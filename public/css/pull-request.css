@@ -1,0 +1,23 @@
+.tab-content {
+    max-height: calc(100vh - 50px);
+}
+
+.tab-content .label {
+    height: calc((100vh - 50px) / 2);
+    padding: 25px 0;
+}
+
+.tab-content .label .list-group-items {
+    height: calc((100vh - 100px) / 2);
+    overflow: auto;
+}
+
+.tab-content .label .list-group-item {
+    max-height: 50px;
+    overflow: auto;
+}
+
+.tab-content .label .list-group-item img {
+    width: 21px;
+    height: 21px;
+}

@@ -1,0 +1,3 @@
+pr_list:
+    path: /
+    controller: App\Controller\PullRequestController
