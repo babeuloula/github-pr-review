@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5728a426eeb5362e10aa62d5982b9cfd",
+    "content-hash": "9ec678fd26182046f84eea1441157983",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -1123,6 +1123,39 @@
             ],
             "description": "A polyfill for getallheaders.",
             "time": "2019-03-08T08:55:37+00:00"
+        },
+        {
+            "name": "steevanb/php-typed-array",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/steevanb/php-typed-array.git",
+                "reference": "2123b0f36c3d41b030774d9c7b5df414a3aac1fa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/steevanb/php-typed-array/zipball/2123b0f36c3d41b030774d9c7b5df414a3aac1fa",
+                "reference": "2123b0f36c3d41b030774d9c7b5df414a3aac1fa",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "steevanb\\PhpTypedArray\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Add IntArray, StringArray, ObjectArray etc.",
+            "time": "2019-04-27T16:44:38+00:00"
         },
         {
             "name": "symfony/cache",

@@ -68,6 +68,9 @@
     "ralouphie/getallheaders": {
         "version": "3.0.3"
     },
+    "steevanb/php-typed-array": {
+        "version": "2.0.0"
+    },
     "symfony/cache": {
         "version": "v4.3.4"
     },

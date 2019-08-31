@@ -7,6 +7,9 @@ declare(strict_types=1);
 namespace App\Service\Github;
 
 use App\Enum\Label;
+use App\TypedArray\PullRequestArray;
+use App\TypedArray\Type\PullRequest;
+use App\TypedArray\Type\Repository;
 use Github\Api\PullRequest as PullRequestApi;
 use Github\Client;
 use http\Exception\RuntimeException;
@@ -31,12 +34,19 @@ class PullRequestService
     /** @var string[] */
     protected $labelsWip;
 
+    /** @var string[] */
+    protected $branchsColors;
+
+    /** @var string */
+    protected $branchDefaultColor;
+
     /**
      * @param string[] $githubRepos
      * @param string[] $githubLabelsReviewNeeded
      * @param string[] $githubLabelsChangedRequested
      * @param string[] $githubLabelsAccepted
      * @param string[] $githubLabelsWip
+     * @param string[] $githubBranchsColors
      */
     public function __construct(
         string $githubAuthMethod,
@@ -47,7 +57,9 @@ class PullRequestService
         array $githubLabelsReviewNeeded,
         array $githubLabelsChangedRequested,
         array $githubLabelsAccepted,
-        array $githubLabelsWip
+        array $githubLabelsWip,
+        array $githubBranchsColors,
+        string $githubBranchDefaultColor
     ) {
         $this->client = new Client();
 
@@ -66,6 +78,8 @@ class PullRequestService
         $this->labelsChangesRequested = $githubLabelsChangedRequested;
         $this->labelsAccepted = $githubLabelsAccepted;
         $this->labelsWip = $githubLabelsWip;
+        $this->branchsColors = $githubBranchsColors;
+        $this->branchDefaultColor = $githubBranchDefaultColor;
     }
 
     public function getOpen(): array
@@ -115,10 +129,10 @@ class PullRequestService
     protected function sortByLabel(array $pullRequests): array
     {
         $pullRequestsSorted = [
-            Label::REVIEW_NEEDED()->getValue() => [],
-            Label::ACCEPTED()->getValue() => [],
-            Label::CHANGES_REQUESTED()->getValue() => [],
-            Label::WIP()->getValue() => [],
+            Label::REVIEW_NEEDED()->getValue() => new PullRequestArray(),
+            Label::ACCEPTED()->getValue() => new PullRequestArray(),
+            Label::CHANGES_REQUESTED()->getValue() => new PullRequestArray(),
+            Label::WIP()->getValue() => new PullRequestArray(),
         ];
 
         foreach ($pullRequests as $key => $pullRequest) {
@@ -140,6 +154,18 @@ class PullRequestService
                 } elseif (in_array($label['name'], $this->labelsWip, true)) {
                     $labelEnum = Label::WIP();
 
+                    break;
+                }
+            }
+
+            $pullRequest = (new PullRequest($pullRequest))->setBranchColor($this->branchDefaultColor);
+
+            foreach ($this->branchsColors as $branchColor) {
+                $branch = array_keys($branchColor)[0];
+                $color = array_values($branchColor)[0];
+
+                if (preg_match("/".$branch."/", $pullRequest->getBase()) === 1) {
+                    $pullRequest->setBranchColor($color);
                     break;
                 }
             }
