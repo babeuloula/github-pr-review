@@ -2,6 +2,18 @@
 
 Interface to simplify PR management on GitHub. 
 
+## Installation
+
+Install composer and assets:
+```sh
+./install.sh
+```
+
+Start docker containers:
+```sh
+./docker/start.sh
+```
+
 ## How to use
 
 1. Create a Github's token ([here](https://github.com/settings/tokens)) and select `repo` scope
