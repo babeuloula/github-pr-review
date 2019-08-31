@@ -29,43 +29,51 @@
                         <div class="row">
                     {% endif %}
 
-                    <div class="col-sm">
-                        <div class="list-group label label-group-{{ label|slugify }}">
-                            {% set type = 'primary' %}
-                            {% if loop.index == 2 %}
-                                {% set type = 'success' %}
-                            {% elseif loop.index == 3 %}
-                                {% set type = 'warning' %}
-                            {% elseif loop.index == 4 %}
-                                {% set type = 'danger' %}
-                            {% endif %}
+                            <div class="col-sm">
+                                <div class="list-group label label-group-{{ label|slugify }}">
+                                    {% set type = 'primary' %}
+                                    {% if loop.index == 2 %}
+                                        {% set type = 'success' %}
+                                    {% elseif loop.index == 3 %}
+                                        {% set type = 'warning' %}
+                                    {% elseif loop.index == 4 %}
+                                        {% set type = 'danger' %}
+                                    {% endif %}
 
-                            <div class="list-group-item list-group-item-{{ type }}">
-                                {{ label }} <strong>({{ pullRequests|length }})</strong>
-                            </div>
-
-                            <div class="list-group-items">
-                                {% if pullRequests|length > 0 %}
-                                    {% for pullRequest in pullRequests %}
-                                        <a href="{{ pullRequest.html_url }}" class="list-group-item list-group-item-action" target="_blank">
-                                            <img src="{{ pullRequest.user.avatar_url }}" class="float-left rounded" title="Pull request from: {{ pullRequest.user.login }}">
-                                            <span class="ml-3">
-                                                {{ pullRequest.title }}
-                                            </span>
-
-                                            <span class="badge badge-secondary float-right" title="Pull request updated at:">
-                                                {{ pullRequest.updated_at|date('Y-m-d H:i') }}
-                                            </span>
-                                        </a>
-                                    {% endfor %}
-                                {% else %}
-                                    <div class="list-group-item list-group-item-action disabled" tabindex="-1" aria-disabled="true">
-                                        No pull request in <strong>{{ label|lower }}</strong>.
+                                    <div class="list-group-item list-group-item-{{ type }}">
+                                        {{ label }} <strong>({{ pullRequests.count() }})</strong>
                                     </div>
-                                {% endif %}
+
+                                    <div class="list-group-items">
+                                        {% if pullRequests.count() > 0 %}
+                                            {% for pullRequest in pullRequests %}
+                                                <a href="{{ pullRequest.getUrl() }}"
+                                                        class="list-group-item list-group-item-action" target="_blank">
+                                                    <img src="{{ pullRequest.getUser().getAvatarUrl() }}"
+                                                            class="float-left rounded"
+                                                            title="Pull request from: {{ pullRequest.getUser().getLogin() }}">
+
+                                                    <span class="ml-3 text-primary">
+                                                        #{{ pullRequest.getNumber() }}
+                                                    </span>
+
+                                                    <span class="ml-3">
+                                                        {{ pullRequest.getTitle() }}
+                                                    </span>
+
+                                                    <span class="badge badge-{{ pullRequest.getBranchColor() }} float-right">
+                                                        {{ pullRequest.getBase() }}
+                                                    </span>
+                                                </a>
+                                            {% endfor %}
+                                        {% else %}
+                                            <div class="list-group-item list-group-item-action disabled" aria-disabled="true">
+                                                No pull request in <strong>{{ label|lower }}</strong>.
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
 
                     {% if loop.index == 2 or loop.index == 4 %}
                         </div>

@@ -13,6 +13,8 @@ services:
             $githubLabelsChangedRequested: '%env(json:GITHUB_LABELS_CHANGES_REQUESTED)%'
             $githubLabelsAccepted: '%env(json:GITHUB_LABELS_ACCEPTED)%'
             $githubLabelsWip: '%env(json:GITHUB_LABELS_WIP)%'
+            $githubBranchsColors: '%env(json:GITHUB_BRANCHS_COLORS)%'
+            $githubBranchDefaultColor: '%env(GITHUB_BRANCH_DEFAULT_COLOR)%'
 
     App\Controller\PullRequestController:
         public: true
