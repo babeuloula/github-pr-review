@@ -36,3 +36,9 @@ jobs:
             - composer-install
             - phpcs
             - phpstan
+
+workflows:
+    version: 2.1
+    php-check:
+        jobs:
+            - code-style-validation
