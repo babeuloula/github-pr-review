@@ -1,12 +1,66 @@
 {
+    "clue/stream-filter": {
+        "version": "v1.4.1"
+    },
+    "guzzlehttp/guzzle": {
+        "version": "6.3.3"
+    },
+    "guzzlehttp/promises": {
+        "version": "v1.3.1"
+    },
+    "guzzlehttp/psr7": {
+        "version": "1.6.1"
+    },
+    "knplabs/github-api": {
+        "version": "2.6",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.6",
+            "ref": "a7d5781e4a8e84f1c238c43e4c9bb806f01d8a3f"
+        },
+        "files": [
+            "./config/packages/github_api.yaml"
+        ]
+    },
+    "php-http/cache-plugin": {
+        "version": "1.6.0"
+    },
+    "php-http/client-common": {
+        "version": "1.9.1"
+    },
+    "php-http/discovery": {
+        "version": "1.7.0"
+    },
+    "php-http/guzzle6-adapter": {
+        "version": "v1.1.1"
+    },
+    "php-http/httplug": {
+        "version": "v1.1.0"
+    },
+    "php-http/message": {
+        "version": "1.8.0"
+    },
+    "php-http/message-factory": {
+        "version": "v1.0.2"
+    },
+    "php-http/promise": {
+        "version": "v1.0.0"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
     "psr/container": {
         "version": "1.0.0"
     },
+    "psr/http-message": {
+        "version": "1.0.1"
+    },
     "psr/log": {
         "version": "1.1.0"
+    },
+    "ralouphie/getallheaders": {
+        "version": "3.0.3"
     },
     "symfony/cache": {
         "version": "v4.3.4"
@@ -89,6 +143,9 @@
         "version": "v4.3.4"
     },
     "symfony/mime": {
+        "version": "v4.3.4"
+    },
+    "symfony/options-resolver": {
         "version": "v4.3.4"
     },
     "symfony/polyfill-intl-idn": {
