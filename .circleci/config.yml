@@ -5,8 +5,8 @@ commands:
         description: "Install dependencies"
         steps:
             - run:
-                name: "Execute: sh ./install.sh"
-                command: sh ./install.sh
+                name: "Execute: composer install"
+                command: composer install
 
     phpcs:
         description: "Execute PHPCS"
