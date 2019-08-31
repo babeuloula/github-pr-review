@@ -1,0 +1,22 @@
+version: '3.5'
+
+services:
+    nginx:
+        build:
+            context: ..
+            dockerfile: docker/nginx/Dockerfile
+        ports:
+            - "${HTTP_PORT:-8011}:80"
+        volumes:
+            - ../public:/var/www/html/public
+        restart: unless-stopped
+
+    php:
+        build:
+            context: ..
+            dockerfile: docker/php/Dockerfile
+            args:
+                UID: "${DOCKER_UID}"
+        volumes:
+            - ..:/var/www/html
+        restart: unless-stopped
