@@ -8,8 +8,11 @@
 }
 
 .tab-content .label .list-group-items {
-    height: calc((100vh - 100px) / 2);
+    max-height: calc((100vh - 100px) / 2);
     overflow: auto;
+    border-bottom: 1px solid rgba(0,0,0,.125);
+    border-bottom-right-radius: .25rem;
+    border-bottom-left-radius: .25rem;
 }
 
 .tab-content .label .list-group-item {
@@ -20,4 +23,8 @@
 .tab-content .label .list-group-item img {
     width: 21px;
     height: 21px;
+}
+
+.tab-content .label .list-group-item.list-group-item-action:last-child {
+    border-bottom: none;
 }
