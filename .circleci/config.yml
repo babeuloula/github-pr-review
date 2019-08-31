@@ -26,7 +26,7 @@ executors:
     composer:
         docker:
             - image: composer
-        working_directory: /app
+        working_directory: ~/github-pr-review
 
 jobs:
     code-style-validation:
