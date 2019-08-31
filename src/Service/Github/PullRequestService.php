@@ -20,6 +20,9 @@ class PullRequestService
     protected $githubRepos;
 
     /** @var string[] */
+    protected $labelsReviewNeeded;
+
+    /** @var string[] */
     protected $labelsChangesRequested;
 
     /** @var string[] */
@@ -30,6 +33,7 @@ class PullRequestService
 
     /**
      * @param string[] $githubRepos
+     * @param string[] $githubLabelsReviewNeeded
      * @param string[] $githubLabelsChangedRequested
      * @param string[] $githubLabelsAccepted
      * @param string[] $githubLabelsWip
@@ -40,6 +44,7 @@ class PullRequestService
         string $githubPassword,
         string $githubToken,
         array $githubRepos,
+        array $githubLabelsReviewNeeded,
         array $githubLabelsChangedRequested,
         array $githubLabelsAccepted,
         array $githubLabelsWip
@@ -57,6 +62,7 @@ class PullRequestService
         $this->githubRepos = $githubRepos;
         natcasesort($this->githubRepos);
 
+        $this->labelsReviewNeeded = $githubLabelsReviewNeeded;
         $this->labelsChangesRequested = $githubLabelsChangedRequested;
         $this->labelsAccepted = $githubLabelsAccepted;
         $this->labelsWip = $githubLabelsWip;
@@ -119,7 +125,11 @@ class PullRequestService
             $labelEnum = Label::REVIEW_NEEDED();
 
             foreach ($pullRequest['labels'] as $label) {
-                if (in_array($label['name'], $this->labelsChangesRequested, true)) {
+                if (in_array($label['name'], $this->labelsReviewNeeded, true)) {
+                    $labelEnum = Label::CHANGES_REQUESTED();
+
+                    break;
+                } elseif (in_array($label['name'], $this->labelsChangesRequested, true)) {
                     $labelEnum = Label::CHANGES_REQUESTED();
 
                     break;
