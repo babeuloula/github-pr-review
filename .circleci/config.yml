@@ -1,0 +1,38 @@
+version: 2.1
+
+commands:
+    composer-install:
+        description: "Install dependencies"
+        steps:
+            - run:
+                name: "Execute: sh ./install.sh"
+                command: sh ./install.sh
+
+    phpcs:
+        description: "Execute PHPCS"
+        steps:
+            - run:
+                name: "Execute PHPCS"
+                command: vendor/bin/phpcs
+
+    phpstan:
+        description: "Execute PHPStan"
+        steps:
+            - run:
+                name: "Execute PHPStan"
+                command: vendor/bin/phpstan analyse src --level 7
+
+executors:
+    composer:
+        docker:
+            - image: composer
+        working_directory: /app
+
+jobs:
+    code-style-validation:
+        executor: composer
+        steps:
+            - checkout
+            - composer-install
+            - phpcs
+            - phpstan
