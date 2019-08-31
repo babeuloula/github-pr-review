@@ -13,27 +13,36 @@ use http\Exception\RuntimeException;
 
 class PullRequestService
 {
-    /** @var string[] */
-    protected const LABELS_CHANGES_REQUESTED = ['Changes requested', 'Modifications demandées'];
-
-    /** @var string[] */
-    protected const LABELS_ACCEPTED = ['Accepted', 'Accepté'];
-
-    /** @var string[] */
-    protected const LABELS_WIP = ['WIP'];
-
     /** @var Client */
     protected $client;
 
-    /** @var array */
+    /** @var string[] */
     protected $githubRepos;
 
+    /** @var string[] */
+    protected $labelsChangesRequested;
+
+    /** @var string[] */
+    protected $labelsAccepted;
+
+    /** @var string[] */
+    protected $labelsWip;
+
+    /**
+     * @param string[] $githubRepos
+     * @param string[] $githubLabelsChangedRequested
+     * @param string[] $githubLabelsAccepted
+     * @param string[] $githubLabelsWip
+     */
     public function __construct(
         string $githubAuthMethod,
         string $githubUsername,
         string $githubPassword,
         string $githubToken,
-        array $githubRepos
+        array $githubRepos,
+        array $githubLabelsChangedRequested,
+        array $githubLabelsAccepted,
+        array $githubLabelsWip
     ) {
         $this->client = new Client();
 
@@ -47,6 +56,10 @@ class PullRequestService
 
         $this->githubRepos = $githubRepos;
         natcasesort($this->githubRepos);
+
+        $this->labelsChangesRequested = $githubLabelsChangedRequested;
+        $this->labelsAccepted = $githubLabelsAccepted;
+        $this->labelsWip = $githubLabelsWip;
     }
 
     public function getOpen(): array
@@ -59,18 +72,17 @@ class PullRequestService
 
     protected function search(array $params = []): array
     {
-        $pr = [];
+        $pullRequests = [];
 
         foreach ($this->githubRepos as $githubRepo) {
-            $repo = explode("/", $githubRepo);
+            [$username, $repository] = explode("/", $githubRepo);
 
-            $pullRequests = $this->getAll($repo[0], $repo[1], $params);
-            $pullRequests = $this->sortByLabel($pullRequests);
-
-            $pr[$githubRepo] = $pullRequests;
+            $pullRequests[$githubRepo] = $this->sortByLabel(
+                $this->getAll($username, $repository, $params)
+            );
         }
 
-        return $pr;
+        return $pullRequests;
     }
 
     protected function getAll(string $username, string $repository, array $params): array
@@ -107,15 +119,15 @@ class PullRequestService
             $labelEnum = Label::REVIEW_NEEDED();
 
             foreach ($pullRequest['labels'] as $label) {
-                if (in_array($label['name'], static::LABELS_CHANGES_REQUESTED, true)) {
+                if (in_array($label['name'], $this->labelsChangesRequested, true)) {
                     $labelEnum = Label::CHANGES_REQUESTED();
 
                     break;
-                } elseif (in_array($label['name'], static::LABELS_ACCEPTED, true)) {
+                } elseif (in_array($label['name'], $this->labelsAccepted, true)) {
                     $labelEnum = Label::ACCEPTED();
 
                     break;
-                } elseif (in_array($label['name'], static::LABELS_WIP, true)) {
+                } elseif (in_array($label['name'], $this->labelsWip, true)) {
                     $labelEnum = Label::WIP();
 
                     break;
