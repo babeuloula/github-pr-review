@@ -9,10 +9,8 @@ namespace App\Service\Github;
 use App\Enum\Label;
 use App\TypedArray\PullRequestArray;
 use App\TypedArray\Type\PullRequest;
-use App\TypedArray\Type\Repository;
 use Github\Api\PullRequest as PullRequestApi;
 use Github\Client;
-use http\Exception\RuntimeException;
 
 class PullRequestService
 {
@@ -68,7 +66,7 @@ class PullRequestService
         } elseif(Client::AUTH_HTTP_PASSWORD === $githubAuthMethod) {
             $this->client->authenticate($githubUsername, $githubPassword, Client::AUTH_HTTP_PASSWORD);
         } else {
-            throw new RuntimeException("Auth method '$githubAuthMethod' is not implemented yet.");
+            throw new \RuntimeException("Auth method '$githubAuthMethod' is not implemented yet.");
         }
 
         $this->githubRepos = $githubRepos;
@@ -160,6 +158,7 @@ class PullRequestService
 
             $pullRequest = (new PullRequest($pullRequest))->setBranchColor($this->branchDefaultColor);
 
+            /** @var array $branchColor */
             foreach ($this->branchsColors as $branchColor) {
                 $branch = array_keys($branchColor)[0];
                 $color = array_values($branchColor)[0];
