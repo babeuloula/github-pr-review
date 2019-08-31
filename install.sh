@@ -2,7 +2,7 @@
 
 set -e
 
-readonly PROJECT_DIRECTORY=$(dirname $(realpath $0)))
+readonly PROJECT_DIRECTORY=$(dirname $(realpath $0))
 
 . "$PROJECT_DIRECTORY/.env";
 if [ -f "$PROJECT_DIRECTORY/.env.local" ]; then
