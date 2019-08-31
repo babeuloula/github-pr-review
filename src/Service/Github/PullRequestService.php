@@ -63,7 +63,7 @@ class PullRequestService
 
         if (Client::AUTH_HTTP_TOKEN === $githubAuthMethod) {
             $this->client->authenticate($githubToken, null, Client::AUTH_HTTP_TOKEN);
-        } elseif(Client::AUTH_HTTP_PASSWORD === $githubAuthMethod) {
+        } elseif (Client::AUTH_HTTP_PASSWORD === $githubAuthMethod) {
             $this->client->authenticate($githubUsername, $githubPassword, Client::AUTH_HTTP_PASSWORD);
         } else {
             throw new \RuntimeException("Auth method '$githubAuthMethod' is not implemented yet.");
