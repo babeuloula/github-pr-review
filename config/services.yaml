@@ -8,7 +8,11 @@ services:
             $githubUsername: '%env(GITHUB_USERNAME)%'
             $githubPassword: '%env(GITHUB_PASSWORD)%'
             $githubToken: '%env(GITHUB_TOKEN)%'
-            $githubRepos: '%env(GITHUB_REPOS)%'
+            $githubRepos: '%env(json:GITHUB_REPOS)%'
+            $githubLabelsReviewNeeded: '%env(json:GITHUB_LABELS_REVIEW_NEEDED)%'
+            $githubLabelsChangedRequested: '%env(json:GITHUB_LABELS_CHANGES_REQUESTED)%'
+            $githubLabelsAccepted: '%env(json:GITHUB_LABELS_ACCEPTED)%'
+            $githubLabelsWip: '%env(json:GITHUB_LABELS_WIP)%'
 
     App\Controller\PullRequestController:
         public: true
