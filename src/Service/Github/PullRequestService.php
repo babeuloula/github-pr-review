@@ -33,7 +33,7 @@ class PullRequestService
         string $githubUsername,
         string $githubPassword,
         string $githubToken,
-        string $githubRepos
+        array $githubRepos
     ) {
         $this->client = new Client();
 
@@ -45,7 +45,7 @@ class PullRequestService
             throw new RuntimeException("Auth method '$githubAuthMethod' is not implemented yet.");
         }
 
-        $this->githubRepos = explode('|', $githubRepos);
+        $this->githubRepos = $githubRepos;
         natcasesort($this->githubRepos);
     }
 

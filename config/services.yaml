@@ -8,7 +8,7 @@ services:
             $githubUsername: '%env(GITHUB_USERNAME)%'
             $githubPassword: '%env(GITHUB_PASSWORD)%'
             $githubToken: '%env(GITHUB_TOKEN)%'
-            $githubRepos: '%env(GITHUB_REPOS)%'
+            $githubRepos: '%env(json:GITHUB_REPOS)%'
 
     App\Controller\PullRequestController:
         public: true
