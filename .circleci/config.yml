@@ -6,39 +6,86 @@ commands:
         steps:
             - run:
                 name: "Execute: composer install"
-                command: composer install
+                command: |
+                    if [ ! -f vendor/autoload.php ];then
+                        composer global require hirak/prestissimo;
+                        composer install --ignore-platform-reqs --no-interaction --no-progress --classmap-authoritative;
+                    fi
+
+    restore-composer-cache:
+        description: "Restore vendor folder from CircleCI cache"
+        steps:
+            - restore_cache:
+                key: composer-{{ checksum "composer.json" }}-{{ checksum "composer.lock" }}
+
+    store-composer-cache:
+        description: "Store vendor folder in CircleCI cache"
+        steps:
+            - checkout
+            - restore-composer-cache
+            - composer-install
+            - save_cache:
+                key: composer-{{ checksum "composer.json" }}-{{ checksum "composer.lock" }}
+                paths:
+                  - ./vendor
+            - persist_to_workspace:
+                root: .
+                paths:
+                  - vendor
 
     phpcs:
         description: "Execute PHPCS"
         steps:
             - run:
-                name: "Execute PHPCS"
+                name: "Execute: vendor/bin/phpcs"
                 command: vendor/bin/phpcs
 
     phpstan:
         description: "Execute PHPStan"
         steps:
             - run:
-                name: "Execute PHPStan"
+                name: "Execute: vendor/bin/phpstan"
                 command: vendor/bin/phpstan analyse src --level 7
 
 executors:
-    composer:
+    composer_cache:
         docker:
             - image: composer
-        working_directory: ~/github-pr-review
+        working_directory: ~/repository
+
+    php:
+        docker:
+            - image: php:7.3.8-cli-alpine3.10
+        working_directory: ~/repository
 
 jobs:
-    code-style-validation:
-        executor: composer
+    composer:
+        executor: composer_cache
+        steps:
+            - store-composer-cache
+
+    phpcs:
+        executor: php
         steps:
             - checkout
-            - composer-install
+            - restore-composer-cache
             - phpcs
+
+    phpstan:
+        executor: php
+        steps:
+            - checkout
+            - restore-composer-cache
             - phpstan
 
 workflows:
     version: 2.1
-    php-check:
+    Code quality:
         jobs:
-            - code-style-validation
+            - composer
+            - phpcs:
+                requires:
+                    - composer
+            - phpstan:
+                requires:
+                    - composer
