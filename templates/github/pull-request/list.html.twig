@@ -101,6 +101,15 @@
 
                 $title.text(title);
             });
+
+            $(window).on('focus', function () {
+                modals(null, $("<p/>").text("Please be patient while loading the pull requests ..."), {
+                    modalId: "reload-pull-requrests-modal",
+                    buttons: null
+                }, function () {
+                    location.reload();
+                });
+            });
         });
     </script>
 {% endblock %}
