@@ -15,6 +15,10 @@
     border-bottom-left-radius: .25rem;
 }
 
+.tab-content .label .list-group-item.list-group-header {
+    overflow: visible;
+}
+
 .tab-content .label .list-group-item {
     max-height: 50px;
     overflow: auto;
