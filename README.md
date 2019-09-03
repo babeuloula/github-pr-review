@@ -23,7 +23,14 @@ GITHUB_LABELS_ACCEPTED='["Accepted"]'
 GITHUB_LABELS_WIP='["WIP", "Pending answer"]'
 GITHUB_BRANCHS_COLORS='[{"master": "warning"}, {"develop": "success"}, {"feature-*": "primary"}, {"release*": "info"}, , {"hotfix-*": "danger"}]'
 GITHUB_BRANCH_DEFAULT_COLOR=danger
+
+ENABLE_DARK_THEME=1
+RELOAD_ON_FOCUS=0
+# Reload time is ms
+RELOAD_EVERY=60000
 ```
+
+If you don't want to reload on focus and reload every x ms, you just need to set `RELOAD_ON_FOCUS=0` and `RELOAD_EVERY=0`.
 
 ## Installation
 
