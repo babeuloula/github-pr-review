@@ -3,4 +3,6 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     globals:
-        darkTheme: '%env(bool:ENABLE_DARK_THEME)%'
+        enableDarkTheme: '%env(bool:ENABLE_DARK_THEME)%'
+        reloadOnFocus: '%env(bool:RELOAD_ON_FOCUS)%'
+        reloadEvery: '%env(int:RELOAD_EVERY)%'

@@ -90,6 +90,9 @@
 
     <script type="text/javascript">
         jQuery(function($){
+            let reloadOnFocus = {{ reloadOnFocus ? 'true' : 'false' }};
+            let reloadEvery = {{ reloadEvery }};
+
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                 let newRepo = $.trim($(e.target).text());
                 let oldRepo = $.trim($(e.relatedTarget).text());
@@ -102,14 +105,20 @@
                 $title.text(title);
             });
 
-            $(window).on('focus', function () {
+            window.showWaitModal = function () {
                 modals(null, $("<p/>").text("Please be patient while loading the pull requests ..."), {
                     modalId: "reload-pull-requrests-modal",
                     buttons: null
                 }, function () {
                     location.reload();
                 });
-            });
+            };
+
+            if (reloadOnFocus) {
+                $(window).on('focus', showWaitModal);
+            } else if(reloadEvery > 0) {
+                window.setInterval(showWaitModal, reloadEvery);
+            }
         });
     </script>
 {% endblock %}
