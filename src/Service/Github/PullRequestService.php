@@ -70,7 +70,7 @@ class PullRequestService
         }
 
         $this->githubRepos = $githubRepos;
-        natcasesort($this->githubRepos);
+        \natcasesort($this->githubRepos);
 
         $this->labelsReviewNeeded = $githubLabelsReviewNeeded;
         $this->labelsChangesRequested = $githubLabelsChangedRequested;
@@ -93,7 +93,7 @@ class PullRequestService
         $pullRequests = [];
 
         foreach ($this->githubRepos as $githubRepo) {
-            [$username, $repository] = explode("/", $githubRepo);
+            [$username, $repository] = \explode("/", $githubRepo);
 
             $pullRequests[$githubRepo] = $this->sortByLabel(
                 $this->getAll($username, $repository, $params)
@@ -111,11 +111,11 @@ class PullRequestService
         $pullRequest = $pullRequestApi->all($username, $repository, $params);
 
         if (\count($pullRequest) === 30) {
-            $pullRequest = array_merge(
+            $pullRequest = \array_merge(
                 $this->getAll(
                     $username,
                     $repository,
-                    array_merge($params, ['page' => ($params['page'] ?? 1) + 1])
+                    \array_merge($params, ['page' => ($params['page'] ?? 1) + 1])
                 ),
                 $pullRequest
             );
@@ -137,20 +137,20 @@ class PullRequestService
             $labelEnum = Label::REVIEW_NEEDED();
 
             foreach ($pullRequest['labels'] as $label) {
-                if (in_array($label['name'], $this->labelsReviewNeeded, true)) {
-                    $labelEnum = Label::CHANGES_REQUESTED();
+                if (\in_array($label['name'], $this->labelsWip, true)) {
+                    $labelEnum = Label::WIP();
 
                     break;
-                } elseif (in_array($label['name'], $this->labelsChangesRequested, true)) {
-                    $labelEnum = Label::CHANGES_REQUESTED();
-
-                    break;
-                } elseif (in_array($label['name'], $this->labelsAccepted, true)) {
+                } elseif (\in_array($label['name'], $this->labelsAccepted, true)) {
                     $labelEnum = Label::ACCEPTED();
 
                     break;
-                } elseif (in_array($label['name'], $this->labelsWip, true)) {
-                    $labelEnum = Label::WIP();
+                } elseif (\in_array($label['name'], $this->labelsReviewNeeded, true)) {
+                    $labelEnum = Label::REVIEW_NEEDED();
+
+                    break;
+                } elseif (\in_array($label['name'], $this->labelsChangesRequested, true)) {
+                    $labelEnum = Label::CHANGES_REQUESTED();
 
                     break;
                 }
@@ -160,10 +160,10 @@ class PullRequestService
 
             /** @var array $branchColor */
             foreach ($this->branchsColors as $branchColor) {
-                $branch = array_keys($branchColor)[0];
-                $color = array_values($branchColor)[0];
+                $branch = \array_keys($branchColor)[0];
+                $color = \array_values($branchColor)[0];
 
-                if (preg_match("/".$branch."/", $pullRequest->getBase()) === 1) {
+                if (\preg_match("/".$branch."/", $pullRequest->getBase()) === 1) {
                     $pullRequest->setBranchColor($color);
                     break;
                 }
