@@ -106,10 +106,7 @@
             });
 
             window.showWaitModal = function () {
-                modals(null, $("<p/>").text("Please be patient while loading the pull requests ..."), {
-                    modalId: "reload-pull-requrests-modal",
-                    buttons: null
-                }, function () {
+                $(document).find('#reload-img').fadeIn(250, function () {
                     location.reload();
                 });
             };
