@@ -45,7 +45,9 @@ commands:
         steps:
             - run:
                 name: "Execute: vendor/bin/phpstan"
-                command: vendor/bin/phpstan analyse src --level 7
+                command: |
+                    bin/console cache:warmup --env=dev
+                    vendor/bin/phpstan analyse src --level 7
 
 executors:
     composer_cache:
