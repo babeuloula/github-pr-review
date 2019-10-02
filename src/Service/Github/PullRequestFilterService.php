@@ -60,6 +60,7 @@ class PullRequestFilterService implements PullRequestServiceInterface
         $this->githubFilters = $githubFilters;
     }
 
+    /** @return PullRequestArray[] */
     public function getOpen(): array
     {
         return $this->search([

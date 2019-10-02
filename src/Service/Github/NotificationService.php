@@ -51,6 +51,7 @@ class NotificationService
         $this->notificationsCount[static::OTHER_REPOS] = 0;
     }
 
+    /** @return array[] */
     public function getNotifications(): array
     {
         /** @var NotificationApi $notificationsApi */

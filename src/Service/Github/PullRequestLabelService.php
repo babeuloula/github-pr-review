@@ -72,6 +72,7 @@ class PullRequestLabelService implements PullRequestServiceInterface
         $this->branchDefaultColor = $githubBranchDefaultColor;
     }
 
+    /** @return array[] */
     public function getOpen(): array
     {
         return $this->search([
@@ -80,6 +81,7 @@ class PullRequestLabelService implements PullRequestServiceInterface
         ]);
     }
 
+    /** @return array[] */
     protected function search(array $params = []): array
     {
         $pullRequests = [];
@@ -95,6 +97,7 @@ class PullRequestLabelService implements PullRequestServiceInterface
         return $pullRequests;
     }
 
+    /** @return array[] */
     protected function getAll(string $username, string $repository, array $params): array
     {
         /** @var PullRequestApi $pullRequestApi */
@@ -115,6 +118,7 @@ class PullRequestLabelService implements PullRequestServiceInterface
         return $pullRequest;
     }
 
+    /** @return PullRequestArray[] */
     protected function sortByLabel(array $pullRequests): array
     {
         $pullRequestsSorted = [
