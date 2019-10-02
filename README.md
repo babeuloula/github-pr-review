@@ -36,10 +36,16 @@ If you don't want to reload on focus and reload every x ms, you just need to set
 
 Install composer and assets:
 ```sh
-./install.sh
+make install
 ```
 
 Start docker containers:
 ```sh
-./docker/start.sh
+make start
+```
+
+## Check code quality
+
+```sh
+make check
 ```
