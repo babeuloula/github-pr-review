@@ -1,9 +1,8 @@
 <?php
 /**
- * @author      Wizacha DevTeam <dev@wizacha.com>
- * @license     Proprietary
- * @copyright   Copyright (c) Wizacha
+ * @author BaBeuloula <info@babeuloula.fr>
  */
+
 declare(strict_types=1);
 
 namespace App\Service\Github;
