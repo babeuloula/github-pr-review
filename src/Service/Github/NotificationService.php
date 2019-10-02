@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace App\Service\Github;
 
 use App\Enum\NotificationReason;
+use App\Enum\NotificationType;
 use App\TypedArray\NotificationArray;
 use App\TypedArray\Type\Notification;
 use Github\Api\Notification as NotificationApi;
@@ -52,8 +53,8 @@ class NotificationService
 
     public function getNotifications(): array
     {
-        /** @var NotificationApi $notifications */
-        $notifications = $this->client->api('notifications');
+        /** @var NotificationApi $notificationsApi */
+        $notificationsApi = $this->client->api('notifications');
         $reasons = \array_filter(
             \array_values(NotificationReason::toArray()),
             function (string $reason): bool {
@@ -73,14 +74,20 @@ class NotificationService
             $notificationsOrdered[static::OTHER_REPOS][$reason] = new NotificationArray();
         }
 
-        foreach ($notifications->all() as $notification) {
+        foreach ($notificationsApi->all() as $notification) {
             $repo = \array_key_exists($notification['repository']['full_name'], $notificationsOrdered)
                 ? $notification['repository']['full_name']
                 : static::OTHER_REPOS;
             $reason = $notification['reason'];
 
             if (\array_key_exists($reason, $notificationsOrdered[$repo])) {
-                $notificationsOrdered[$repo][$reason][] = new Notification($notification);
+                $notification = new Notification($notification);
+
+                $notification->setUrl(
+                    $this->formatUrl($notification->getType(), $notification->getUrl())
+                );
+
+                $notificationsOrdered[$repo][$reason][] = $notification;
                 ++$this->notificationsCount[$repo];
             }
         }
@@ -92,5 +99,46 @@ class NotificationService
     public function getNotificationsCount(): array
     {
         return $this->notificationsCount;
+    }
+
+    public function markAsRead(int $threadId): bool
+    {
+        /** @var NotificationApi $notificationsApi */
+        $notificationsApi = $this->client->api('notifications');
+
+        try {
+            $notificationsApi->markThreadRead($threadId);
+        } catch (\Throwable $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function formatUrl(NotificationType $type, string $url): ?string
+    {
+        switch ($type) {
+            case NotificationType::ISSUE():
+                $url = \str_replace(
+                    ['https://api.github.com/repos/'],
+                    ['https://github.com/'],
+                    $url
+                );
+                break;
+
+            case NotificationType::PULL_REQUEST():
+                $url = \str_replace(
+                    ['https://api.github.com/repos/', '/pulls/'],
+                    ['https://github.com/', '/pull/'],
+                    $url
+                );
+                break;
+
+            default:
+                $url = null;
+                break;
+        }
+
+        return $url;
     }
 }

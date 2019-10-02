@@ -23,6 +23,15 @@ services:
     App\Controller\PullRequestController:
         public: true
 
+    App\Controller\ReloadPullRequestController:
+        public: true
+
+    App\Controller\ReloadNotificationController:
+        public: true
+
+    App\Controller\MarkAsReadNotificationController:
+        public: true
+
     App\Service\Github\PullRequestLabelService: ~
     App\Service\Github\PullRequestFilterService: ~
     App\Service\Github\NotificationService: ~

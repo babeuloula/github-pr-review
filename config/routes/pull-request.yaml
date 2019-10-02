@@ -1,3 +1,9 @@
 pr_list:
     path: /
     controller: App\Controller\PullRequestController
+    methods: [GET]
+
+ajax_pr_reload:
+    path: /reload/pull-request.html
+    controller: App\Controller\ReloadPullRequestController
+    methods: [GET]

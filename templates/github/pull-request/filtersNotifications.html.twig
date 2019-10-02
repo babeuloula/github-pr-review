@@ -27,8 +27,10 @@
                                                 {{ notification.getSubject() }}
                                             </span>
 
-                                            {# TODO #}
-                                            <span class="badge badge-success float-right">
+                                            <span class="badge badge-success float-right notification-mark-as-read"
+                                                    id="notification-mark-as-read-{{ notification.getId() }}"
+                                                    title="Mark as read"
+                                                    data-url="{{ url('ajax_notif_mark_as_read', { 'threadId': notification.getId() }) }}">
                                                 <i class="fas fa-check"></i>
                                             </span>
                                         </a>

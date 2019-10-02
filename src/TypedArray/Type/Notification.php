@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace App\TypedArray\Type;
 
 use App\Enum\NotificationReason;
+use App\Enum\NotificationType;
 
 class Notification
 {
@@ -29,22 +30,26 @@ class Notification
     /** @var string */
     protected $subject;
 
+    /** @var NotificationType */
+    protected $type;
+
     /** @var string */
     protected $repository;
 
-    /** @var string */
+    /** @var ?string */
     protected $url;
 
     public function __construct(array $data)
     {
-        $this->id = $data['id'];
+        $this->id = (int) $data['id'];
         $this->unread = $data['unread'];
         $this->reason = new NotificationReason($data['reason']);
         $this->updatedAt = new \DateTimeImmutable($data['updated_at']);
         $this->lastReadAt = \is_string($data['last_read_at']) ? new \DateTimeImmutable($data['last_read_at']) : null;
         $this->subject = $data['subject']['title'];
+        $this->type = new NotificationType($data['subject']['type']);
         $this->repository = $data['repository']['full_name'];
-        $this->url = "";
+        $this->url = $data['subject']['url'];
     }
 
     public function getId(): int
@@ -77,13 +82,25 @@ class Notification
         return $this->subject;
     }
 
+    public function getType(): NotificationType
+    {
+        return $this->type;
+    }
+
     public function getRepository(): string
     {
         return $this->repository;
     }
 
-    public function getUrl(): string
+    public function getUrl(): ?string
     {
         return $this->url;
+    }
+
+    public function setUrl($url)
+    {
+        $this->url = $url;
+
+        return $this;
     }
 }
