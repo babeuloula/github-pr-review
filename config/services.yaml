@@ -15,8 +15,15 @@ services:
             $githubLabelsWip: '%env(json:GITHUB_LABELS_WIP)%'
             $githubBranchsColors: '%env(json:GITHUB_BRANCHS_COLORS)%'
             $githubBranchDefaultColor: '%env(GITHUB_BRANCH_DEFAULT_COLOR)%'
+            $githubFilters: '%env(json:GITHUB_FILTERS)%'
+            $useLabels: '%env(bool:USE_LABELS)%'
+            $useFilters: '%env(bool:USE_FILTERS)%'
+            $githubExcludeReasons: '%env(json:GITHUB_EXCLUDE_REASONS)%'
 
     App\Controller\PullRequestController:
         public: true
 
-    App\Service\Github\PullRequestService: ~
+    App\Service\Github\PullRequestLabelService: ~
+    App\Service\Github\PullRequestFilterService: ~
+    App\Service\Github\NotificationService: ~
+    App\Service\Github\GithubClientService: ~

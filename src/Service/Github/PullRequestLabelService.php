@@ -12,7 +12,7 @@ use App\TypedArray\Type\PullRequest;
 use Github\Api\PullRequest as PullRequestApi;
 use Github\Client;
 
-class PullRequestService
+class PullRequestLabelService implements PullRequestServiceInterface
 {
     /** @var Client */
     protected $client;
@@ -47,10 +47,7 @@ class PullRequestService
      * @param string[] $githubBranchsColors
      */
     public function __construct(
-        string $githubAuthMethod,
-        string $githubUsername,
-        string $githubPassword,
-        string $githubToken,
+        GithubClientService $client,
         array $githubRepos,
         array $githubLabelsReviewNeeded,
         array $githubLabelsChangedRequested,
@@ -59,15 +56,7 @@ class PullRequestService
         array $githubBranchsColors,
         string $githubBranchDefaultColor
     ) {
-        $this->client = new Client();
-
-        if (Client::AUTH_HTTP_TOKEN === $githubAuthMethod) {
-            $this->client->authenticate($githubToken, null, Client::AUTH_HTTP_TOKEN);
-        } elseif (Client::AUTH_HTTP_PASSWORD === $githubAuthMethod) {
-            $this->client->authenticate($githubUsername, $githubPassword, Client::AUTH_HTTP_PASSWORD);
-        } else {
-            throw new \RuntimeException("Auth method '$githubAuthMethod' is not implemented yet.");
-        }
+        $this->client = $client->getClient();
 
         $this->githubRepos = $githubRepos;
         \natcasesort($this->githubRepos);
@@ -84,7 +73,7 @@ class PullRequestService
     {
         return $this->search([
             'sort' => 'updated',
-            'direction' => 'desc'
+            'direction' => 'desc',
         ]);
     }
 
@@ -107,7 +96,6 @@ class PullRequestService
     {
         /** @var PullRequestApi $pullRequestApi */
         $pullRequestApi = $this->client->api('pullRequest');
-
         $pullRequest = $pullRequestApi->all($username, $repository, $params);
 
         if (\count($pullRequest) === 30) {

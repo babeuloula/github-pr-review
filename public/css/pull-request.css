@@ -19,16 +19,21 @@
     overflow: visible;
 }
 
-.tab-content .label .list-group-item {
+.list-group-item {
     max-height: 50px;
     overflow: auto;
 }
 
-.tab-content .label .list-group-item img {
+.list-group-item img {
     width: 21px;
     height: 21px;
 }
 
 .tab-content .label .list-group-item.list-group-item-action:last-child {
     border-bottom: none;
+}
+
+.accordion {
+    max-height: calc(100vh - 75px);
+    overflow: auto;
 }

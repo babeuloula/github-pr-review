@@ -23,14 +23,22 @@ GITHUB_LABELS_ACCEPTED='["Accepted"]'
 GITHUB_LABELS_WIP='["WIP", "Pending answer"]'
 GITHUB_BRANCHS_COLORS='[{"master": "warning"}, {"develop": "success"}, {"feature-*": "primary"}, {"release*": "info"}, , {"hotfix-*": "danger"}]'
 GITHUB_BRANCH_DEFAULT_COLOR=danger
+GITHUB_FILTERS='[]'
+GITHUB_EXCLUDE_REASONS='[]'
 
 ENABLE_DARK_THEME=1
 RELOAD_ON_FOCUS=0
 # Reload time is ms
 RELOAD_EVERY=60000
+USE_LABELS=1
+USE_FILTERS=0
 ```
 
 If you don't want to reload on focus and reload every x ms, you just need to set `RELOAD_ON_FOCUS=0` and `RELOAD_EVERY=0`.
+
+If you want to search PRs by filters, you can fill `GITHUB_FILTERS`. You can found a list of available filters [here](https://help.github.com/en/articles/searching-issues-and-pull-requests).
+
+To fill `GITHUB_EXCLUDE_REASONS` you can found the list [here](https://developer.github.com/v3/activity/notifications/#notification-reasons).
 
 ## Installation
 
