@@ -1,0 +1,48 @@
+{% for repository, sortedNotifications in unreadNotifications %}
+    <div class="card">
+        <div class="card-header p-0" id="heading-notifs-{{ repository|slugify }}">
+            <button class="btn btn-link" type="button" data-toggle="collapse"
+                    data-target="#collapse-notifs-{{ repository|slugify }}" aria-expanded="true"
+                    aria-controls="collapse-notifs-{{ repository|slugify }}">
+                {{ repository }} <strong>({{ unreadNotificationsCount[repository] }})</strong>
+            </button>
+        </div>
+
+        <div id="collapse-notifs-{{ repository|slugify }}" class="collapse show"
+                aria-labelledby="heading-notifs-{{ repository|slugify }}" data-parent="#accordion-notifs">
+            <div class="card-body">
+                <div class="list-group">
+                    <div class="list-group-items">
+                        {% if unreadNotificationsCount[repository] > 0 %}
+                            {% for notifications in sortedNotifications %}
+                                {% if notifications.count() > 0 %}
+                                    <div class="list-group-item list-group-header text-success">
+                                        <strong>{{ notifications[0].getReason().getName() }}</strong>
+                                    </div>
+
+                                    {% for notification in notifications %}
+                                        <a href="{{ notification.getUrl() }}" class="list-group-item list-group-item-action"
+                                                target="_blank">
+                                            <span class="ml-3">
+                                                {{ notification.getSubject() }}
+                                            </span>
+
+                                            {# TODO #}
+                                            <span class="badge badge-success float-right">
+                                                <i class="fas fa-check"></i>
+                                            </span>
+                                        </a>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <div class="list-group-item list-group-item-action disabled" aria-disabled="true">
+                                No notification for this repository.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

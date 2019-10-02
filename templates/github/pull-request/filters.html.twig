@@ -7,52 +7,7 @@
             <h4 class="mt-2 ml-2">Pull requests</h4>
 
             <div class="accordion" id="accordion-pull-requests">
-                {% for repository, sortedPullRequests in openPullRequests %}
-                    <div class="card">
-                        <div class="card-header p-0" id="heading-pr-{{ repository|slugify }}">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-pr-{{ repository|slugify }}" aria-expanded="true" aria-controls="collapse-pr-{{ repository|slugify }}">
-                                {{ repository }} <strong>({{ sortedPullRequests.count() }})</strong>
-                            </button>
-                        </div>
-
-                        <div id="collapse-pr-{{ repository|slugify }}" class="collapse show" aria-labelledby="heading-pr-{{ repository|slugify }}" data-parent="#accordion-pull-requests">
-                            <div class="card-body">
-                                <div class="list-group">
-                                    <div class="list-group-items">
-                                        {% if sortedPullRequests.count() > 0 %}
-                                            {% for pullRequest in sortedPullRequests %}
-                                                <a href="{{ pullRequest.getUrl() }}"
-                                                        class="list-group-item list-group-item-action" target="_blank">
-                                                    <img src="{{ pullRequest.getUser().getAvatarUrl() }}"
-                                                            class="float-left rounded"
-                                                            title="Pull request from: {{ pullRequest.getUser().getLogin() }}">
-
-                                                    <span class="ml-3 text-primary">
-                                                        #{{ pullRequest.getNumber() }}
-                                                    </span>
-
-                                                    <span class="ml-3">
-                                                        {{ pullRequest.getTitle() }}
-                                                    </span>
-
-                                                    {% if pullRequest.getBase() is not null %}
-                                                        <span class="badge badge-{{ pullRequest.getBranchColor() }} float-right">
-                                                            {{ pullRequest.getBase() }}
-                                                        </span>
-                                                    {% endif %}
-                                                </a>
-                                            {% endfor %}
-                                        {% else %}
-                                            <div class="list-group-item list-group-item-action disabled" aria-disabled="true">
-                                                No pull request for this repository..
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
+                {% include 'github/pull-request/filtersPullRequests.html.twig' %}
             </div>
         </div>
 
@@ -60,45 +15,7 @@
             <h4 class="mt-2 ml-2">Notifications</h4>
 
             <div class="accordion" id="accordion-notifs">
-                {% for repository, sortedNotifications in unreadNotifications %}
-                    <div class="card">
-                        <div class="card-header p-0" id="heading-notifs-{{ repository|slugify }}">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-notifs-{{ repository|slugify }}" aria-expanded="true" aria-controls="collapse-notifs-{{ repository|slugify }}">
-                                {{ repository }} <strong>(TODO)</strong>
-                            </button>
-                        </div>
-
-                        <div id="collapse-notifs-{{ repository|slugify }}" class="collapse show" aria-labelledby="heading-notifs-{{ repository|slugify }}" data-parent="#accordion-notifs">
-                            <div class="card-body">
-                                <div class="list-group">
-                                    <div class="list-group-items">
-                                        {% for notifications in sortedNotifications %}
-                                            {% if notifications.count() > 0 %}
-                                                <div class="list-group-item list-group-header text-success">
-                                                    <strong>{{ notifications[0].getReason().getName() }}</strong>
-                                                </div>
-
-                                                {% for notification in notifications %}
-                                                    <a href="{{ notification.getUrl() }}"
-                                                            class="list-group-item list-group-item-action" target="_blank">
-                                                        <span class="ml-3">
-                                                            {{ notification.getSubject() }}
-                                                        </span>
-
-                                                        {# TODO #}
-                                                        <span class="badge badge-success float-right">
-                                                            <i class="fas fa-check"></i>
-                                                        </span>
-                                                    </a>
-                                                {% endfor %}
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
+                {% include 'github/pull-request/filtersNotifications.html.twig' %}
             </div>
         </div>
     </div>

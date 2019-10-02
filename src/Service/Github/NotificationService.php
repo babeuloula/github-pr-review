@@ -26,6 +26,8 @@ class NotificationService
     /** @var string[] */
     protected $githubExcludeReasons;
 
+    protected $notificationsCount = [];
+
     /**
      * @param string[] $githubRepos
      * @param string[] $githubExcludeReasons
@@ -40,6 +42,12 @@ class NotificationService
         \natcasesort($this->githubRepos);
 
         $this->githubExcludeReasons = $githubExcludeReasons;
+
+        foreach ($this->githubRepos as $repo) {
+            $this->notificationsCount[$repo] = 0;
+        }
+
+        $this->notificationsCount[static::OTHER_REPOS] = 0;
     }
 
     public function getNotifications(): array
@@ -73,9 +81,16 @@ class NotificationService
 
             if (\array_key_exists($reason, $notificationsOrdered[$repo])) {
                 $notificationsOrdered[$repo][$reason][] = new Notification($notification);
+                ++$this->notificationsCount[$repo];
             }
         }
 
         return $notificationsOrdered;
+    }
+
+    /** @return int[] */
+    public function getNotificationsCount(): array
+    {
+        return $this->notificationsCount;
     }
 }

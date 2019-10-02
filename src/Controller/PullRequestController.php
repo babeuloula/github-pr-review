@@ -68,6 +68,7 @@ class PullRequestController
                 [
                     'openPullRequests' => $service->getOpen(),
                     'unreadNotifications' => $this->notificationService->getNotifications(),
+                    'unreadNotificationsCount' => $this->notificationService->getNotificationsCount(),
                     'labels' => Label::toArray(),
                 ]
             )
