@@ -1,5 +1,6 @@
 {
     "type": "project",
+    "description": "Interface to simplify PR management on GitHub.",
     "license": "proprietary",
     "require": {
         "php": "^7.1.3",
