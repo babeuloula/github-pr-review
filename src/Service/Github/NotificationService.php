@@ -28,8 +28,6 @@ class NotificationService
 
     /**
      * @param string[] $githubRepos
-     * @param string[] $githubBranchsColors
-     * @param string[] $githubFilters
      * @param string[] $githubExcludeReasons
      */
     public function __construct(

@@ -7,13 +7,15 @@ declare(strict_types=1);
 
 namespace App\Service\Github;
 
+use App\Traits\PullRequestTypedArrayTrait;
 use App\TypedArray\PullRequestArray;
-use App\TypedArray\Type\PullRequest;
 use Github\Api\Search;
 use Github\Client;
 
 class PullRequestFilterService implements PullRequestServiceInterface
 {
+    use PullRequestTypedArrayTrait;
+
     protected const OTHER_REPOS = 'Other repos';
 
     /** @var Client */
@@ -41,11 +43,12 @@ class PullRequestFilterService implements PullRequestServiceInterface
         array $githubRepos,
         array $githubBranchsColors,
         string $githubBranchDefaultColor,
-        array $githubFilters
+        array $githubFilters,
+        bool $useFilters
     ) {
         $this->client = $client->getClient();
 
-        if (0 === \count($githubFilters)) {
+        if (true === $useFilters && 0 === \count($githubFilters)) {
             throw new \RuntimeException("Option Github Filters cannot be empty.");
         }
 
@@ -79,21 +82,7 @@ class PullRequestFilterService implements PullRequestServiceInterface
             $pullRequestsArray = new PullRequestArray();
 
             foreach ($this->getAll($username, $repository, $params) as $pullRequest) {
-                $pullRequest = (new PullRequest($pullRequest))->setBranchColor($this->branchDefaultColor);
-
-                /** @var array $branchColor */
-                foreach ($this->branchsColors as $branchColor) {
-                    $branch = \array_keys($branchColor)[0];
-                    $color = \array_values($branchColor)[0];
-
-                    if (\is_string($pullRequest->getBase())
-                        && \preg_match("/".$branch."/", $pullRequest->getBase()) === 1
-                    ) {
-                        $pullRequest->setBranchColor($color);
-                        break;
-                    }
-                }
-
+                $pullRequest = $this->convertToTypedArray($pullRequest);
                 $pullRequestsArray[$pullRequest->getUrl()] = $pullRequest;
             }
 
@@ -129,5 +118,11 @@ class PullRequestFilterService implements PullRequestServiceInterface
         }
 
         return $pullRequests;
+    }
+
+    /** @return string[] */
+    protected function getBranchsColors(): array
+    {
+        return $this->branchsColors;
     }
 }

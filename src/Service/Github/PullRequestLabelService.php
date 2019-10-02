@@ -8,13 +8,15 @@ declare(strict_types=1);
 namespace App\Service\Github;
 
 use App\Enum\Label;
+use App\Traits\PullRequestTypedArrayTrait;
 use App\TypedArray\PullRequestArray;
-use App\TypedArray\Type\PullRequest;
 use Github\Api\PullRequest as PullRequestApi;
 use Github\Client;
 
 class PullRequestLabelService implements PullRequestServiceInterface
 {
+    use PullRequestTypedArrayTrait;
+
     /** @var Client */
     protected $client;
 
@@ -145,22 +147,15 @@ class PullRequestLabelService implements PullRequestServiceInterface
                 }
             }
 
-            $pullRequest = (new PullRequest($pullRequest))->setBranchColor($this->branchDefaultColor);
-
-            /** @var array $branchColor */
-            foreach ($this->branchsColors as $branchColor) {
-                $branch = \array_keys($branchColor)[0];
-                $color = \array_values($branchColor)[0];
-
-                if (\preg_match("/".$branch."/", $pullRequest->getBase()) === 1) {
-                    $pullRequest->setBranchColor($color);
-                    break;
-                }
-            }
-
-            $pullRequestsSorted[$labelEnum->getValue()][] = $pullRequest;
+            $pullRequestsSorted[$labelEnum->getValue()][] = $this->convertToTypedArray($pullRequest);
         }
 
         return $pullRequestsSorted;
+    }
+
+    /** @return string[] */
+    protected function getBranchsColors(): array
+    {
+        return $this->branchsColors;
     }
 }
