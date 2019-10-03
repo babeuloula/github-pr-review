@@ -27,22 +27,29 @@ class NotificationService
     /** @var string[] */
     protected $githubExcludeReasons;
 
+    /** @var array */
+    protected $githubExcludeReasonsOtherRepos;
+
+    /** @var int[] */
     protected $notificationsCount = [];
 
     /**
      * @param string[] $githubRepos
      * @param string[] $githubExcludeReasons
+     * @param string[] $githubExcludeReasonsOtherRepos
      */
     public function __construct(
         GithubClientService $client,
         array $githubRepos,
-        array $githubExcludeReasons
+        array $githubExcludeReasons,
+        array $githubExcludeReasonsOtherRepos
     ) {
         $this->client = $client->getClient();
         $this->githubRepos = $githubRepos;
         \natcasesort($this->githubRepos);
 
         $this->githubExcludeReasons = $githubExcludeReasons;
+        $this->githubExcludeReasonsOtherRepos = $githubExcludeReasonsOtherRepos;
 
         foreach ($this->githubRepos as $repo) {
             $this->notificationsCount[$repo] = 0;
@@ -60,6 +67,12 @@ class NotificationService
             \array_values(NotificationReason::toArray()),
             function (string $reason): bool {
                 return false === \in_array($reason, $this->githubExcludeReasons);
+            }
+        );
+        $reasonsOtherRepos = \array_filter(
+            \array_values(NotificationReason::toArray()),
+            function (string $reason): bool {
+                return false === \in_array($reason, $this->githubExcludeReasonsOtherRepos);
             }
         );
         $notificationsOrdered = [];

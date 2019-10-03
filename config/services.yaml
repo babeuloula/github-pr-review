@@ -19,6 +19,7 @@ services:
             $useLabels: '%env(bool:USE_LABELS)%'
             $useFilters: '%env(bool:USE_FILTERS)%'
             $githubExcludeReasons: '%env(json:GITHUB_EXCLUDE_REASONS)%'
+            $githubExcludeReasonsOtherRepos: '%env(json:GITHUB_EXCLUDE_REASONS_OTHER_REPOS)%'
 
     App\Controller\PullRequestController:
         public: true
