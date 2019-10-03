@@ -66,10 +66,7 @@ class PullRequestFilterService implements PullRequestServiceInterface
     /** @return PullRequestArray[] */
     public function getOpen(): array
     {
-        return $this->search([
-            'sort' => 'updated',
-            'direction' => 'desc',
-        ]);
+        return $this->search();
     }
 
     /** return int[] */
