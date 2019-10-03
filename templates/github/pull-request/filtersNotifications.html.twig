@@ -1,4 +1,9 @@
 {% for repository, sortedNotifications in unreadNotifications %}
+    {% set lastRepo = false %}
+    {% if loop.last %}
+        {% set lastRepo = true %}
+    {% endif %}
+
     <div class="card">
         <div class="card-header p-0" id="heading-notifs-{{ repository|slugify }}">
             <button class="btn btn-link" type="button" data-toggle="collapse"
@@ -23,7 +28,11 @@
                                     {% for notification in notifications %}
                                         <a href="{{ notification.getUrl() }}" class="list-group-item list-group-item-action"
                                                 target="_blank">
-                                            <span class="ml-3">
+                                            <span>
+                                                {% if lastRepo %}
+                                                    <strong>({{ notification.repository }})</strong>
+                                                {% endif %}
+
                                                 {{ notification.getSubject() }}
                                             </span>
 
