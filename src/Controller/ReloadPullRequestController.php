@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enum\UseMode;
 use App\Service\Github\PullRequestFilterService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,25 +19,25 @@ class ReloadPullRequestController
     /** @var PullRequestFilterService */
     protected $pullRequestFilterService;
 
-    /** @var bool */
-    protected $useFilters;
+    /** @var UseMode */
+    protected $useMode;
 
     /** @var Environment */
     protected $twig;
 
     public function __construct(
         PullRequestFilterService $pullRequestFilterService,
-        bool $useFilters,
+        string $useMode,
         Environment $twig
     ) {
         $this->pullRequestFilterService = $pullRequestFilterService;
-        $this->useFilters = $useFilters;
+        $this->useMode = new UseMode($useMode);
         $this->twig = $twig;
     }
 
     public function __invoke(Request $request): Response
     {
-        if (false === $this->useFilters) {
+        if (false === $this->useMode->equals(UseMode::FILTER())) {
             throw new \RuntimeException("You need to use filters to access to this endpoint.");
         }
 

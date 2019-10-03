@@ -25,31 +25,31 @@ class NotificationService
     protected $githubRepos;
 
     /** @var string[] */
-    protected $githubExcludeReasons;
+    protected $githubNotificationsExcludeReasons;
 
-    /** @var array */
-    protected $githubExcludeReasonsOtherRepos;
+    /** @var string[] */
+    protected $githubNotificationsExcludeReasonsOtherRepos;
 
     /** @var int[] */
     protected $notificationsCount = [];
 
     /**
      * @param string[] $githubRepos
-     * @param string[] $githubExcludeReasons
-     * @param string[] $githubExcludeReasonsOtherRepos
+     * @param string[] $githubNotificationsExcludeReasons
+     * @param string[] $githubNotificationsExcludeReasonsOtherRepos
      */
     public function __construct(
         GithubClientService $client,
         array $githubRepos,
-        array $githubExcludeReasons,
-        array $githubExcludeReasonsOtherRepos
+        array $githubNotificationsExcludeReasons,
+        array $githubNotificationsExcludeReasonsOtherRepos
     ) {
         $this->client = $client->getClient();
         $this->githubRepos = $githubRepos;
         \natcasesort($this->githubRepos);
 
-        $this->githubExcludeReasons = $githubExcludeReasons;
-        $this->githubExcludeReasonsOtherRepos = $githubExcludeReasonsOtherRepos;
+        $this->githubNotificationsExcludeReasons = $githubNotificationsExcludeReasons;
+        $this->githubNotificationsExcludeReasonsOtherRepos = $githubNotificationsExcludeReasonsOtherRepos;
 
         foreach ($this->githubRepos as $repo) {
             $this->notificationsCount[$repo] = 0;
@@ -66,13 +66,13 @@ class NotificationService
         $reasons = \array_filter(
             \array_values(NotificationReason::toArray()),
             function (string $reason): bool {
-                return false === \in_array($reason, $this->githubExcludeReasons);
+                return false === \in_array($reason, $this->githubNotificationsExcludeReasons);
             }
         );
         $reasonsOtherRepos = \array_filter(
             \array_values(NotificationReason::toArray()),
             function (string $reason): bool {
-                return false === \in_array($reason, $this->githubExcludeReasonsOtherRepos);
+                return false === \in_array($reason, $this->githubNotificationsExcludeReasonsOtherRepos);
             }
         );
         $notificationsOrdered = [];
@@ -84,6 +84,7 @@ class NotificationService
         }
 
         $notificationsOrdered[static::OTHER_REPOS] = [];
+
         foreach ($reasons as $reason) {
             $notificationsOrdered[static::OTHER_REPOS][$reason] = new NotificationArray();
         }
@@ -129,12 +130,8 @@ class NotificationService
         return true;
     }
 
-    protected function formatUrl(NotificationType $type, ?string $url): ?string
+    protected function formatUrl(NotificationType $type, string $url): string
     {
-        if (false === \is_string($url)) {
-            return null;
-        }
-
         switch ($type) {
             case NotificationType::ISSUE():
                 $url = \str_replace(
@@ -150,10 +147,6 @@ class NotificationService
                     ['https://github.com/', '/pull/'],
                     $url
                 );
-                break;
-
-            default:
-                $url = null;
                 break;
         }
 

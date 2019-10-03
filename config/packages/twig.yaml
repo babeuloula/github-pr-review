@@ -6,5 +6,4 @@ twig:
         enableDarkTheme: '%env(bool:ENABLE_DARK_THEME)%'
         reloadOnFocus: '%env(bool:RELOAD_ON_FOCUS)%'
         reloadEvery: '%env(int:RELOAD_EVERY)%'
-        useLabels: '%env(bool:USE_LABELS)%'
-        useFilters: '%env(bool:USE_FILTERS)%'
+        useMode: '%env(USE_MODE)%'

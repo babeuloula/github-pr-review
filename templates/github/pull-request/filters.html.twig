@@ -1,32 +1,32 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm">
-            <h4 class="mt-2 ml-2">Pull requests</h4>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm">
+                <h4 class="mt-2 ml-2">Pull requests</h4>
 
-            <div class="accordion" id="accordion-pull-requests" data-url="{{ url('ajax_pr_reload') }}">
-                {% include 'github/pull-request/filtersPullRequests.html.twig' %}
+                <div class="accordion" id="accordion-pull-requests" data-url="{{ url('ajax_pr_reload') }}">
+                    {% include 'github/pull-request/filtersPullRequests.html.twig' %}
+                </div>
             </div>
-        </div>
 
-        <div class="col-sm">
-            <h4 class="mt-2 ml-2">Notifications</h4>
+            <div class="col-sm">
+                <h4 class="mt-2 ml-2">Notifications</h4>
 
-            <div class="accordion" id="accordion-notifs" data-url="{{ url('ajax_notif_reload') }}">
-                {% include 'github/pull-request/filtersNotifications.html.twig' %}
+                <div class="accordion" id="accordion-notifs" data-url="{{ url('ajax_notif_reload') }}">
+                    {% include 'github/pull-request/filtersNotifications.html.twig' %}
+                </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
 
     <script type="text/javascript">
-        jQuery(function($){
+        jQuery(function ($) {
             let reloadOnFocus = {{ reloadOnFocus ? 'true' : 'false' }};
             let reloadEvery = {{ reloadEvery }};
             let pullRequestsCount = {{ openPullRequestsCount|json_encode|raw }};
@@ -48,10 +48,10 @@
 
                 $.ajax({
                     url: $accordionNotifs.attr('data-url'),
-                    success: function(response, textStatus, jqXHR) {
+                    success: function (response, textStatus, jqXHR) {
                         $accordionNotifs.html(response);
                     },
-                    error: function(response, textStatus, errorThrown) {
+                    error: function (response, textStatus, errorThrown) {
                         alert("Unable to load notifications.");
                     }
                 });

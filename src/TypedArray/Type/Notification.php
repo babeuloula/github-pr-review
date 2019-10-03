@@ -36,7 +36,7 @@ class Notification
     /** @var string */
     protected $repository;
 
-    /** @var ?string */
+    /** @var string */
     protected $url;
 
     public function __construct(array $data)
@@ -92,12 +92,12 @@ class Notification
         return $this->repository;
     }
 
-    public function getUrl(): ?string
+    public function getUrl(): string
     {
         return $this->url;
     }
 
-    public function setUrl($url)
+    public function setUrl(string $url): self
     {
         $this->url = $url;
 

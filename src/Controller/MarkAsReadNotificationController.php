@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enum\UseMode;
 use App\Service\Github\NotificationService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,25 +18,25 @@ class MarkAsReadNotificationController
     /** @var NotificationService */
     protected $notificationService;
 
-    /** @var bool */
-    protected $useFilters;
+    /** @var UseMode */
+    protected $useMode;
 
     /** @var Environment */
     protected $twig;
 
     public function __construct(
         NotificationService $notificationService,
-        bool $useFilters,
+        string $useMode,
         Environment $twig
     ) {
         $this->notificationService = $notificationService;
-        $this->useFilters = $useFilters;
+        $this->useMode = new UseMode($useMode);
         $this->twig = $twig;
     }
 
     public function __invoke(Request $request, int $threadId): JsonResponse
     {
-        if (false === $this->useFilters) {
+        if (false === $this->useMode->equals(UseMode::FILTER())) {
             throw new \RuntimeException("You need to use filters to access to this endpoint.");
         }
 

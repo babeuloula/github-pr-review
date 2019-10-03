@@ -97,7 +97,11 @@ class PullRequestLabelService implements PullRequestServiceInterface
         return $this->openCount;
     }
 
-    /** @return array[] */
+    /**
+     * @param mixed[] $params
+     *
+     * @return array[]
+     */
     protected function search(array $params = []): array
     {
         $pullRequests = [];
@@ -119,13 +123,20 @@ class PullRequestLabelService implements PullRequestServiceInterface
         return $pullRequests;
     }
 
-    /** @return array[] */
+    /**
+     * @param mixed[] $params
+     *
+     * @return array[]
+     */
     protected function getAll(string $username, string $repository, array $params): array
     {
         /** @var PullRequestApi $pullRequestApi */
         $pullRequestApi = $this->client->api('pullRequest');
         $pullRequest = $pullRequestApi->all($username, $repository, $params);
 
+        // Github does not offer a system indicating the total number of PRs.
+        // We are therefore obliged to detect the number of returns.
+        // If we have 30, it's because there's a next page. If we have less, we are on the last page.
         if (\count($pullRequest) === 30) {
             $pullRequest = \array_merge(
                 $this->getAll(
@@ -140,7 +151,11 @@ class PullRequestLabelService implements PullRequestServiceInterface
         return $pullRequest;
     }
 
-    /** @return PullRequestArray[] */
+    /**
+     * @param array[] $pullRequests
+     *
+     * @return PullRequestArray[]
+     */
     protected function sortByLabel(array $pullRequests): array
     {
         $pullRequestsSorted = [
