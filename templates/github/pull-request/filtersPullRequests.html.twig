@@ -31,7 +31,7 @@
 
                                     {% if pullRequest.getBase() is not null %}
                                         <span class="badge badge-{{ pullRequest.getBranchColor() }} float-right">
-                                            {{ pullRequest.getBase() }}
+                                            {{ pullRequest.getHead() }}
                                         </span>
                                     {% endif %}
                                 </a>

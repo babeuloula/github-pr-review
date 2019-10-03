@@ -40,7 +40,7 @@ If you don't want to reload on focus and reload every x ms, you just need to set
 
 If you want to search PRs by filters, you can fill `GITHUB_FILTERS`. You can find a list of available filters [here](https://help.github.com/en/articles/searching-issues-and-pull-requests).
 
-To fill `GITHUB_EXCLUDE_REASONS` and `GITHUB_EXCLUDE_REASONS_OTHER_REPOS` you can find the list [here](https://developer.github.com/v3/activity/notifications/#notification-reasons).
+To fill `GITHUB_NOTIFICATIONS_EXCLUDE_REASONS` and `GITHUB_NOTIFICATIONS_EXCLUDE_REASONS_OTHER_REPOS` you can find the list [here](https://developer.github.com/v3/activity/notifications/#notification-reasons).
 
 ## Installation
 

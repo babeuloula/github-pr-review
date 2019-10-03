@@ -98,7 +98,7 @@ class PullRequestFilterService implements PullRequestServiceInterface
                     $pullRequest = $pullRequestApi->show($username, $repository, $pullRequest['number']);
 
                     if (\is_array($pullRequest)) {
-                        $pullRequest = $this->convertToTypedArray($pullRequest);
+                        $pullRequest = $this->convertToTypedArray($pullRequest, true);
                         $pullRequestsArray[$pullRequest->getUrl()] = $pullRequest;
                     }
                 }

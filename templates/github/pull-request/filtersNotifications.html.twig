@@ -37,11 +37,11 @@
                                                     </span>
                                                 {% endif %}
 
-                                                <span class="badge badge-success notification-mark-as-read"
+                                                <span class="notification-mark-as-read"
                                                         id="notification-mark-as-read-{{ notification.getId() }}"
                                                         title="Mark as read"
                                                         data-url="{{ url('ajax_notif_mark_as_read', { 'threadId': notification.getId() }) }}">
-                                                    <i class="fas fa-check"></i>
+                                                    <i class="text-muted fas fa-check"></i>
                                                 </span>
                                             </div>
                                         </a>

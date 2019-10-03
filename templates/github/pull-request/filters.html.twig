@@ -69,6 +69,8 @@
 
                 let $that = $(this);
 
+                $that.find('i').removeClass('text-muted').addClass('text-success');
+
                 $.ajax({
                     url: $that.attr('data-url'),
                     type: 'POST',
