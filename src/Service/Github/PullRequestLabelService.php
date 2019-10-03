@@ -41,7 +41,7 @@ class PullRequestLabelService implements PullRequestServiceInterface
     /** @var string */
     protected $branchDefaultColor;
 
-    /** @var int[] */
+    /** @var array[] */
     protected $openCount = [];
 
     /**

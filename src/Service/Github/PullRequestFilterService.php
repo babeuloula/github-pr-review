@@ -95,10 +95,12 @@ class PullRequestFilterService implements PullRequestServiceInterface
             $pullRequestsArray = new PullRequestArray();
 
             foreach ($this->getAll($username, $repository, $params) as $pullRequest) {
-                $pullRequest = $this->convertToTypedArray(
-                    $pullRequestApi->show($username, $repository, $pullRequest['number'])
-                );
-                $pullRequestsArray[$pullRequest->getUrl()] = $pullRequest;
+                $pullRequest = $pullRequestApi->show($username, $repository, $pullRequest['number']);
+
+                if (\is_array($pullRequest)) {
+                    $pullRequest = $this->convertToTypedArray($pullRequest);
+                    $pullRequestsArray[$pullRequest->getUrl()] = $pullRequest;
+                }
             }
 
             $this->openCount[$githubRepo] = $pullRequestsArray->count();

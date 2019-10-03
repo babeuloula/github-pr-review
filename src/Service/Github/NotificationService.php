@@ -129,8 +129,12 @@ class NotificationService
         return true;
     }
 
-    protected function formatUrl(NotificationType $type, string $url): ?string
+    protected function formatUrl(NotificationType $type, ?string $url): ?string
     {
+        if (false === \is_string($url)) {
+            return null;
+        }
+
         switch ($type) {
             case NotificationType::ISSUE():
                 $url = \str_replace(
