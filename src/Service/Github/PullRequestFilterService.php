@@ -9,6 +9,7 @@ namespace App\Service\Github;
 
 use App\Traits\PullRequestTypedArrayTrait;
 use App\TypedArray\PullRequestArray;
+use Github\Api\PullRequest as PullRequestApi;
 use Github\Api\Search;
 use Github\Client;
 
@@ -76,6 +77,8 @@ class PullRequestFilterService implements PullRequestServiceInterface
      */
     protected function search(array $params = []): array
     {
+        /** @var PullRequestApi $pullRequestApi */
+        $pullRequestApi = $this->client->api('pullRequest');
         $pullRequests = [];
 
         foreach ($this->githubRepos as $githubRepo) {
@@ -83,7 +86,9 @@ class PullRequestFilterService implements PullRequestServiceInterface
             $pullRequestsArray = new PullRequestArray();
 
             foreach ($this->getAll($username, $repository, $params) as $pullRequest) {
-                $pullRequest = $this->convertToTypedArray($pullRequest);
+                $pullRequest = $this->convertToTypedArray(
+                    $pullRequestApi->show($username, $repository, $pullRequest['number'])
+                );
                 $pullRequestsArray[$pullRequest->getUrl()] = $pullRequest;
             }
 
