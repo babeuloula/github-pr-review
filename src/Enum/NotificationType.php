@@ -1,0 +1,23 @@
+<?php
+/**
+ * @author BaBeuloula <info@babeuloula.fr>
+ */
+
+declare(strict_types=1);
+
+namespace App\Enum;
+
+use MyCLabs\Enum\Enum;
+
+/**
+ * @method static NotificationType ISSUE()
+ * @method static NotificationType PULL_REQUEST()
+ */
+class NotificationType extends Enum
+{
+    /** @var string */
+    protected const ISSUE = 'issue';
+
+    /** @var string */
+    protected const PULL_REQUEST = 'PullRequest';
+}

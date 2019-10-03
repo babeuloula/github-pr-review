@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm">
+                <h4 class="mt-2 ml-2">Pull requests</h4>
+
+                <div class="accordion" id="accordion-pull-requests" data-url="{{ url('ajax_pr_reload') }}">
+                    {% include 'github/pull-request/filtersPullRequests.html.twig' %}
+                </div>
+            </div>
+
+            <div class="col-sm">
+                <h4 class="mt-2 ml-2">Notifications</h4>
+
+                <div class="accordion" id="accordion-notifs" data-url="{{ url('ajax_notif_reload') }}">
+                    {% include 'github/pull-request/filtersNotifications.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        jQuery(function ($) {
+            let reloadOnFocus = {{ reloadOnFocus ? 'true' : 'false' }};
+            let reloadEvery = {{ reloadEvery }};
+            let pullRequestsCount = {{ openPullRequestsCount|json_encode|raw }};
+            let unreadNotificationsCount = {{ unreadNotificationsCount|json_encode|raw }};
+
+            window.reloadData = function () {
+                let $accordionPullRequests = $(document).find('#accordion-pull-requests');
+                let $accordionNotifs = $(document).find('#accordion-notifs');
+
+                $.ajax({
+                    url: $accordionPullRequests.attr('data-url'),
+                    success: function(response, textStatus, jqXHR) {
+                        $accordionPullRequests.html(response);
+                    },
+                    error: function(response, textStatus, errorThrown) {
+                        alert("Unable to load pull requests.");
+                    }
+                });
+
+                $.ajax({
+                    url: $accordionNotifs.attr('data-url'),
+                    success: function (response, textStatus, jqXHR) {
+                        $accordionNotifs.html(response);
+                    },
+                    error: function (response, textStatus, errorThrown) {
+                        alert("Unable to load notifications.");
+                    }
+                });
+            };
+
+            if (reloadOnFocus) {
+                $(window).on('focus', reloadData);
+            } else if(reloadEvery > 0) {
+                window.setInterval(reloadData, reloadEvery);
+            }
+
+            $(document).on('click', '.notification-mark-as-read', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                let $that = $(this);
+
+                $that.find('i').removeClass('text-muted').addClass('text-success');
+
+                $.ajax({
+                    url: $that.attr('data-url'),
+                    type: 'POST',
+                    success: function(response, textStatus, jqXHR) {
+                        let $strong = $($that.parents('.collapse').get(0)).prev().find('strong');
+                        let number = $strong.text()
+                            .replace('(', '')
+                            .replace(')', '')
+                        ;
+                        number = parseInt(number, 10);
+
+                        let $listItem = $($that.parents('.list-group-item').get(0));
+
+                        let nextTag = $listItem.next()[0] === undefined ? undefined : $listItem.next()[0].tagName.toLowerCase();
+                        let prevTag = $listItem.prev()[0] === undefined ? undefined : $listItem.prev()[0].tagName.toLowerCase();
+
+                        if (('div' === nextTag && 'div' === prevTag)
+                            || (undefined === nextTag && 'div' === prevTag)
+                        ) {
+                            $($listItem.prev().get(0)).slideUp(250, function () {
+                                $(this).remove();
+                            });
+                        }
+
+                        $listItem.slideUp(250, function () {
+                            --number;
+                            $strong.text('('+number+')');
+
+                            $(this).remove();
+                        });
+                    },
+                    error: function(response, textStatus, errorThrown) {
+                        alert("Unable to mark as read notification.");
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

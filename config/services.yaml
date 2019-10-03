@@ -15,8 +15,24 @@ services:
             $githubLabelsWip: '%env(json:GITHUB_LABELS_WIP)%'
             $githubBranchsColors: '%env(json:GITHUB_BRANCHS_COLORS)%'
             $githubBranchDefaultColor: '%env(GITHUB_BRANCH_DEFAULT_COLOR)%'
+            $githubFilters: '%env(json:GITHUB_FILTERS)%'
+            $useMode: '%env(USE_MODE)%'
+            $githubNotificationsExcludeReasons: '%env(json:GITHUB_NOTIFICATIONS_EXCLUDE_REASONS)%'
+            $githubNotificationsExcludeReasonsOtherRepos: '%env(json:GITHUB_NOTIFICATIONS_EXCLUDE_REASONS_OTHER_REPOS)%'
 
     App\Controller\PullRequestController:
         public: true
 
-    App\Service\Github\PullRequestService: ~
+    App\Controller\ReloadPullRequestController:
+        public: true
+
+    App\Controller\ReloadNotificationController:
+        public: true
+
+    App\Controller\MarkAsReadNotificationController:
+        public: true
+
+    App\Service\Github\PullRequestLabelService: ~
+    App\Service\Github\PullRequestFilterService: ~
+    App\Service\Github\NotificationService: ~
+    App\Service\Github\GithubClientService: ~

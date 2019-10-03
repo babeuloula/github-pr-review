@@ -2,18 +2,21 @@
 /**
  * @author BaBeuloula <info@babeuloula.fr>
  */
+
 declare(strict_types=1);
 
 namespace App\Service\Github;
 
 use App\Enum\Label;
+use App\Traits\PullRequestTypedArrayTrait;
 use App\TypedArray\PullRequestArray;
-use App\TypedArray\Type\PullRequest;
 use Github\Api\PullRequest as PullRequestApi;
 use Github\Client;
 
-class PullRequestService
+class PullRequestLabelService implements PullRequestServiceInterface
 {
+    use PullRequestTypedArrayTrait;
+
     /** @var Client */
     protected $client;
 
@@ -38,6 +41,9 @@ class PullRequestService
     /** @var string */
     protected $branchDefaultColor;
 
+    /** @var array[] */
+    protected $openCount = [];
+
     /**
      * @param string[] $githubRepos
      * @param string[] $githubLabelsReviewNeeded
@@ -47,10 +53,7 @@ class PullRequestService
      * @param string[] $githubBranchsColors
      */
     public function __construct(
-        string $githubAuthMethod,
-        string $githubUsername,
-        string $githubPassword,
-        string $githubToken,
+        GithubClientService $client,
         array $githubRepos,
         array $githubLabelsReviewNeeded,
         array $githubLabelsChangedRequested,
@@ -59,15 +62,7 @@ class PullRequestService
         array $githubBranchsColors,
         string $githubBranchDefaultColor
     ) {
-        $this->client = new Client();
-
-        if (Client::AUTH_HTTP_TOKEN === $githubAuthMethod) {
-            $this->client->authenticate($githubToken, null, Client::AUTH_HTTP_TOKEN);
-        } elseif (Client::AUTH_HTTP_PASSWORD === $githubAuthMethod) {
-            $this->client->authenticate($githubUsername, $githubPassword, Client::AUTH_HTTP_PASSWORD);
-        } else {
-            throw new \RuntimeException("Auth method '$githubAuthMethod' is not implemented yet.");
-        }
+        $this->client = $client->getClient();
 
         $this->githubRepos = $githubRepos;
         \natcasesort($this->githubRepos);
@@ -78,16 +73,35 @@ class PullRequestService
         $this->labelsWip = $githubLabelsWip;
         $this->branchsColors = $githubBranchsColors;
         $this->branchDefaultColor = $githubBranchDefaultColor;
+
+        $this->openCount = [
+            Label::REVIEW_NEEDED()->getValue() => [],
+            Label::ACCEPTED()->getValue() => [],
+            Label::CHANGES_REQUESTED()->getValue() => [],
+            Label::WIP()->getValue() => [],
+        ];
     }
 
+    /** @return array[] */
     public function getOpen(): array
     {
         return $this->search([
             'sort' => 'updated',
-            'direction' => 'desc'
+            'direction' => 'desc',
         ]);
     }
 
+    /** return array[] */
+    public function getOpenCount(): array
+    {
+        return $this->openCount;
+    }
+
+    /**
+     * @param mixed[] $params
+     *
+     * @return array[]
+     */
     protected function search(array $params = []): array
     {
         $pullRequests = [];
@@ -95,21 +109,34 @@ class PullRequestService
         foreach ($this->githubRepos as $githubRepo) {
             [$username, $repository] = \explode("/", $githubRepo);
 
-            $pullRequests[$githubRepo] = $this->sortByLabel(
+            $pullRequestsSorted = $this->sortByLabel(
                 $this->getAll($username, $repository, $params)
             );
+
+            foreach ($pullRequestsSorted as $label => $pullRequestArray) {
+                $this->openCount[$label][$githubRepo] = $pullRequestArray->count();
+            }
+
+            $pullRequests[$githubRepo] = $pullRequestsSorted;
         }
 
         return $pullRequests;
     }
 
+    /**
+     * @param mixed[] $params
+     *
+     * @return array[]
+     */
     protected function getAll(string $username, string $repository, array $params): array
     {
         /** @var PullRequestApi $pullRequestApi */
         $pullRequestApi = $this->client->api('pullRequest');
-
         $pullRequest = $pullRequestApi->all($username, $repository, $params);
 
+        // Github does not offer a system indicating the total number of PRs.
+        // We are therefore obliged to detect the number of returns.
+        // If we have 30, it's because there's a next page. If we have less, we are on the last page.
         if (\count($pullRequest) === 30) {
             $pullRequest = \array_merge(
                 $this->getAll(
@@ -124,6 +151,11 @@ class PullRequestService
         return $pullRequest;
     }
 
+    /**
+     * @param array[] $pullRequests
+     *
+     * @return PullRequestArray[]
+     */
     protected function sortByLabel(array $pullRequests): array
     {
         $pullRequestsSorted = [
@@ -156,22 +188,15 @@ class PullRequestService
                 }
             }
 
-            $pullRequest = (new PullRequest($pullRequest))->setBranchColor($this->branchDefaultColor);
-
-            /** @var array $branchColor */
-            foreach ($this->branchsColors as $branchColor) {
-                $branch = \array_keys($branchColor)[0];
-                $color = \array_values($branchColor)[0];
-
-                if (\preg_match("/".$branch."/", $pullRequest->getBase()) === 1) {
-                    $pullRequest->setBranchColor($color);
-                    break;
-                }
-            }
-
-            $pullRequestsSorted[$labelEnum->getValue()][] = $pullRequest;
+            $pullRequestsSorted[$labelEnum->getValue()][] = $this->convertToTypedArray($pullRequest);
         }
 
         return $pullRequestsSorted;
+    }
+
+    /** @return string[] */
+    protected function getBranchsColors(): array
+    {
+        return $this->branchsColors;
     }
 }

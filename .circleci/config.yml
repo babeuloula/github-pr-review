@@ -1,6 +1,14 @@
 version: 2.1
 
 commands:
+    checkout-alpine:
+        description: Install alpine requirements for checkout
+        steps:
+            - run:
+                name: "Install alpine requirements for checkout"
+                command: apk add git openssh-client curl
+            - checkout
+
     composer-install:
         description: "Install dependencies"
         steps:
@@ -8,8 +16,10 @@ commands:
                 name: "Execute: composer install"
                 command: |
                     if [ ! -f vendor/autoload.php ];then
+                        curl https://getcomposer.org/composer.phar --location --silent  --output /usr/bin/composer;
+                        chmod +x /usr/bin/composer;
                         composer global require hirak/prestissimo;
-                        composer install --ignore-platform-reqs --no-interaction --no-progress --classmap-authoritative;
+                        composer install --no-interaction --no-progress;
                     fi
 
     restore-composer-cache:
@@ -21,7 +31,7 @@ commands:
     store-composer-cache:
         description: "Store vendor folder in CircleCI cache"
         steps:
-            - checkout
+            - checkout-alpine
             - restore-composer-cache
             - composer-install
             - save_cache:
@@ -50,11 +60,6 @@ commands:
                     vendor/bin/phpstan analyse src --level 7
 
 executors:
-    composer_cache:
-        docker:
-            - image: composer
-        working_directory: ~/repository
-
     php:
         docker:
             - image: php:7.3.8-cli-alpine3.10
@@ -62,21 +67,21 @@ executors:
 
 jobs:
     composer:
-        executor: composer_cache
+        executor: php
         steps:
             - store-composer-cache
 
     phpcs:
         executor: php
         steps:
-            - checkout
+            - checkout-alpine
             - restore-composer-cache
             - phpcs
 
     phpstan:
         executor: php
         steps:
-            - checkout
+            - checkout-alpine
             - restore-composer-cache
             - phpstan
 

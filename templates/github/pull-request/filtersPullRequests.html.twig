@@ -1,0 +1,49 @@
+{% for repository, sortedPullRequests in openPullRequests %}
+    <div class="card">
+        <div class="card-header p-0" id="heading-pr-{{ repository|slugify }}">
+            <button class="btn btn-link" type="button" data-toggle="collapse"
+                    data-target="#collapse-pr-{{ repository|slugify }}" aria-expanded="true"
+                    aria-controls="collapse-pr-{{ repository|slugify }}">
+                {{ repository }} <strong>({{ sortedPullRequests.count() }})</strong>
+            </button>
+        </div>
+
+        <div id="collapse-pr-{{ repository|slugify }}" class="collapse show"
+                aria-labelledby="heading-pr-{{ repository|slugify }}" data-parent="#accordion-pull-requests">
+            <div class="card-body">
+                <div class="list-group">
+                    <div class="list-group-items">
+                        {% if sortedPullRequests.count() > 0 %}
+                            {% for pullRequest in sortedPullRequests %}
+                                <a href="{{ pullRequest.getUrl() }}"
+                                        class="list-group-item list-group-item-action" target="_blank">
+                                    <img src="{{ pullRequest.getUser().getAvatarUrl() }}"
+                                            class="float-left rounded"
+                                            title="Pull request from: {{ pullRequest.getUser().getLogin() }}">
+
+                                    <span class="ml-3 text-success">
+                                        #{{ pullRequest.getNumber() }}
+                                    </span>
+
+                                    <span class="ml-3">
+                                        {{ pullRequest.getTitle() }}
+                                    </span>
+
+                                    {% if pullRequest.getBase() is not null %}
+                                        <span class="badge badge-{{ pullRequest.getBranchColor() }} float-right">
+                                            {{ pullRequest.getHead() }}
+                                        </span>
+                                    {% endif %}
+                                </a>
+                            {% endfor %}
+                        {% else %}
+                            <div class="list-group-item list-group-item-action disabled" aria-disabled="true">
+                                No pull request for this repository.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}

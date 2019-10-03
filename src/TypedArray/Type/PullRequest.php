@@ -2,6 +2,7 @@
 /**
  * @author BaBeuloula <info@babeuloula.fr>
  */
+
 declare(strict_types=1);
 
 namespace App\TypedArray\Type;
@@ -26,10 +27,10 @@ class PullRequest
     /** @var \DateTimeImmutable */
     protected $updatedAt;
 
-    /** @var string */
+    /** @var ?string */
     protected $head;
 
-    /** @var string */
+    /** @var ?string */
     protected $base;
 
     /** @var string */
@@ -43,8 +44,8 @@ class PullRequest
         $this->user = new User($data['user']);
         $this->createdAt = new \DateTimeImmutable($data['created_at']);
         $this->updatedAt = new \DateTimeImmutable($data['updated_at']);
-        $this->head = $data['head']['ref'];
-        $this->base = $data['base']['ref'];
+        $this->head = \array_key_exists('head', $data) ? $data['head']['ref'] : null;
+        $this->base = \array_key_exists('base', $data) ? $data['base']['ref'] : null;
     }
 
     public function getUrl(): string
@@ -77,12 +78,12 @@ class PullRequest
         return $this->updatedAt;
     }
 
-    public function getHead(): string
+    public function getHead(): ?string
     {
         return $this->head;
     }
 
-    public function getBase(): string
+    public function getBase(): ?string
     {
         return $this->base;
     }
