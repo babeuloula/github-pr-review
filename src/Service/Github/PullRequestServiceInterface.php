@@ -10,4 +10,6 @@ namespace App\Service\Github;
 interface PullRequestServiceInterface
 {
     public function getOpen(): array;
+
+    public function getOpenCount(): array;
 }

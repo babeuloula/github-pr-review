@@ -41,6 +41,9 @@ class PullRequestLabelService implements PullRequestServiceInterface
     /** @var string */
     protected $branchDefaultColor;
 
+    /** @var int[] */
+    protected $openCount = [];
+
     /**
      * @param string[] $githubRepos
      * @param string[] $githubLabelsReviewNeeded
@@ -70,6 +73,13 @@ class PullRequestLabelService implements PullRequestServiceInterface
         $this->labelsWip = $githubLabelsWip;
         $this->branchsColors = $githubBranchsColors;
         $this->branchDefaultColor = $githubBranchDefaultColor;
+
+        $this->openCount = [
+            Label::REVIEW_NEEDED()->getValue() => [],
+            Label::ACCEPTED()->getValue() => [],
+            Label::CHANGES_REQUESTED()->getValue() => [],
+            Label::WIP()->getValue() => [],
+        ];
     }
 
     /** @return array[] */
@@ -81,6 +91,12 @@ class PullRequestLabelService implements PullRequestServiceInterface
         ]);
     }
 
+    /** return array[] */
+    public function getOpenCount(): array
+    {
+        return $this->openCount;
+    }
+
     /** @return array[] */
     protected function search(array $params = []): array
     {
@@ -89,9 +105,15 @@ class PullRequestLabelService implements PullRequestServiceInterface
         foreach ($this->githubRepos as $githubRepo) {
             [$username, $repository] = \explode("/", $githubRepo);
 
-            $pullRequests[$githubRepo] = $this->sortByLabel(
+            $pullRequestsSorted = $this->sortByLabel(
                 $this->getAll($username, $repository, $params)
             );
+
+            foreach ($pullRequestsSorted as $label => $pullRequestArray) {
+                $this->openCount[$label][$githubRepo] = $pullRequestArray->count();
+            }
+
+            $pullRequests[$githubRepo] = $pullRequestsSorted;
         }
 
         return $pullRequests;

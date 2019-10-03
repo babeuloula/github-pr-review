@@ -34,6 +34,9 @@ class PullRequestFilterService implements PullRequestServiceInterface
     /** @var string[] */
     protected $githubFilters;
 
+    /** @var int[] */
+    protected $openCount = [];
+
     /**
      * @param string[] $githubRepos
      * @param string[] $githubBranchsColors
@@ -70,6 +73,12 @@ class PullRequestFilterService implements PullRequestServiceInterface
         ]);
     }
 
+    /** return int[] */
+    public function getOpenCount(): array
+    {
+        return $this->openCount;
+    }
+
     /**
      * @param mixed[] $params
      *
@@ -92,6 +101,7 @@ class PullRequestFilterService implements PullRequestServiceInterface
                 $pullRequestsArray[$pullRequest->getUrl()] = $pullRequest;
             }
 
+            $this->openCount[$githubRepo] = $pullRequestsArray->count();
             $pullRequests[$githubRepo] = $pullRequestsArray;
         }
 
