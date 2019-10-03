@@ -28,20 +28,22 @@
                                     {% for notification in notifications %}
                                         <a href="{{ notification.getUrl() }}" class="list-group-item list-group-item-action"
                                                 target="_blank">
-                                            <span>
+                                            <span>{{ notification.getSubject() }}</span>
+
+                                            <div class="float-right">
                                                 {% if lastRepo %}
-                                                    <strong>({{ notification.repository }})</strong>
+                                                    <span class="badge badge-primary mr-2">
+                                                        {{ notification.repository }}
+                                                    </span>
                                                 {% endif %}
 
-                                                {{ notification.getSubject() }}
-                                            </span>
-
-                                            <span class="badge badge-success float-right notification-mark-as-read"
-                                                    id="notification-mark-as-read-{{ notification.getId() }}"
-                                                    title="Mark as read"
-                                                    data-url="{{ url('ajax_notif_mark_as_read', { 'threadId': notification.getId() }) }}">
-                                                <i class="fas fa-check"></i>
-                                            </span>
+                                                <span class="badge badge-success notification-mark-as-read"
+                                                        id="notification-mark-as-read-{{ notification.getId() }}"
+                                                        title="Mark as read"
+                                                        data-url="{{ url('ajax_notif_mark_as_read', { 'threadId': notification.getId() }) }}">
+                                                    <i class="fas fa-check"></i>
+                                                </span>
+                                            </div>
                                         </a>
                                     {% endfor %}
                                 {% endif %}
