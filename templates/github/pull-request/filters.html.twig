@@ -63,7 +63,7 @@
                 window.setInterval(reloadData, reloadEvery);
             }
 
-            $(document).find('.notification-mark-as-read').on('click', function (event) {
+            $(document).on('click', '.notification-mark-as-read', function (event) {
                 event.preventDefault();
                 event.stopPropagation();
 
