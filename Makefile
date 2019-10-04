@@ -8,7 +8,7 @@ stop:
 
 composer:
 	cd ./docker/ && docker-compose exec php composer global require hirak/prestissimo
-	cd ./docker/ && docker-compose exec php composer install --ignore-platform-reqs --no-interaction --no-progress --classmap-authoritative
+	cd ./docker/ && docker-compose exec php composer install --no-interaction --no-progress
 
 shell:
 	cd ./docker/ && docker-compose exec php bash
