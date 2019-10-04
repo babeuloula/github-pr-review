@@ -16,7 +16,7 @@ use MyCLabs\Enum\Enum;
 class NotificationType extends Enum
 {
     /** @var string */
-    protected const ISSUE = 'issue';
+    protected const ISSUE = 'Issue';
 
     /** @var string */
     protected const PULL_REQUEST = 'PullRequest';
