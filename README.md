@@ -7,13 +7,19 @@ Interface to simplify PR management on GitHub.
 1. Create a Github's token ([here](https://github.com/settings/tokens)) and select `repo` scope
 1. Create `.env.local` from `.env`
 1. Fill `GITHUB_TOKEN` with your own token
-1. Fill `GITHUB_LABELS_*` with you own labels for the differents categories 
+1. Depending on if you want to search PRs with labels or filters, you can set `USE_MODE` with two different value: filter | label
+1. If you choose `USE_MODE=label`, fill `GITHUB_LABELS_*` with you own labels for the differents categories 
+1. If you choose `USE_MODE=filter`, fill `GITHUB_FILTERS` and `GITHUB_NOTIFICATIONS_*` with you own filters
 
 ### Demo find by labels
 
-![PR list labels](github-pr-review.png)
+![PR list labels](github-pr-review-labels.png)
 
-### Configuration example
+### Demo find by filters
+
+![PR list filters](github-pr-review-filters.png)
+
+## Configuration example
 
 ```
 GITHUB_AUTH_METHOD=http_token
@@ -49,9 +55,21 @@ Install composer and assets:
 make install
 ```
 
-Start docker containers:
+## Docker commands
+
+Start containers:
 ```sh
 make start
+```
+
+Stop containers:
+```sh
+make stop
+```
+
+Connect to PHP's container:
+```sh
+make shell
 ```
 
 ## Check code quality
