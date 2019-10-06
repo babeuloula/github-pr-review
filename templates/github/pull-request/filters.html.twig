@@ -31,6 +31,7 @@
             let reloadEvery = {{ reloadEvery }};
             let pullRequestsCount = {{ openPullRequestsCount|json_encode|raw }};
             let unreadNotificationsCount = {{ unreadNotificationsCount|json_encode|raw }};
+            hideEmpty();
 
             window.reloadData = function () {
                 let $accordionPullRequests = $(document).find('#accordion-pull-requests');
@@ -40,6 +41,7 @@
                     url: $accordionPullRequests.attr('data-url'),
                     success: function(response, textStatus, jqXHR) {
                         $accordionPullRequests.html(response);
+                        hideEmpty();
                     },
                     error: function(response, textStatus, errorThrown) {
                         alert("Unable to load pull requests.");
@@ -50,6 +52,7 @@
                     url: $accordionNotifs.attr('data-url'),
                     success: function (response, textStatus, jqXHR) {
                         $accordionNotifs.html(response);
+                        hideEmpty();
                     },
                     error: function (response, textStatus, errorThrown) {
                         alert("Unable to load notifications.");
@@ -107,6 +110,14 @@
                     }
                 });
             });
+
+            function hideEmpty() {
+                $('.empty').map((key, value) => {
+                    let toHide = value.parentElement.parentElement.parentElement.parentElement;
+                    toHide.classList.remove('show');
+                    toHide.classList.add('hide');
+                });
+            }
         });
     </script>
 {% endblock %}
