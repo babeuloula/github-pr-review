@@ -77,3 +77,8 @@ make shell
 ```sh
 make check
 ```
+
+## Contributors
+
+- [ArthurHoaro](https://github.com/ArthurHoaro)
+- [tleon](https://github.com/tleon)
