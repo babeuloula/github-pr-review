@@ -85,7 +85,7 @@ class NotificationService
 
         $notificationsOrdered[static::OTHER_REPOS] = [];
 
-        foreach ($reasons as $reason) {
+        foreach ($reasonsOtherRepos as $reason) {
             $notificationsOrdered[static::OTHER_REPOS][$reason] = new NotificationArray();
         }
 
