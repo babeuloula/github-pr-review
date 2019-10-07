@@ -27,10 +27,19 @@
 
     <script type="text/javascript">
         jQuery(function ($) {
+
+            window.hideEmpty = function () {
+                $('[data-empty="true"]').map(function (key, value) {
+                    $(value).parents('.collapse').removeClass('show');
+                    $(value).parents('.collapse').addClass('hide');
+                });
+            };
+
             let reloadOnFocus = {{ reloadOnFocus ? 'true' : 'false' }};
             let reloadEvery = {{ reloadEvery }};
             let pullRequestsCount = {{ openPullRequestsCount|json_encode|raw }};
             let unreadNotificationsCount = {{ unreadNotificationsCount|json_encode|raw }};
+
             hideEmpty();
 
             window.reloadData = function () {
@@ -110,14 +119,6 @@
                     }
                 });
             });
-
-            function hideEmpty() {
-                $('.empty').map((key, value) => {
-                    let toHide = value.parentElement.parentElement.parentElement.parentElement;
-                    toHide.classList.remove('show');
-                    toHide.classList.add('hide');
-                });
-            }
         });
     </script>
 {% endblock %}
