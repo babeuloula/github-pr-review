@@ -8,7 +8,7 @@
             </button>
         </div>
 
-        <div id="collapse-pr-{{ repository|slugify }}" class="collapse show"
+        <div id="collapse-pr-{{ repository|slugify }}" class="{{ sortedPullRequests.count() > 0 ? 'collapse show' : 'collapse' }}"
                 aria-labelledby="heading-pr-{{ repository|slugify }}" data-parent="#accordion-pull-requests">
             <div class="card-body">
                 <div class="list-group">

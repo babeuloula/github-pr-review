@@ -30,8 +30,7 @@
 
             window.hideEmpty = function () {
                 $('[data-empty="true"]').map(function (key, value) {
-                    $(value).parents('.collapse').removeClass('show');
-                    $(value).parents('.collapse').addClass('hide');
+                    $($(value).parents('.collapse').get(0)).removeClass('show');
                 });
             };
 
@@ -40,7 +39,6 @@
             let pullRequestsCount = {{ openPullRequestsCount|json_encode|raw }};
             let unreadNotificationsCount = {{ unreadNotificationsCount|json_encode|raw }};
 
-            hideEmpty();
 
             window.reloadData = function () {
                 let $accordionPullRequests = $(document).find('#accordion-pull-requests');
