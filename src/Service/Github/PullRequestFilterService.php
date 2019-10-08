@@ -122,7 +122,10 @@ class PullRequestFilterService implements PullRequestServiceInterface
     {
         /** @var Search $searchApi */
         $searchApi = $this->client->api('search');
-        $filter .= " repo:$username/$repository";
+
+        if (0 === \preg_match("/repo\:[a-zA-Z0-9\/-]+/", $filter)) {
+            $filter .= " repo:$username/$repository";
+        }
 
         // Issues and PRs use the same method
         $pullRequests = $searchApi->issues($filter)['items'];
