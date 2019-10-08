@@ -94,6 +94,12 @@ class PullRequestFilterService implements PullRequestServiceInterface
             //   - "is:pr is:open -label:WIP"
             //   - "is:pr is:draft"
             foreach ($this->githubFilters as $filter) {
+                if (1 === \preg_match("/repo\:[a-zA-Z0-9\/-]+/", $filter, $matches)
+                    && "repo:$username/$repository" !== $matches[0]
+                ) {
+                    continue;
+                }
+
                 foreach ($this->getAll($username, $repository, $filter, $params) as $pullRequest) {
                     $pullRequest = $pullRequestApi->show($username, $repository, $pullRequest['number']);
 
