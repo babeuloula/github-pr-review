@@ -39,7 +39,6 @@
             let pullRequestsCount = {{ openPullRequestsCount|json_encode|raw }};
             let unreadNotificationsCount = {{ unreadNotificationsCount|json_encode|raw }};
 
-
             window.reloadData = function () {
                 let $accordionPullRequests = $(document).find('#accordion-pull-requests');
                 let $accordionNotifs = $(document).find('#accordion-notifs');
