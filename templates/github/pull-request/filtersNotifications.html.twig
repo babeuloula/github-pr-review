@@ -13,7 +13,7 @@
             </button>
         </div>
 
-        <div id="collapse-notifs-{{ repository|slugify }}" class="{{ unreadNotificationsCount[repository] > 0 ? 'collapse show' : 'collapse' }}"
+        <div id="collapse-notifs-{{ repository|slugify }}" class="collapse {{ unreadNotificationsCount[repository] > 0 ? 'show' : '' }}"
                 aria-labelledby="heading-notifs-{{ repository|slugify }}" data-parent="#accordion-notifs">
             <div class="card-body">
                 <div class="list-group">
