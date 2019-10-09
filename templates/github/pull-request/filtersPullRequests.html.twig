@@ -1,9 +1,8 @@
 {% for repository, sortedPullRequests in openPullRequests %}
     <div class="card">
         <div class="card-header p-0" id="heading-pr-{{ repository|slugify }}">
-            <button class="btn btn-link" type="button" data-toggle="collapse"
-                    data-target="#collapse-pr-{{ repository|slugify }}" aria-expanded="true"
-                    aria-controls="collapse-pr-{{ repository|slugify }}">
+            <button class="btn btn-link" type="button" data-target="#collapse-pr-{{ repository|slugify }}"
+                    aria-expanded="true" aria-controls="collapse-pr-{{ repository|slugify }}">
                 {{ repository }} <strong>({{ sortedPullRequests.count() }})</strong>
             </button>
         </div>
