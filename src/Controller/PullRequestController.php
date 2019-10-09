@@ -59,7 +59,6 @@ class PullRequestController
                 'github/pull-request/list.html.twig',
                 [
                     'openPullRequests' => $service->getOpen(),
-                    'openPullRequestsCount' => $service->getOpenCount(),
                     'unreadNotifications' => $this->notificationService->getNotifications(),
                     'unreadNotificationsCount' => $this->notificationService->getNotificationsCount(),
                     'labels' => Label::toArray(),

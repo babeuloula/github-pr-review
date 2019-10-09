@@ -50,7 +50,6 @@ class ReloadPullRequestController
                 'github/pull-request/filtersPullRequests.html.twig',
                 [
                     'openPullRequests' => $this->pullRequestFilterService->getOpen(),
-                    'openPullRequestsCount' => $this->pullRequestFilterService->getOpenCount(),
                 ]
             )
         );

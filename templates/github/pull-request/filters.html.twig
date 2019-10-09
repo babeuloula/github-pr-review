@@ -25,14 +25,15 @@
 {% block javascripts %}
     {{ parent() }}
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/favico.js/0.3.10/favico.min.js"
+            integrity="sha256-i265HmNQ6FYdanwd4Tvt6Phby2Ht/9KOGQ3cromZq5Y=" crossorigin="anonymous"></script>
+
     <script type="text/javascript">
         jQuery(function ($) {
             const LOCALSTORAGE_KEY = 'collapses';
 
             let reloadOnFocus = {{ reloadOnFocus ? 'true' : 'false' }};
             let reloadEvery = {{ reloadEvery }};
-            let pullRequestsCount = {{ openPullRequestsCount|json_encode|raw }};
-            let unreadNotificationsCount = {{ unreadNotificationsCount|json_encode|raw }};
 
             $(document).ready(function () {
                 let collapses = getCollapses();
@@ -48,6 +49,7 @@
                 });
 
                 saveCollapses(collapses);
+                updateFavicon();
             });
 
             $(document).on('click', '.accordion .card-header', function (event) {
@@ -85,6 +87,7 @@
                     success: function(response, textStatus, jqXHR) {
                         $accordionPullRequests.html(response);
                         hideCollapses();
+                        updateFavicon();
                     },
                     error: function(response, textStatus, errorThrown) {
                         alert("Unable to load pull requests.");
@@ -96,6 +99,7 @@
                     success: function (response, textStatus, jqXHR) {
                         $accordionNotifs.html(response);
                         hideCollapses();
+                        updateFavicon();
                     },
                     error: function (response, textStatus, errorThrown) {
                         alert("Unable to load notifications.");
@@ -128,6 +132,20 @@
                 });
             };
 
+            window.updateFavicon = function () {
+                let count = 0;
+
+                $(document).find('.accordion .collapse').each(function (index, elem) {
+                    count = count + parseInt($(elem).attr('data-count'), 10);
+                });
+
+                if (0 < count) {
+                    new Favico({
+                        animation:'none'
+                    }).badge(count);
+                }
+            };
+
             if (reloadOnFocus) {
                 $(window).on('focus', reloadData);
             } else if(reloadEvery > 0) {
@@ -146,7 +164,8 @@
                     url: $that.attr('data-url'),
                     type: 'POST',
                     success: function(response, textStatus, jqXHR) {
-                        let $strong = $($that.parents('.collapse').get(0)).prev().find('strong');
+                        let $collapse = $($that.parents('.collapse').get(0));
+                        let $strong = $collapse.prev().find('strong');
                         let number = $strong.text()
                             .replace('(', '')
                             .replace(')', '')
@@ -169,8 +188,16 @@
                         $listItem.slideUp(250, function () {
                             --number;
                             $strong.text('('+number+')');
+                            $collapse.attr('data-count', number);
+
+                            if (0 === number) {
+                                $collapse.slideUp(250, function () {
+                                    $(this).removeClass('show');
+                                });
+                            }
 
                             $(this).remove();
+                            updateFavicon();
                         });
                     },
                     error: function(response, textStatus, errorThrown) {
