@@ -6,9 +6,8 @@
 
     <div class="card">
         <div class="card-header p-0" id="heading-notifs-{{ repository|slugify }}">
-            <button class="btn btn-link" type="button" data-toggle="collapse"
-                    data-target="#collapse-notifs-{{ repository|slugify }}" aria-expanded="true"
-                    aria-controls="collapse-notifs-{{ repository|slugify }}">
+            <button class="btn btn-link" type="button" data-target="#collapse-notifs-{{ repository|slugify }}"
+                    aria-expanded="true" aria-controls="collapse-notifs-{{ repository|slugify }}">
                 {{ repository }} <strong>({{ unreadNotificationsCount[repository] }})</strong>
             </button>
         </div>

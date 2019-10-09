@@ -27,11 +27,55 @@
 
     <script type="text/javascript">
         jQuery(function ($) {
+            const LOCALSTORAGE_KEY = 'collapses';
+
             let reloadOnFocus = {{ reloadOnFocus ? 'true' : 'false' }};
             let reloadEvery = {{ reloadEvery }};
             let pullRequestsCount = {{ openPullRequestsCount|json_encode|raw }};
             let unreadNotificationsCount = {{ unreadNotificationsCount|json_encode|raw }};
 
+            $(document).ready(function () {
+                let collapses = getCollapses();
+
+                $(document).find('.accordion .collapse').each(function (index, elem) {
+                    let id = $(elem).attr('id');
+
+                    if (undefined === collapses[id]) {
+                        collapses[id] = true;
+                    } else if (false === collapses[id]) {
+                        $(elem).removeClass('show');
+                    }
+                });
+
+                saveCollapses(collapses);
+            });
+
+            $(document).on('click', '.accordion .card-header', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                let collapses = getCollapses();
+                let $collapse = $(this).next();
+                let id = $collapse.attr('id');
+
+                if ($collapse.hasClass('show')) {
+                    $collapse.slideUp(250, function () {
+                        $(this).removeClass('show');
+                    });
+
+                    collapses[id] = false;
+                } else {
+                    $collapse.slideDown(250, function () {
+                        $(this).addClass('show');
+                    });
+
+                    collapses[id] = true;
+                }
+
+                saveCollapses(collapses);
+            });
+
+            /** Start an AJAX request to get new Pull requests ans Notifications */
             window.reloadData = function () {
                 let $accordionPullRequests = $(document).find('#accordion-pull-requests');
                 let $accordionNotifs = $(document).find('#accordion-notifs');
@@ -40,6 +84,7 @@
                     url: $accordionPullRequests.attr('data-url'),
                     success: function(response, textStatus, jqXHR) {
                         $accordionPullRequests.html(response);
+                        hideCollapses();
                     },
                     error: function(response, textStatus, errorThrown) {
                         alert("Unable to load pull requests.");
@@ -50,9 +95,35 @@
                     url: $accordionNotifs.attr('data-url'),
                     success: function (response, textStatus, jqXHR) {
                         $accordionNotifs.html(response);
+                        hideCollapses();
                     },
                     error: function (response, textStatus, errorThrown) {
                         alert("Unable to load notifications.");
+                    }
+                });
+            };
+
+            /** Save collapses on localStorage */
+            window.saveCollapses = function (collapses) {
+                if (undefined === collapses) {
+                    throw new Error("Missing parameter 'collapses'");
+                }
+
+                localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(collapses));
+            };
+
+            /** Get collapses from localStorage */
+            window.getCollapses = function () {
+                let collapses = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY));
+
+                return null === collapses ? {} : collapses;
+            };
+
+            /** Hide closed collapses after AJAX request */
+            window.hideCollapses = function () {
+                $.each(getCollapses(), function (id, display) {
+                    if (false === display) {
+                        $('#'+id).removeClass('show');
                     }
                 });
             };
