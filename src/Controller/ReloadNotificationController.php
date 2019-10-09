@@ -49,7 +49,6 @@ class ReloadNotificationController
                 'github/pull-request/filtersNotifications.html.twig',
                 [
                     'unreadNotifications' => $this->notificationService->getNotifications(),
-                    'unreadNotificationsCount' => $this->notificationService->getNotificationsCount(),
                 ]
             )
         );
