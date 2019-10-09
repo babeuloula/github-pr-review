@@ -27,12 +27,6 @@
 
     <script type="text/javascript">
         jQuery(function ($) {
-            window.hideEmpty = function () {
-                $('[data-empty="true"]').map(function (key, value) {
-                    $($(value).parents('.collapse').get(0)).removeClass('show');
-                });
-            };
-
             let reloadOnFocus = {{ reloadOnFocus ? 'true' : 'false' }};
             let reloadEvery = {{ reloadEvery }};
             let pullRequestsCount = {{ openPullRequestsCount|json_encode|raw }};
@@ -46,7 +40,6 @@
                     url: $accordionPullRequests.attr('data-url'),
                     success: function(response, textStatus, jqXHR) {
                         $accordionPullRequests.html(response);
-                        hideEmpty();
                     },
                     error: function(response, textStatus, errorThrown) {
                         alert("Unable to load pull requests.");
@@ -57,7 +50,6 @@
                     url: $accordionNotifs.attr('data-url'),
                     success: function (response, textStatus, jqXHR) {
                         $accordionNotifs.html(response);
-                        hideEmpty();
                     },
                     error: function (response, textStatus, errorThrown) {
                         alert("Unable to load notifications.");
