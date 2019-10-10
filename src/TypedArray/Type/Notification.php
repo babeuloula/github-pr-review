@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author BaBeuloula <info@babeuloula.fr>
  */
@@ -45,7 +46,9 @@ class Notification
         $this->unread = $data['unread'];
         $this->reason = new NotificationReason($data['reason']);
         $this->updatedAt = new \DateTimeImmutable($data['updated_at']);
-        $this->lastReadAt = \is_string($data['last_read_at']) ? new \DateTimeImmutable($data['last_read_at']) : null;
+        $this->lastReadAt = (true === \is_string($data['last_read_at']))
+            ? new \DateTimeImmutable($data['last_read_at'])
+            : null;
         $this->subject = $data['subject']['title'];
         $this->type = new NotificationType($data['subject']['type']);
         $this->repository = $data['repository']['full_name'];

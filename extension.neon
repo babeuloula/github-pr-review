@@ -1,0 +1,2 @@
+includes:
+  - vendor/timeweb/phpstan-enum/extension.neon

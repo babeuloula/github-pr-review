@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author BaBeuloula <info@babeuloula.fr>
  */
@@ -10,8 +11,10 @@ namespace App\Service\Github;
 use App\Enum\UseMode;
 use App\Traits\PullRequestTypedArrayTrait;
 use App\TypedArray\PullRequestArray;
-use Github\Api\PullRequest as PullRequestApi;
-use Github\Api\Search;
+use Github\Api\{
+    PullRequest as PullRequestApi,
+    Search
+};
 use Github\Client;
 
 class PullRequestFilterService implements PullRequestServiceInterface
@@ -51,7 +54,7 @@ class PullRequestFilterService implements PullRequestServiceInterface
     ) {
         $this->client = $client->getClient();
 
-        if ((new UseMode($useMode))->equals(UseMode::FILTER()) && 0 === \count($githubFilters)) {
+        if (true === (new UseMode($useMode))->equals(UseMode::FILTER()) && 0 === \count($githubFilters)) {
             throw new \RuntimeException("Option Github Filters cannot be empty.");
         }
 
@@ -103,7 +106,7 @@ class PullRequestFilterService implements PullRequestServiceInterface
                 foreach ($this->getAll($username, $repository, $filter, $params) as $pullRequest) {
                     $pullRequest = $pullRequestApi->show($username, $repository, $pullRequest['number']);
 
-                    if (\is_array($pullRequest)) {
+                    if (true === \is_array($pullRequest)) {
                         $pullRequest = $this->convertToTypedArray($pullRequest, true);
                         $pullRequestsArray[$pullRequest->getUrl()] = $pullRequest;
                     }

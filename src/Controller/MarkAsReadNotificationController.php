@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author BaBeuloula <info@babeuloula.fr>
  */
@@ -9,8 +10,10 @@ namespace App\Controller;
 
 use App\Enum\UseMode;
 use App\Service\Github\NotificationService;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\{
+    JsonResponse,
+    Request
+};
 use Twig\Environment;
 
 class MarkAsReadNotificationController
@@ -46,7 +49,7 @@ class MarkAsReadNotificationController
 
         return new JsonResponse(
             null,
-            $this->notificationService->markAsRead($threadId) ? 200 : 500
+            (true === $this->notificationService->markAsRead($threadId)) ? 200 : 500
         );
     }
 }

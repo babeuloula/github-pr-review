@@ -1,9 +1,9 @@
 <?php
+
 /**
- * @author      Wizacha DevTeam <dev@wizacha.com>
- * @license     Proprietary
- * @copyright   Copyright (c) Wizacha
+ * @author BaBeuloula <info@babeuloula.fr>
  */
+
 declare(strict_types=1);
 
 namespace App\Traits;
@@ -22,11 +22,9 @@ trait PullRequestTypedArrayTrait
             $branch = \array_keys($branchColor)[0];
             $color = \array_values($branchColor)[0];
 
-            $branchType = $headColor ? $pullRequest->getHead() : $pullRequest->getBase();
+            $branchType = true === $headColor ? $pullRequest->getHead() : $pullRequest->getBase();
 
-            if (\is_string($branchType)
-                && \preg_match("/".$branch."/", $branchType) === 1
-            ) {
+            if (true === \is_string($branchType) && 1 === \preg_match("/" . $branch . "/", $branchType)) {
                 $pullRequest->setBranchColor($color);
                 break;
             }

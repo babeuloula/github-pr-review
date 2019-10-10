@@ -2,24 +2,69 @@
 <ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
 
-    <arg name="basepath" value="."/>
-    <arg name="colors"/>
-    <arg name="extensions" value="php"/>
+    <arg name="basepath" value="." />
+    <arg name="colors" />
+    <arg name="extensions" value="php" />
+    <arg name="ignore" value="src/Kernel.php" />
 
-    <rule ref="PSR2"/>
+    <config name="Steevanb" value="vendor/steevanb/php-code-sniffs/ruleset.xml" />
 
-    <rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>
-    <rule ref="Generic.Commenting.Todo"/>
+    <rule ref="PSR12">
+        <!-- Buggy sniff -->
+        <exclude name="PSR12.ControlStructures.ControlStructureSpacing" />
+    </rule>
+
+    <rule ref="Generic.CodeAnalysis.UnusedFunctionParameter" />
+    <rule ref="Generic.Commenting.Todo" />
     <rule ref="Generic.PHP.ForbiddenFunctions">
         <properties>
             <property name="forbiddenFunctions" type="array" extend="true">
-                <element key="sizeof" value="count"/>
-                <element key="isset" value=""/>
-                <element key="empty" value=""/>
-                <element key="split" value="explode"/>
+                <element key="sizeof" value="count" />
+                <element key="isset" value="null" />
+                <element key="empty" value="null" />
+                <element key="split" value="explode" />
+                <element key="delete" value="unset"/>
+                <element key="print" value="echo"/>
+                <element key="create_function" value="null"/>
             </property>
         </properties>
     </rule>
+    <rule ref="Generic.Arrays.ArrayIndent" />
+    <rule ref="Generic.Files.LineLength" />
+    <rule ref="Generic.Formatting.SpaceAfterCast" />
+    <rule ref="Generic.NamingConventions.UpperCaseConstantName" />
+
+    <rule ref="PEAR.ControlStructures.MultiLineCondition" />
+    <rule ref="PEAR.Formatting.MultiLineAssignment" />
+    <rule ref="PEAR.Functions.FunctionCallSignature" />
+
+    <rule ref="PSR1.Methods.CamelCapsMethodName" />
+
+    <rule ref="PSR2.ControlStructures.ControlStructureSpacing" />
+    <rule ref="PSR2.Files.ClosingTag" />
+    <rule ref="PSR2.Files.EndFileNewline" />
+    <rule ref="PSR2.Namespaces.NamespaceDeclaration" />
+
+    <rule ref="Squiz.Arrays.ArrayBracketSpacing" />
+    <rule ref="Squiz.Classes.ClassDeclaration" />
+    <rule ref="Squiz.Classes.ClassFileName" />
+    <rule ref="Squiz.Operators.ComparisonOperatorUsage" />
+    <rule ref="Squiz.Operators.IncrementDecrementUsage" />
+    <rule ref="Squiz.PHP.DisallowBooleanStatement" />
+    <rule ref="Squiz.PHP.DisallowMultipleAssignments" />
+    <rule ref="Squiz.PHP.DiscouragedFunctions">
+        <properties>
+            <property name="forbiddenFunctions" type="array" extend="true">
+                <element key="error_log" value="null" />
+                <element key="print_r" value="null" />
+                <element key="var_dump" value="null" />
+                <element key="dump" value="null" />
+                <element key="dd" value="null" />
+            </property>
+        </properties>
+    </rule>
+    <rule ref="Squiz.PHP.NonExecutableCode" />
+    <rule ref="Squiz.Scope.StaticThisUsage" />
 
     <file>src/</file>
 

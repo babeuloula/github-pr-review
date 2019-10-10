@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author BaBeuloula <info@babeuloula.fr>
  */
@@ -85,10 +86,12 @@ class PullRequestLabelService implements PullRequestServiceInterface
     /** @return array[] */
     public function getOpen(): array
     {
-        return $this->search([
-            'sort' => 'updated',
-            'direction' => 'desc',
-        ]);
+        return $this->search(
+            [
+                'sort' => 'updated',
+                'direction' => 'desc',
+            ]
+        );
     }
 
     /** return array[] */
@@ -169,19 +172,19 @@ class PullRequestLabelService implements PullRequestServiceInterface
             $labelEnum = Label::REVIEW_NEEDED();
 
             foreach ($pullRequest['labels'] as $label) {
-                if (\in_array($label['name'], $this->labelsWip, true)) {
+                if (true === \in_array($label['name'], $this->labelsWip, true)) {
                     $labelEnum = Label::WIP();
 
                     break;
-                } elseif (\in_array($label['name'], $this->labelsAccepted, true)) {
+                } elseif (true === \in_array($label['name'], $this->labelsAccepted, true)) {
                     $labelEnum = Label::ACCEPTED();
 
                     break;
-                } elseif (\in_array($label['name'], $this->labelsReviewNeeded, true)) {
+                } elseif (true === \in_array($label['name'], $this->labelsReviewNeeded, true)) {
                     $labelEnum = Label::REVIEW_NEEDED();
 
                     break;
-                } elseif (\in_array($label['name'], $this->labelsChangesRequested, true)) {
+                } elseif (true === \in_array($label['name'], $this->labelsChangesRequested, true)) {
                     $labelEnum = Label::CHANGES_REQUESTED();
 
                     break;
