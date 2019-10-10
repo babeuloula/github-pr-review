@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author      Wizacha DevTeam <dev@wizacha.com>
  * @license     Proprietary
@@ -10,8 +11,10 @@ namespace App\Controller;
 
 use App\Enum\UseMode;
 use App\Service\Github\PullRequestFilterService;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\{
+    Request,
+    Response
+};
 use Twig\Environment;
 
 class ReloadPullRequestController

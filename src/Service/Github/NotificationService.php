@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author BaBeuloula <info@babeuloula.fr>
  */
@@ -7,10 +8,14 @@ declare(strict_types=1);
 
 namespace App\Service\Github;
 
-use App\Enum\NotificationReason;
-use App\Enum\NotificationType;
-use App\TypedArray\NotificationArray;
-use App\TypedArray\Type\Notification;
+use App\Enum\{
+    NotificationReason,
+    NotificationType
+};
+use App\TypedArray\{
+    NotificationArray,
+    Type\Notification
+};
 use Github\Api\Notification as NotificationApi;
 use Github\Client;
 
@@ -90,12 +95,12 @@ class NotificationService
         }
 
         foreach ($notificationsApi->all() as $notification) {
-            $repo = \array_key_exists($notification['repository']['full_name'], $notificationsOrdered)
+            $repo = (true === \array_key_exists($notification['repository']['full_name'], $notificationsOrdered))
                 ? $notification['repository']['full_name']
                 : static::OTHER_REPOS;
             $reason = $notification['reason'];
 
-            if (\array_key_exists($reason, $notificationsOrdered[$repo])) {
+            if (true === \array_key_exists($reason, $notificationsOrdered[$repo])) {
                 $notification = new Notification($notification);
 
                 $notification->setUrl(

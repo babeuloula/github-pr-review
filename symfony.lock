@@ -117,10 +117,7 @@
             "branch": "master",
             "version": "3.0",
             "ref": "0dc9cceda799fd3a08b96987e176a261028a3709"
-        },
-        "files": [
-            "./phpcs.xml.dist"
-        ]
+        }
     },
     "steevanb/php-typed-array": {
         "version": "2.0.0"
@@ -284,6 +281,9 @@
     },
     "symfony/yaml": {
         "version": "v4.3.4"
+    },
+    "timeweb/phpstan-enum": {
+        "version": "v2.2.0"
     },
     "twig/twig": {
         "version": "v2.11.3"

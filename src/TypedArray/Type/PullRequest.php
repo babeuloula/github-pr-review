@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author BaBeuloula <info@babeuloula.fr>
  */
@@ -44,8 +45,8 @@ class PullRequest
         $this->user = new User($data['user']);
         $this->createdAt = new \DateTimeImmutable($data['created_at']);
         $this->updatedAt = new \DateTimeImmutable($data['updated_at']);
-        $this->head = \array_key_exists('head', $data) ? $data['head']['ref'] : null;
-        $this->base = \array_key_exists('base', $data) ? $data['base']['ref'] : null;
+        $this->head = (true === \array_key_exists('head', $data)) ? $data['head']['ref'] : null;
+        $this->base = (true === \array_key_exists('base', $data)) ? $data['base']['ref'] : null;
     }
 
     public function getUrl(): string

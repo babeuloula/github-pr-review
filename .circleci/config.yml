@@ -6,7 +6,7 @@ commands:
         steps:
             - run:
                 name: "Install alpine requirements for checkout"
-                command: apk add git openssh-client curl
+                command: apk add git openssh-client curl make
             - checkout
 
     composer-install:
@@ -47,17 +47,15 @@ commands:
         description: "Execute PHPCS"
         steps:
             - run:
-                name: "Execute: vendor/bin/phpcs"
-                command: vendor/bin/phpcs
+                name: "Execute: make phpcs"
+                command: make phpcs
 
     phpstan:
         description: "Execute PHPStan"
         steps:
             - run:
-                name: "Execute: vendor/bin/phpstan"
-                command: |
-                    bin/console cache:warmup --env=dev
-                    vendor/bin/phpstan analyse src --level 7
+                name: "Execute: make stan"
+                command: make stan
 
 executors:
     php:

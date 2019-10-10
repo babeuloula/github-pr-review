@@ -1,6 +1,6 @@
-install: start composer
+install: start composer hooks
 
-start:
+start: hooks
 	bash ./docker/start.sh
 
 stop:
@@ -14,12 +14,17 @@ shell:
 	cd ./docker/ && docker-compose exec php bash
 
 check:
-	cd ./docker/ && docker-compose exec php make phpcs
-	cd ./docker/ && docker-compose exec php make stan
+	cd ./docker/ && docker-compose exec -T php make phpcs
+	cd ./docker/ && docker-compose exec -T php make stan
+
+hooks:
+	echo "#!/bin/bash" > .git/hooks/pre-commit
+	echo "make check" >> .git/hooks/pre-commit
+	chmod +x .git/hooks/pre-commit
 
 phpcs:
 	vendor/bin/phpcs
 
 stan:
 	bin/console cache:warmup --env=dev
-	vendor/bin/phpstan analyse src --level 7
+	vendor/bin/phpstan analyse src --level max -c extension.neon

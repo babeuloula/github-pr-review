@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author BaBeuloula <info@babeuloula.fr>
  */
@@ -9,10 +10,12 @@ namespace App\Controller;
 
 use App\Enum\Label;
 use App\Enum\UseMode;
-use App\Service\Github\NotificationService;
-use App\Service\Github\PullRequestFilterService;
-use App\Service\Github\PullRequestLabelService;
-use App\Service\Github\PullRequestServiceInterface;
+use App\Service\Github\{
+    NotificationService,
+    PullRequestFilterService,
+    PullRequestLabelService,
+    PullRequestServiceInterface
+};
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -50,7 +53,7 @@ class PullRequestController
     public function __invoke(): Response
     {
         /** @var PullRequestServiceInterface $service */
-        $service = $this->useMode->equals(UseMode::LABEL())
+        $service = (true === $this->useMode->equals(UseMode::LABEL()))
             ? $this->pullRequestLabelService
             : $this->pullRequestFilterService;
 

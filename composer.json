@@ -10,7 +10,6 @@
         "knplabs/github-api": "^2.11",
         "myclabs/php-enum": "^1.7",
         "php-http/guzzle6-adapter": "^1.1",
-        "squizlabs/php_codesniffer": "*",
         "steevanb/php-typed-array": "2.0",
         "symfony/console": "4.3.*",
         "symfony/dotenv": "4.3.*",
@@ -23,8 +22,10 @@
     },
     "require-dev": {
         "phpstan/phpstan": "^0.11.15",
+        "squizlabs/php_codesniffer": "^3.5",
         "symfony/debug-bundle": "4.3.*",
-        "symfony/var-dumper": "4.3.*"
+        "symfony/var-dumper": "4.3.*",
+        "timeweb/phpstan-enum": "^2.2"
     },
     "config": {
         "preferred-install": {
