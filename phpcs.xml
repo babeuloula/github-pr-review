@@ -7,8 +7,6 @@
     <arg name="extensions" value="php" />
     <arg name="ignore" value="src/Kernel.php" />
 
-    <config name="Steevanb" value="vendor/steevanb/php-code-sniffs/ruleset.xml" />
-
     <rule ref="PSR12">
         <!-- Buggy sniff -->
         <exclude name="PSR12.ControlStructures.ControlStructureSpacing" />
@@ -60,6 +58,8 @@
                 <element key="var_dump" value="null" />
                 <element key="dump" value="null" />
                 <element key="dd" value="null" />
+                <element key="die" value="null" />
+                <element key="exit" value="null" />
             </property>
         </properties>
     </rule>
