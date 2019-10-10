@@ -29,6 +29,12 @@
     height: 21px;
 }
 
+.list-group-item .absolute-right {
+    position: absolute;
+    right: 20px;
+    top: 12px;
+}
+
 .tab-content .label .list-group-item.list-group-item-action:last-child {
     border-bottom: none;
 }
@@ -36,4 +42,12 @@
 .accordion {
     max-height: calc(100vh - 75px);
     overflow: auto;
+}
+
+.next-reload-container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 5px;
+    width: 100%;
 }
