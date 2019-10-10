@@ -61,9 +61,11 @@
                                                         {{ pullRequest.getTitle() }}
                                                     </span>
 
-                                                    <span class="badge badge-{{ pullRequest.getBranchColor() }} float-right">
-                                                        {{ pullRequest.getBase() }}
-                                                    </span>
+                                                    <div class="absolute-right">
+                                                        <span class="badge badge-{{ pullRequest.getBranchColor() }}">
+                                                            {{ pullRequest.getBase() }}
+                                                        </span>
+                                                    </div>
                                                 </a>
                                             {% endfor %}
                                         {% else %}
