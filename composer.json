@@ -21,8 +21,8 @@
         "twig/twig": "^2.0"
     },
     "require-dev": {
+        "babeuloula/phpcs": "^1.0",
         "phpstan/phpstan": "^0.11.15",
-        "squizlabs/php_codesniffer": "^3.5",
         "symfony/debug-bundle": "4.3.*",
         "symfony/var-dumper": "4.3.*",
         "timeweb/phpstan-enum": "^2.2"

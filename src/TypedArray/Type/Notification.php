@@ -8,8 +8,10 @@ declare(strict_types=1);
 
 namespace App\TypedArray\Type;
 
-use App\Enum\NotificationReason;
-use App\Enum\NotificationType;
+use App\Enum\{
+    NotificationReason,
+    NotificationType
+};
 
 class Notification
 {
