@@ -21,8 +21,11 @@ RUN apt-get update \
 ARG UID
 RUN \
     useradd -ms /bin/bash --uid ${UID} githubgui \
-    && usermod -a -G www-data githubgui
+    && usermod -a -G www-data githubgui \
+    && chown -R githubgui /var/www/html
 
 RUN echo "date.timezone = Europe/Paris" > /usr/local/etc/php/conf.d/timezone.ini
 
 WORKDIR /var/www/html
+
+USER githubgui
