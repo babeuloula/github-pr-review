@@ -1,5 +1,7 @@
 jQuery(function ($) {
     var interval = null;
+    var intervalNextReload = null;
+    var nextReload = null;
     var favicon = new Favico({
         animation:'none'
     });
@@ -100,10 +102,9 @@ jQuery(function ($) {
     /** Update next reload at span */
     window.updateNextReload = function () {
         if (false === RELOAD_ON_FOCUS && 0 < RELOAD_EVERY) {
-            $(document).find('#next-reload').text(
-                moment().add(RELOAD_EVERY, 'milliseconds').format('HH:mm:ss')
-            );
+            nextReload = moment().add(RELOAD_EVERY, 'milliseconds');
 
+            initIntervalNextReload();
             initInterval();
         }
     };
@@ -113,6 +114,20 @@ jQuery(function ($) {
         clearInterval(interval);
 
         interval = window.setInterval(reloadData, RELOAD_EVERY);
+    };
+
+    /** Clear next reload interval */
+    window.initIntervalNextReload = function () {
+        clearInterval(intervalNextReload);
+
+        intervalNextReload = window.setInterval(
+            function () {
+                $(document).find('#next-reload').text(
+                    parseInt(nextReload.format('X'), 10) - parseInt(moment().format('X'), 10)
+                );
+            },
+            1000
+        );
     };
 
     if (true === RELOAD_ON_FOCUS) {
