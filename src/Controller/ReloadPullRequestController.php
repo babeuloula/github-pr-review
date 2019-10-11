@@ -11,9 +11,9 @@ namespace App\Controller;
 
 use App\Enum\UseMode;
 use App\Service\Github\PullRequestFilterService;
-use Symfony\Component\HttpFoundation\{
-    Request,
-    Response
+use Symfony\Component\{
+    HttpFoundation\Response,
+    HttpFoundation\Request
 };
 use Twig\Environment;
 

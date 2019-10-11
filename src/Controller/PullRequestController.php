@@ -8,13 +8,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Enum\Label;
-use App\Enum\UseMode;
-use App\Service\Github\{
-    NotificationService,
-    PullRequestFilterService,
-    PullRequestLabelService,
-    PullRequestServiceInterface
+use App\Enum\{
+    Label,
+    UseMode
+};
+use App\Service\{
+    Github\NotificationService,
+    Github\PullRequestFilterService,
+    Github\PullRequestLabelService,
+    Github\PullRequestServiceInterface
 };
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
