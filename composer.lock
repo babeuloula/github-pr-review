@@ -3126,16 +3126,16 @@
     "packages-dev": [
         {
             "name": "babeuloula/phpcs",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/babeuloula/phpcs.git",
-                "reference": "539cd2a292f47da95079b9e7bbab9ba0141b7225"
+                "reference": "c63cc707dcbf8e81671402a50917770c7a8fdb78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/babeuloula/phpcs/zipball/539cd2a292f47da95079b9e7bbab9ba0141b7225",
-                "reference": "539cd2a292f47da95079b9e7bbab9ba0141b7225",
+                "url": "https://api.github.com/repos/babeuloula/phpcs/zipball/c63cc707dcbf8e81671402a50917770c7a8fdb78",
+                "reference": "c63cc707dcbf8e81671402a50917770c7a8fdb78",
                 "shasum": ""
             },
             "require": {
@@ -3165,7 +3165,7 @@
                 "phpcs",
                 "standard"
             ],
-            "time": "2019-10-11T16:55:57+00:00"
+            "time": "2019-10-13T08:33:02+00:00"
         },
         {
             "name": "composer/xdebug-handler",
