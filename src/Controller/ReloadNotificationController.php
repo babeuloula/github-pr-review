@@ -10,9 +10,9 @@ namespace App\Controller;
 
 use App\Enum\UseMode;
 use App\Service\Github\NotificationService;
-use Symfony\Component\{
-    HttpFoundation\Response,
-    HttpFoundation\Request
+use Symfony\Component\HttpFoundation\{
+    Response,
+    Request
 };
 use Twig\Environment;
 
