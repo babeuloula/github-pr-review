@@ -82,4 +82,5 @@ make check
 ## Contributors
 
 - [ArthurHoaro](https://github.com/ArthurHoaro)
+- [GijsGoudzwaard](https://github.com/GijsGoudzwaard)
 - [tleon](https://github.com/tleon)

@@ -21,7 +21,7 @@
         "twig/twig": "^2.0"
     },
     "require-dev": {
-        "babeuloula/phpcs": "^1.0",
+        "babeuloula/phpcs": "^1.1",
         "phpstan/phpstan": "^0.11.15",
         "symfony/debug-bundle": "4.3.*",
         "symfony/var-dumper": "4.3.*",

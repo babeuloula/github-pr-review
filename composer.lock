@@ -3126,7 +3126,7 @@
     "packages-dev": [
         {
             "name": "babeuloula/phpcs",
-            "version": "v1.0.1",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/babeuloula/phpcs.git",
