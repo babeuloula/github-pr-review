@@ -83,3 +83,4 @@ make check
 
 - [ArthurHoaro](https://github.com/ArthurHoaro)
 - [tleon](https://github.com/tleon)
+- [GijsGoudzwaard](https://github.com/GijsGoudzwaard)

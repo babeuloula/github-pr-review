@@ -1,6 +1,6 @@
 {
     "babeuloula/phpcs": {
-        "version": "v1.0.0"
+        "version": "v1.1.0"
     },
     "clue/stream-filter": {
         "version": "v1.4.1"
