@@ -51,21 +51,36 @@ To fill `GITHUB_NOTIFICATIONS_EXCLUDE_REASONS` and `GITHUB_NOTIFICATIONS_EXCLUDE
 
 ## Installation
 
-Install composer and assets:
+Install composer and assets for dev:
 ```sh
-make install
+make install-dev
+```
+
+Install composer and assets for prod:
+```sh
+make install-prod
 ```
 
 ## Docker commands
 
-Start containers:
+Start containers for dev:
 ```sh
-make start
+make start-dev
 ```
 
-Stop containers:
+Start containers for production:
 ```sh
-make stop
+make start-prod
+```
+
+Stop containers for dev:
+```sh
+make stop-dev
+```
+
+Stop containers for production:
+```sh
+make stop-prod
 ```
 
 Connect to PHP's container:
@@ -78,6 +93,25 @@ make shell
 ```sh
 make check
 ```
+
+## Database connection
+
+Setting up your database information:
+
+```
+# .env
+[...]
+MYSQL_DATABASE=
+MYSQL_USER=
+MYSQL_PASSWORD=
+[...]
+```
+
+Only in dev, you can use **adminer** to see you database:
+- Server: mysql
+- Username: env:MYSQL_USER
+- Password: env:MYSQL_PASSWORD
+- Database: env:MYSQL_DATABASE
 
 ## Contributors
 

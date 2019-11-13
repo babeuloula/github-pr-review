@@ -1,14 +1,26 @@
-install: start composer hooks
+install-dev: start-dev composer-dev hooks
 
-start: hooks
-	bash ./docker/start.sh
+install-prod: start-prod composer-prod
 
-stop:
-	cd ./docker/ && docker-compose stop
+start-dev: hooks
+	bash ./docker/start_dev.sh
 
-composer:
+start-prod:
+	bash ./docker/start_prod.sh
+
+stop-dev:
+	cd ./docker/ && docker-compose -f docker-compose.yml -f docker-compose.dev.yml stop
+
+stop-prod:
+	cd ./docker/ && docker-compose -f docker-compose.yml -f docker-compose.prod.yml stop
+
+composer-dev:
 	cd ./docker/ && docker-compose exec php composer global require hirak/prestissimo
 	cd ./docker/ && docker-compose exec php composer install --no-interaction --no-progress
+
+composer-prod:
+	cd ./docker/ && docker-compose exec php composer global require hirak/prestissimo
+	cd ./docker/ && docker-compose exec php composer install --no-dev --optimize-autoloader --no-interaction --no-progress
 
 shell:
 	cd ./docker/ && docker-compose exec php bash

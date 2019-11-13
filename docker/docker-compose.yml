@@ -5,8 +5,6 @@ services:
         build:
             context: ..
             dockerfile: docker/nginx/Dockerfile
-        ports:
-            - "${HTTP_PORT:-8011}:80"
         volumes:
             - ../public:/var/www/html/public
         restart: unless-stopped
@@ -20,3 +18,14 @@ services:
         volumes:
             - ..:/var/www/html
         restart: unless-stopped
+
+    mysql:
+        env_file:
+            - .env
+        image: mysql:5.7
+        restart: unless-stopped
+        volumes:
+            - mysql:/var/lib/mysql
+
+volumes:
+    mysql:

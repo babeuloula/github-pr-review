@@ -16,7 +16,7 @@ RUN apt-get update \
     && apt-get install -y \
         zlib1g-dev \
         libzip-dev \
-    && docker-php-ext-install zip
+    && docker-php-ext-install zip pdo_mysql
 
 ARG UID
 RUN \
