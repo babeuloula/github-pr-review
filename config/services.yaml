@@ -1,5 +1,3 @@
-parameters:
-
 services:
     _defaults:
         autowire: true
@@ -20,19 +18,16 @@ services:
             $githubNotificationsExcludeReasons: '%env(json:GITHUB_NOTIFICATIONS_EXCLUDE_REASONS)%'
             $githubNotificationsExcludeReasonsOtherRepos: '%env(json:GITHUB_NOTIFICATIONS_EXCLUDE_REASONS_OTHER_REPOS)%'
 
-    App\Controller\PullRequestController:
+    App\Controller\:
+        resource: '../src/Controller'
         public: true
 
-    App\Controller\ReloadPullRequestController:
-        public: true
+    App\Factory\:
+        resource: '../src/Factory'
 
-    App\Controller\ReloadNotificationController:
-        public: true
+    App\Repository\:
+        autoconfigure: true
+        resource: '../src/Repository'
 
-    App\Controller\MarkAsReadNotificationController:
-        public: true
-
-    App\Service\Github\PullRequestLabelService: ~
-    App\Service\Github\PullRequestFilterService: ~
-    App\Service\Github\NotificationService: ~
-    App\Service\Github\GithubClientService: ~
+    App\Service\:
+        resource: '../src/Service'

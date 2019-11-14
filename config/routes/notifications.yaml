@@ -1,0 +1,11 @@
+notification_reload:
+    path: /notifications/reload
+    controller: App\Controller\Notification\ReloadController
+    methods: [GET]
+
+notifification_mark_as_read:
+    path: /notifications/mark-as-read/{threadId}
+    controller: App\Controller\Notification\MarkAsReadController
+    methods: [POST]
+    requirements:
+        threadId: \d+

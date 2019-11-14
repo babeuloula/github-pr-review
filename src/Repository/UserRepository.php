@@ -24,4 +24,30 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
+
+    public function save(User $user): User
+    {
+        if (false === $this->getEntityManager()->contains($user)) {
+            $this->getEntityManager()->persist($user);
+        }
+
+        $this->getEntityManager()->flush();
+
+        return $user;
+    }
+
+    public function findByNickname(?string $nickname): ?User
+    {
+        if (false === \is_string($nickname)) {
+            return null;
+        }
+
+        return $this
+            ->createQueryBuilder('user')
+            ->where('user.nickname = :nickname')
+            ->setParameter('nickname', $nickname)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

@@ -8,15 +8,14 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use Doctrine\ORM\{
-    Mapping as ORM,
-    Mapping\OneToOne
-};
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OneToOne;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-final class User
+final class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -28,17 +27,17 @@ final class User
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $githubToken;
+    private $token;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $firstname;
+    private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
-    private $lastname;
+    private $nickname;
 
     /**
      * @ORM\Column(type="boolean")
@@ -56,38 +55,38 @@ final class User
         return $this->id;
     }
 
-    public function getGithubToken(): ?string
+    public function getToken(): ?string
     {
-        return $this->githubToken;
+        return $this->token;
     }
 
-    public function setGithubToken(string $githubToken): self
+    public function setToken(string $token): self
     {
-        $this->githubToken = $githubToken;
+        $this->token = $token;
 
         return $this;
     }
 
-    public function getFirstname(): ?string
+    public function getName(): ?string
     {
-        return $this->firstname;
+        return $this->name;
     }
 
-    public function setFirstname(string $firstname): self
+    public function setName(string $name): self
     {
-        $this->firstname = $firstname;
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getLastname(): ?string
+    public function getNickname(): ?string
     {
-        return $this->lastname;
+        return $this->nickname;
     }
 
-    public function setLastname(string $lastname): self
+    public function setNickname(string $nickname): self
     {
-        $this->lastname = $lastname;
+        $this->nickname = $nickname;
 
         return $this;
     }
@@ -114,5 +113,30 @@ final class User
         $this->configuration = $configuration;
 
         return $this;
+    }
+
+    /** @return string[] */
+    public function getRoles(): array
+    {
+        return ['ROLE_USER'];
+    }
+
+    public function getPassword(): string
+    {
+        return '';
+    }
+
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->getNickname();
+    }
+
+    public function eraseCredentials(): void
+    {
     }
 }

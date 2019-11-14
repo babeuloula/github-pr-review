@@ -6,17 +6,15 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Notification;
 
 use App\Enum\UseMode;
 use App\Service\Github\NotificationService;
-use Symfony\Component\HttpFoundation\{
-    Response,
-    Request
-};
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
-class ReloadNotificationController
+class ReloadController
 {
     /** @var NotificationService */
     protected $notificationService;
@@ -49,7 +47,7 @@ class ReloadNotificationController
 
         return new Response(
             $this->twig->render(
-                'github/pull-request/filtersNotifications.html.twig',
+                'pull-request/filtersNotifications.html.twig',
                 [
                     'unreadNotifications' => $this->notificationService->getNotifications(),
                     'unreadNotificationsCount' => $this->notificationService->getNotificationsCount(),

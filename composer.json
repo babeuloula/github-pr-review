@@ -8,6 +8,7 @@
         "ext-iconv": "*",
         "cocur/slugify": "^3.2",
         "knplabs/github-api": "^2.11",
+        "league/oauth2-github": "^2.0",
         "myclabs/php-enum": "^1.7",
         "php-http/guzzle6-adapter": "^1.1",
         "steevanb/php-typed-array": "2.0",
@@ -16,6 +17,7 @@
         "symfony/flex": "^1.3.1",
         "symfony/framework-bundle": "4.3.*",
         "symfony/orm-pack": "^1.0",
+        "symfony/security-bundle": "4.3.*",
         "symfony/templating": "4.3.*",
         "symfony/twig-bundle": "4.3.*",
         "symfony/yaml": "4.3.*",
@@ -26,6 +28,7 @@
         "phpstan/phpstan": "^0.11.15",
         "symfony/debug-bundle": "4.3.*",
         "symfony/maker-bundle": "^1.14",
+        "symfony/profiler-pack": "^1.0",
         "symfony/var-dumper": "4.3.*",
         "timeweb/phpstan-enum": "^2.2"
     },

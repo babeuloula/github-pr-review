@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Hello World!</h1>
+
+    {% for type, messages in app.getSession().getFlashBag().all() %}
+        {% for message in messages %}
+            <div class="alert alert-{{ type }}">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
+
+    <a href="{{ path('pull_requests_list') }}">Open Github GUI</a>
+
+{% endblock %}

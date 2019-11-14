@@ -7,17 +7,15 @@
  */
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\PullRequest;
 
 use App\Enum\UseMode;
 use App\Service\Github\PullRequestFilterService;
-use Symfony\Component\HttpFoundation\{
-    Response,
-    Request
-};
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
-class ReloadPullRequestController
+class ReloadController
 {
     /** @var PullRequestFilterService */
     protected $pullRequestFilterService;
@@ -50,7 +48,7 @@ class ReloadPullRequestController
 
         return new Response(
             $this->twig->render(
-                'github/pull-request/filtersPullRequests.html.twig',
+                'pull-request/filtersPullRequests.html.twig',
                 [
                     'openPullRequests' => $this->pullRequestFilterService->getOpen(),
                 ]

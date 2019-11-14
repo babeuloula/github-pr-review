@@ -1,0 +1,8 @@
+knpu_oauth2_client:
+    clients:
+        github:
+            type: github
+            client_id: '%env(GITHUB_CLIENT_ID)%'
+            client_secret: '%env(GITHUB_CLIENT_SECRET)%'
+            redirect_route: oauth_callback_url
+            redirect_params: {}

@@ -1,0 +1,114 @@
+<?php
+
+/**
+ * @author BaBeuloula <info@babeuloula.fr>
+ */
+
+declare(strict_types=1);
+
+namespace App\Security;
+
+use App\Entity\User;
+use App\Factory\UserFactory;
+use App\Repository\UserRepository;
+use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
+use League\OAuth2\Client\Provider\GithubResourceOwner;
+use League\OAuth2\Client\Token\AccessToken;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+
+class GithubGuard extends SocialAuthenticator
+{
+    /** @var ClientRegistry */
+    protected $clientRegistry;
+
+    /** @var UrlGeneratorInterface */
+    protected $router;
+
+    /** @var UserRepository */
+    protected $userRepository;
+
+    /** @var UserFactory */
+    protected $userFactory;
+
+    /** @var FlashBagInterface */
+    protected $flashBag;
+
+    public function __construct(
+        ClientRegistry $clientRegistry,
+        UrlGeneratorInterface $router,
+        UserRepository $userRepository,
+        UserFactory $userFactory,
+        FlashBagInterface $flashBag
+    ) {
+        $this->clientRegistry = $clientRegistry;
+        $this->router = $router;
+        $this->userRepository = $userRepository;
+        $this->userFactory = $userFactory;
+        $this->flashBag = $flashBag;
+    }
+
+    // phpcs:ignore
+    public function start(Request $request, AuthenticationException $authException = null): RedirectResponse
+    {
+        return new RedirectResponse(
+            $this->router->generate('oauth_login')
+        );
+    }
+
+    public function supports(Request $request): bool
+    {
+        return 'oauth_callback_url' === $request->attributes->get('_route');
+    }
+
+    // phpcs:ignore
+    public function getCredentials(Request $request): AccessToken
+    {
+        return $this->fetchAccessToken(
+            $this->clientRegistry->getClient('github')
+        );
+    }
+
+    /** @param AccessToken $credentials */
+    // phpcs:ignore
+    public function getUser($credentials, UserProviderInterface $userProvider): UserInterface
+    {
+        /** @var GithubResourceOwner $githubUser */
+        $githubUser = $this->clientRegistry->getClient('github')->fetchUserFromToken($credentials);
+        $user = $this->userRepository->findByNickname($githubUser->getNickname());
+
+        if ($user instanceof User) {
+            return $user;
+        }
+
+        return $this->userRepository->save(
+            $this
+                ->userFactory
+                ->createFromGithubUser($githubUser)
+                ->setToken($credentials->getToken())
+        );
+    }
+
+    // phpcs:ignore
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): RedirectResponse
+    {
+        $this->flashBag->set('danger', 'Github OAuth connection failed.');
+
+        return new RedirectResponse($this->router->generate('home'));
+    }
+
+    // phpcs:ignore
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): RedirectResponse
+    {
+        $this->flashBag->set('success', 'Github OAuth connection success.');
+
+        return new RedirectResponse($this->router->generate('home'));
+    }
+}

@@ -6,16 +6,16 @@
             <div class="col-sm">
                 <h4 class="mt-2 ml-2">Pull requests</h4>
 
-                <div class="accordion" id="accordion-pull-requests" data-url="{{ url('ajax_pr_reload') }}">
-                    {% include 'github/pull-request/filtersPullRequests.html.twig' %}
+                <div class="accordion" id="accordion-pull-requests" data-url="{{ url('pull_requests_reload') }}">
+                    {% include 'pull-request/filtersPullRequests.html.twig' %}
                 </div>
             </div>
 
             <div class="col-sm">
                 <h4 class="mt-2 ml-2">Notifications</h4>
 
-                <div class="accordion" id="accordion-notifs" data-url="{{ url('ajax_notif_reload') }}">
-                    {% include 'github/pull-request/filtersNotifications.html.twig' %}
+                <div class="accordion" id="accordion-notifs" data-url="{{ url('notification_reload') }}">
+                    {% include 'pull-request/filtersNotifications.html.twig' %}
                 </div>
             </div>
         </div>
@@ -47,5 +47,5 @@
         const RELOAD_ON_FOCUS = {{ reloadOnFocus ? 'true' : 'false' }};
         const RELOAD_EVERY = {{ reloadEvery }};
     </script>
-    <script src="/js/pull-request.js"></script>
+    <script src="/js/pull-requests.js"></script>
 {% endblock %}

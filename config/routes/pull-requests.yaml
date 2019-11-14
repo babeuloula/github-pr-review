@@ -1,0 +1,9 @@
+pull_requests_list:
+    path: /pull-requests
+    controller: App\Controller\PullRequest\ListController
+    methods: [GET]
+
+pull_requests_reload:
+    path: /pull-requests/reload
+    controller: App\Controller\PullRequest\ReloadController
+    methods: [GET]

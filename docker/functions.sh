@@ -29,11 +29,11 @@ function getEnvValue() {
             value=$(id -u)
         ;;
         COMPOSE_PROJECT_NAME)
-            value="$defaultValue"
+            value=${defaultValue}
         ;;
         *)
             if [ ! -f .env ] || [ "$(cat .env | grep -Ec "^${key}=(.*)$")" -eq 0 ]; then
-                read -p "define the value of ${key} (default: ${defaultValue})" value
+                read -p "define the value of ${key} (default: ${defaultValue}): " value
             else
                 value=$(cat .env | grep -E "^${key}=(.*)$" | awk -F "${key} *= *" '{print $2}')
             fi

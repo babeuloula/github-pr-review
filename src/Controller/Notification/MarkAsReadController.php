@@ -6,17 +6,15 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Notification;
 
 use App\Enum\UseMode;
 use App\Service\Github\NotificationService;
-use Symfony\Component\HttpFoundation\{
-    JsonResponse,
-    Request
-};
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
-class MarkAsReadNotificationController
+class MarkAsReadController
 {
     /** @var NotificationService */
     protected $notificationService;

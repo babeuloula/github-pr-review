@@ -6,54 +6,69 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\PullRequest;
 
-use App\Enum\{
-    Label,
-    UseMode
-};
-use App\Service\{
-    Github\NotificationService,
-    Github\PullRequestFilterService,
-    Github\PullRequestLabelService,
-    Github\PullRequestServiceInterface
-};
+use App\Entity\Configuration;
+use App\Entity\User;
+use App\Enum\Label;
+use App\Enum\UseMode;
+use App\Service\Github\NotificationService;
+use App\Service\Github\PullRequestFilterService;
+use App\Service\Github\PullRequestLabelService;
+use App\Service\Github\PullRequestServiceInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment;
 
-class PullRequestController
+final class ListController
 {
     /** @var PullRequestLabelService */
-    protected $pullRequestLabelService;
+    private $pullRequestLabelService;
 
     /** @var PullRequestFilterService */
-    protected $pullRequestFilterService;
+    private $pullRequestFilterService;
 
     /** @var NotificationService */
-    protected $notificationService;
+    private $notificationService;
 
     /** @var UseMode */
-    protected $useMode;
+    private $useMode;
 
     /** @var Environment */
-    protected $twig;
+    private $twig;
+
+    /** @var UrlGeneratorInterface */
+    private $router;
 
     public function __construct(
         PullRequestLabelService $pullRequestLabelService,
         PullRequestFilterService $pullRequestFilterService,
         NotificationService $notificationService,
         string $useMode,
-        Environment $twig
+        Environment $twig,
+        UrlGeneratorInterface $router
     ) {
         $this->pullRequestLabelService = $pullRequestLabelService;
         $this->pullRequestFilterService = $pullRequestFilterService;
         $this->notificationService = $notificationService;
         $this->useMode = new UseMode($useMode);
         $this->twig = $twig;
+        $this->router = $router;
     }
 
-    public function __invoke(): Response
+    /** @param User $user */
+    public function __invoke(UserInterface $user): Response
     {
+        $configuration = $user->getConfiguration();
+
+        if (false === $configuration instanceof Configuration) {
+            return new RedirectResponse(
+                $this->router->generate('user_configuration')
+            );
+        }
+
         /** @var PullRequestServiceInterface $service */
         $service = (true === $this->useMode->equals(UseMode::LABEL()))
             ? $this->pullRequestLabelService
@@ -61,7 +76,7 @@ class PullRequestController
 
         return new Response(
             $this->twig->render(
-                'github/pull-request/list.html.twig',
+                'pull-request/list.html.twig',
                 [
                     'openPullRequests' => $service->getOpen(),
                     'unreadNotifications' => $this->notificationService->getNotifications(),
