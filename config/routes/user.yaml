@@ -1,0 +1,4 @@
+user_configuration:
+    path: /user/configuration
+    controller: App\Controller\User\ConfigurationController
+    methods: [GET]
