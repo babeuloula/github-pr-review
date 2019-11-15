@@ -49,16 +49,24 @@ class NotificationService
         $this->githubRepos = $userService->getUser()->getConfiguration()->getRepositories();
         \natcasesort($this->githubRepos);
 
-        $this->githubNotificationsExcludeReasons = $userService
-            ->getUser()
-            ->getConfiguration()
-            ->getNotificationsExcludeReasons()
-        ;
-        $this->githubNotificationsExcludeReasonsOtherRepos = $userService
-            ->getUser()
-            ->getConfiguration()
-            ->getNotificationsExcludeReasonsOtherRepos()
-        ;
+        $this->githubNotificationsExcludeReasons = array_map(
+            function (NotificationReason $reason): string {
+                return (string) $reason;
+            },
+            $userService
+                ->getUser()
+                ->getConfiguration()
+                ->getNotificationsExcludeReasons()
+        );
+        $this->githubNotificationsExcludeReasonsOtherRepos = array_map(
+            function (NotificationReason $reason): string {
+                return (string) $reason;
+            },
+            $userService
+                ->getUser()
+                ->getConfiguration()
+                ->getNotificationsExcludeReasonsOtherRepos()
+        );
 
         foreach ($this->githubRepos as $repo) {
             $this->notificationsCount[$repo] = 0;

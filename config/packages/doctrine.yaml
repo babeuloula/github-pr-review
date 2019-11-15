@@ -7,6 +7,9 @@ doctrine:
             charset: utf8mb4
             collate: utf8mb4_unicode_ci
         url: 'mysql://%env(MYSQL_USER)%:%env(MYSQL_PASSWORD)%@mysql:3306/%env(MYSQL_DATABASE)%'
+        types:
+            color: App\DoctrineType\ColorDoctrineType
+            use_mode: App\DoctrineType\UseModeDoctrineType
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore

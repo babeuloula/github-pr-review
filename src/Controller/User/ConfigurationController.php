@@ -10,7 +10,7 @@ namespace App\Controller\User;
 
 use App\Entity\User;
 use App\Enum\Color;
-use App\Enum\NotificationType;
+use App\Enum\NotificationReason;
 use App\Factory\ConfigurationFactory;
 use App\Repository\ConfigurationRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -76,7 +76,7 @@ final class ConfigurationController
                 [
                     'configuration' => $user->getConfiguration() ?? $this->configurationFactory->createDefault(),
                     'colors' => Color::toArray(),
-                    'notificationType' => NotificationType::toArray()
+                    'notificationReasons' => NotificationReason::toArray()
                 ]
             )
         );

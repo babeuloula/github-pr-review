@@ -22,12 +22,32 @@ use MyCLabs\Enum\Enum;
  */
 class Color extends Enum
 {
+    /** @var string */
     protected const PRIMARY = 'primary';
+
+    /** @var string */
     protected const SECONDARY = 'secondary';
+
+    /** @var string */
     protected const SUCCESS = 'success';
+
+    /** @var string */
     protected const DANGER = 'danger';
+
+    /** @var string */
     protected const WARNING = 'warning';
+
+    /** @var string */
     protected const INFO = 'info';
+
+    /** @var string */
     protected const LIGHT = 'light';
+
+    /** @var string */
     protected const DARK = 'dark';
+
+    public static function getDefault(): self
+    {
+        return static::PRIMARY();
+    }
 }

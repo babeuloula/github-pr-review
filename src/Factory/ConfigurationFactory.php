@@ -10,6 +10,8 @@ namespace App\Factory;
 
 use App\Entity\Configuration;
 use App\Enum\Color;
+use App\Enum\NotificationReason;
+use App\Enum\UseMode;
 use Symfony\Component\HttpFoundation\Request;
 
 class ConfigurationFactory
@@ -19,8 +21,8 @@ class ConfigurationFactory
     public function createDefault(): Configuration
     {
         return (new Configuration())
-            ->setMode('label')
-            ->setBranchDefaultColor((string) Color::PRIMARY())
+            ->setMode(UseMode::getDefault())
+            ->setBranchDefaultColor(Color::getDefault())
             ->setEnabledDarkTheme(false)
             ->setReloadOnFocus(false)
             ->setReloadEvery(static::DEFAULT_RELOAD_EVERY)
@@ -37,7 +39,14 @@ class ConfigurationFactory
 
         return $configuration
             ->setRepositories($request->request->get('repositories', []))
-            ->setMode($request->request->get('mode', 'label'))
+            ->setMode(
+                new UseMode(
+                    $request->request->get(
+                        'mode',
+                        (string) UseMode::getDefault()
+                    )
+                )
+            )
             ->setLabelsReviewNeeded($request->request->get('labels_review_needed', []))
             ->setLabelsChangesRequested($request->request->get('labels_changes_requested', []))
             ->setLabelsAccepted($request->request->get('labels_accepted', []))
@@ -51,15 +60,34 @@ class ConfigurationFactory
                     $request->request->get('branchs_colors', [])
                 )
             )
-            ->setBranchDefaultColor($request->request->get('branch_default_color', 'primary'))
+            ->setBranchDefaultColor(
+                new Color(
+                    $request->request->get(
+                        'branch_default_color',
+                        (string) Color::getDefault()
+                    )
+                )
+            )
             ->setFilters($request->request->get('filters', []))
-            ->setNotificationsExcludeReasons($request->request->get('notifications_exclude_reasons', []))
+            ->setNotificationsExcludeReasons(
+                array_map(
+                    function (string $reason): NotificationReason {
+                        return new NotificationReason($reason);
+                    },
+                    $request->request->get('notifications_exclude_reasons', [])
+                )
+            )
             ->setNotificationsExcludeReasonsOtherRepos(
-                $request->request->get('notifications_exclude_reasons_other_repos', [])
+                array_map(
+                    function (string $reason): NotificationReason {
+                        return new NotificationReason($reason);
+                    },
+                    $request->request->get('notifications_exclude_reasons_other_repos', [])
+                )
             )
             ->setEnabledDarkTheme('on' === $request->request->get('enabled_dark_theme', 'off'))
             ->setReloadOnFocus('on' === $request->request->get('reload_on_focus', 'off'))
-            ->setReloadEvery($request->request->getInt('reload_every', 60))
+            ->setReloadEvery($request->request->getInt('reload_every'))
         ;
     }
 }

@@ -66,8 +66,8 @@
                         {% endfor %}
                     </select>
                     <small id="branchs_colors_help" class="form-text text-muted">
-                        Example: branch:color<br>
-                        You can also use regex in branch (ex.: branch-*:color)
+                        Example: branch:color. You can also use regex in branch (ex.: branch-*:color).<br>
+                        Allowed colors: {{ colors|join(', ') }}.
                     </small>
                 </div>
             </div>
@@ -188,10 +188,10 @@
                         <label for="notifications_exclude_reasons">Notifications exclude reasons</label>
                         <select class="form-control" name="notifications_exclude_reasons[]" id="notifications_exclude_reasons"
                                 multiple="multiple">
-                            {% for type in notificationType %}
-                                <option value="{{ type }}"
-                                        {% if type in configuration.getNotificationsExcludeReasons() %}selected="selected"{% endif %}>
-                                    {{ type }}
+                            {% for reason in notificationReasons %}
+                                <option value="{{ reason }}"
+                                        {% if reason in configuration.getNotificationsExcludeReasons() %}selected="selected"{% endif %}>
+                                    {{ reason }}
                                 </option>
                             {% endfor %}
                         </select>
@@ -205,10 +205,10 @@
                         </label>
                         <select class="form-control" name="notifications_exclude_reasons_other_repos[]"
                                 id="notifications_exclude_reasons_other_repos" multiple="multiple">
-                            {% for type in notificationType %}
-                                <option value="{{ type }}"
-                                        {% if type in configuration.getNotificationsExcludeReasonsOtherRepos() %}selected="selected"{% endif %}>
-                                    {{ type }}
+                            {% for reason in notificationReasons %}
+                                <option value="{{ reason }}"
+                                        {% if reason in configuration.getNotificationsExcludeReasonsOtherRepos() %}selected="selected"{% endif %}>
+                                    {{ reason }}
                                 </option>
                             {% endfor %}
                         </select>

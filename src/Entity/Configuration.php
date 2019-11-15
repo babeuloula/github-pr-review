@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Enum\Color;
+use App\Enum\NotificationReason;
+use App\Enum\UseMode;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToOne;
@@ -30,7 +33,7 @@ final class Configuration
     private $repositories = [];
 
     /**
-     * @ORM\Column(type="string", length=25)
+     * @ORM\Column(type="use_mode", length=25)
      */
     private $mode;
 
@@ -60,7 +63,7 @@ final class Configuration
     private $branchsColors = [];
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="color", length=25)
      */
     private $branchDefaultColor;
 
@@ -119,12 +122,12 @@ final class Configuration
         return $this;
     }
 
-    public function getMode(): string
+    public function getMode(): UseMode
     {
-        return $this->mode ?? 'label';
+        return $this->mode ?? new UseMode('label');
     }
 
-    public function setMode(string $mode): self
+    public function setMode(UseMode $mode): self
     {
         $this->mode = $mode;
 
@@ -201,12 +204,12 @@ final class Configuration
         return $this;
     }
 
-    public function getBranchDefaultColor(): string
+    public function getBranchDefaultColor(): Color
     {
-        return $this->branchDefaultColor ?? 'primary';
+        return $this->branchDefaultColor ?? new Color('primary');
     }
 
-    public function setBranchDefaultColor(string $branchDefaultColor): self
+    public function setBranchDefaultColor(Color $branchDefaultColor): self
     {
         $this->branchDefaultColor = $branchDefaultColor;
 
@@ -227,29 +230,50 @@ final class Configuration
         return $this;
     }
 
-    /** @return string[] */
+    /** @return NotificationReason[] */
     public function getNotificationsExcludeReasons(): array
     {
-        return $this->notificationsExcludeReasons ?? [];
+        return array_map(
+            function (string $reason): NotificationReason {
+                return new NotificationReason($reason);
+            },
+            $this->notificationsExcludeReasons ?? []
+        );
     }
 
-    /** @param string[] $notificationsExcludeReasons */
+    /** @param NotificationReason[] $notificationsExcludeReasons */
     public function setNotificationsExcludeReasons(array $notificationsExcludeReasons): self
     {
-        $this->notificationsExcludeReasons = $notificationsExcludeReasons;
+        $this->notificationsExcludeReasons = array_map(
+            function (NotificationReason $reason): string {
+                return $reason->getValue();
+            },
+            $notificationsExcludeReasons
+        );
 
         return $this;
     }
 
-    /** @return string[] */
+    /** @return NotificationReason[] */
     public function getNotificationsExcludeReasonsOtherRepos(): array
     {
-        return $this->notificationsExcludeReasonsOtherRepos ?? [];
+        return array_map(
+            function (string $reason): NotificationReason {
+                return new NotificationReason($reason);
+            },
+            $this->notificationsExcludeReasonsOtherRepos ?? []
+        );
     }
 
+    /** @param NotificationReason[] $notificationsExcludeReasonsOtherRepos */
     public function setNotificationsExcludeReasonsOtherRepos(array $notificationsExcludeReasonsOtherRepos): self
     {
-        $this->notificationsExcludeReasonsOtherRepos = $notificationsExcludeReasonsOtherRepos;
+        $this->notificationsExcludeReasonsOtherRepos = array_map(
+            function (NotificationReason $reason): string {
+                return $reason->getValue();
+            },
+            $notificationsExcludeReasonsOtherRepos
+        );
 
         return $this;
     }

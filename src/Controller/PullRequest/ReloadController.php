@@ -11,6 +11,7 @@ namespace App\Controller\PullRequest;
 
 use App\Entity\Configuration;
 use App\Entity\User;
+use App\Enum\UseMode;
 use App\Exception\GithubGuiException;
 use App\Exception\XhrException;
 use App\Service\Github\PullRequestFilterService;
@@ -46,7 +47,7 @@ final class ReloadController
             );
         }
 
-        if ('filter' === $user->getConfiguration()->getMode()) {
+        if (true === UseMode::FILTER()->equals($user->getConfiguration()->getMode())) {
             throw new GithubGuiException(
                 GithubGuiException::MESSAGE_FILTERS_NOT_ENABLED,
                 GithubGuiException::CODE_FILTERS_NOT_ENABLED_XHR

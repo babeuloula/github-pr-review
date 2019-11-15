@@ -63,7 +63,7 @@ class PullRequestFilterService implements PullRequestServiceInterface
             },
             $userService->getUser()->getConfiguration()->getBranchsColors()
         );
-        $this->branchDefaultColor = $userService->getUser()->getConfiguration()->getBranchDefaultColor();
+        $this->branchDefaultColor = (string) $userService->getUser()->getConfiguration()->getBranchDefaultColor();
         $this->githubFilters = $userService->getUser()->getConfiguration()->getFilters();
     }
 

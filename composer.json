@@ -7,6 +7,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
+        "ext-pdo": "*",
         "cocur/slugify": "^3.2",
         "knplabs/github-api": "^2.11",
         "league/oauth2-github": "^2.0",

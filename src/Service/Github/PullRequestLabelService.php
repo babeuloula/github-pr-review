@@ -75,7 +75,7 @@ class PullRequestLabelService implements PullRequestServiceInterface
             },
             $userService->getUser()->getConfiguration()->getBranchsColors()
         );
-        $this->branchDefaultColor = $userService->getUser()->getConfiguration()->getBranchDefaultColor();
+        $this->branchDefaultColor = (string) $userService->getUser()->getConfiguration()->getBranchDefaultColor();
 
         $this->openCount = [
             Label::REVIEW_NEEDED()->getValue() => [],

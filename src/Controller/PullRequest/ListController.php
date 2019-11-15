@@ -11,6 +11,7 @@ namespace App\Controller\PullRequest;
 use App\Entity\Configuration;
 use App\Entity\User;
 use App\Enum\Label;
+use App\Enum\UseMode;
 use App\Exception\GithubGuiException;
 use App\Service\Github\NotificationService;
 use App\Service\Github\PullRequestFilterService;
@@ -68,7 +69,7 @@ final class ListController
             );
         }
 
-        if ('filter' === $user->getConfiguration()->getMode()
+        if (true === UseMode::FILTER()->equals($user->getConfiguration()->getMode())
             && 0 === \count($user->getConfiguration()->getFilters())
         ) {
             throw new GithubGuiException(
@@ -78,7 +79,7 @@ final class ListController
         }
 
         /** @var PullRequestServiceInterface $service */
-        $service = ('label' === $user->getConfiguration()->getMode())
+        $service = (true === UseMode::LABEL()->equals($user->getConfiguration()->getMode()))
             ? $this->pullRequestLabelService
             : $this->pullRequestFilterService;
 

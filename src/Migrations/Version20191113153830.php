@@ -38,7 +38,7 @@ CREATE TABLE configuration (
     labels_accepted LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)',
     labels_wip LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)',
     branchs_colors LONGTEXT NOT NULL COMMENT '(DC2Type:array)',
-    branch_default_color VARCHAR(255) NOT NULL,
+    branch_default_color VARCHAR(25) NOT NULL,
     filters LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)',
     notifications_exclude_reasons LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)',
     notifications_exclude_reasons_other_repos LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)',

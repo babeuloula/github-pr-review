@@ -7,12 +7,7 @@
         <link rel="shortcut icon" type="image/png" href="/imgs/favicon.png">
         {% block stylesheets %}
             <link title="defaut" type="text/css" rel="stylesheet" href="/css/base.css" media="screen">
-            <link title="defaut" type="text/css" rel="stylesheet" href="/css/pull-request.css" media="screen">
-            {% if app.getUser() is not null and app.getUser().getConfiguration() is not null and app.getUser().getConfiguration().getEnabledDarkTheme() %}
-                <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/darkly/bootstrap.min.css"
-                        rel="stylesheet" crossorigin="anonymous"
-                        integrity="sha384-w+8Gqjk9Cuo6XH9HKHG5t5I1VR4YBNdPt/29vwgfZR485eoEJZ8rJRbm3TR32P6k">
-            {% else %}
+            {% if openPullRequests is not defined %}
                 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
                         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
                         crossorigin="anonymous">

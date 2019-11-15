@@ -4,6 +4,20 @@
     {{ openPullRequests|keys|first }} - {{ parent() }}
 {% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+
+    <link title="defaut" type="text/css" rel="stylesheet" href="/css/pull-request.css" media="screen">
+    {% if app.getUser() is not null
+        and app.getUser().getConfiguration() is not null
+        and app.getUser().getConfiguration().getEnabledDarkTheme()
+    %}
+        <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/darkly/bootstrap.min.css"
+                rel="stylesheet" crossorigin="anonymous"
+                integrity="sha384-w+8Gqjk9Cuo6XH9HKHG5t5I1VR4YBNdPt/29vwgfZR485eoEJZ8rJRbm3TR32P6k">
+    {% endif %}
+{% endblock %}
+
 {% block body %}
 <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
