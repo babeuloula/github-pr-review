@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-final class User implements UserInterface
+final class User implements UserInterface, \JsonSerializable
 {
     /**
      * @ORM\Id()
@@ -138,5 +138,16 @@ final class User implements UserInterface
 
     public function eraseCredentials(): void
     {
+    }
+
+    /** @return mixed[] */
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'nickname' => $this->getNickname(),
+            'roles' => $this->getRoles(),
+        ];
     }
 }

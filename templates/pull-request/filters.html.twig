@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    {% if reloadEvery > 0 and not reloadOnFocus %}
+    {% if app.getUser().getConfiguration().getReloadEvery() > 0 and not app.getUser().getConfiguration().getReloadOnFocus() %}
         <div class="row text-center next-reload-container">
             <div class="col-sm">
                 <small>
@@ -44,8 +44,8 @@
 
     <script type="text/javascript">
         const LOCALSTORAGE_KEY = 'collapses';
-        const RELOAD_ON_FOCUS = {{ reloadOnFocus ? 'true' : 'false' }};
-        const RELOAD_EVERY = {{ reloadEvery }};
+        const RELOAD_ON_FOCUS = {{ app.getUser().getConfiguration().getReloadOnFocus() ? 'true' : 'false' }};
+        const RELOAD_EVERY = {{ app.getUser().getConfiguration().getReloadEvery() }};
     </script>
     <script src="/js/pull-requests.js"></script>
 {% endblock %}

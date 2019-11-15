@@ -92,8 +92,8 @@
 
     <script type="text/javascript">
         jQuery(function($){
-            let reloadOnFocus = {{ reloadOnFocus ? 'true' : 'false' }};
-            let reloadEvery = {{ reloadEvery }};
+            let reloadOnFocus = {{ app.getUser().getConfiguration().getReloadOnFocus() ? 'true' : 'false' }};
+            let reloadEvery = {{ app.getUser().getConfiguration().getReloadEvery() }};
 
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                 let newRepo = $.trim($(e.target).text());

@@ -8,11 +8,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use Doctrine\ORM\{
-    Mapping as ORM,
-    Mapping\JoinColumn,
-    Mapping\OneToOne
-};
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\OneToOne;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ConfigurationRepository")
@@ -109,9 +107,9 @@ final class Configuration
     }
 
     /** @return string[] */
-    public function getRepositories(): ?array
+    public function getRepositories(): array
     {
-        return $this->repositories;
+        return $this->repositories ?? [];
     }
 
     public function setRepositories(array $repositories): self
@@ -121,9 +119,9 @@ final class Configuration
         return $this;
     }
 
-    public function getMode(): ?string
+    public function getMode(): string
     {
-        return $this->mode;
+        return $this->mode ?? 'label';
     }
 
     public function setMode(string $mode): self
@@ -134,13 +132,13 @@ final class Configuration
     }
 
     /** @return string[] */
-    public function getLabelsReviewNeeded(): ?array
+    public function getLabelsReviewNeeded(): array
     {
-        return $this->labelsReviewNeeded;
+        return $this->labelsReviewNeeded ?? [];
     }
 
     /** @param string[] $labelsReviewNeeded */
-    public function setLabelsReviewNeeded(?array $labelsReviewNeeded): self
+    public function setLabelsReviewNeeded(array $labelsReviewNeeded): self
     {
         $this->labelsReviewNeeded = $labelsReviewNeeded;
 
@@ -148,13 +146,13 @@ final class Configuration
     }
 
     /** @return string[] */
-    public function getLabelsChangesRequested(): ?array
+    public function getLabelsChangesRequested(): array
     {
-        return $this->labelsChangesRequested;
+        return $this->labelsChangesRequested ?? [];
     }
 
     /** @param string[] $labelsChangesRequested */
-    public function setLabelsChangesRequested(?array $labelsChangesRequested): self
+    public function setLabelsChangesRequested(array $labelsChangesRequested): self
     {
         $this->labelsChangesRequested = $labelsChangesRequested;
 
@@ -162,13 +160,13 @@ final class Configuration
     }
 
     /** @return string[] */
-    public function getLabelsAccepted(): ?array
+    public function getLabelsAccepted(): array
     {
-        return $this->labelsAccepted;
+        return $this->labelsAccepted ?? [];
     }
 
     /** @param string[] $labelsAccepted */
-    public function setLabelsAccepted(?array $labelsAccepted): self
+    public function setLabelsAccepted(array $labelsAccepted): self
     {
         $this->labelsAccepted = $labelsAccepted;
 
@@ -176,13 +174,13 @@ final class Configuration
     }
 
     /** @return string[] */
-    public function getLabelsWip(): ?array
+    public function getLabelsWip(): array
     {
-        return $this->labelsWip;
+        return $this->labelsWip ?? [];
     }
 
     /** @param string[] $labelsWip */
-    public function setLabelsWip(?array $labelsWip): self
+    public function setLabelsWip(array $labelsWip): self
     {
         $this->labelsWip = $labelsWip;
 
@@ -190,12 +188,12 @@ final class Configuration
     }
 
     /** @return string[] */
-    public function getBranchsColors(): ?array
+    public function getBranchsColors(): array
     {
-        return $this->branchsColors;
+        return $this->branchsColors ?? [];
     }
 
-    /** @param string[] $branchsColors */
+    /** @param array[] $branchsColors */
     public function setBranchsColors(array $branchsColors): self
     {
         $this->branchsColors = $branchsColors;
@@ -203,9 +201,9 @@ final class Configuration
         return $this;
     }
 
-    public function getBranchDefaultColor(): ?string
+    public function getBranchDefaultColor(): string
     {
-        return $this->branchDefaultColor;
+        return $this->branchDefaultColor ?? 'primary';
     }
 
     public function setBranchDefaultColor(string $branchDefaultColor): self
@@ -216,13 +214,13 @@ final class Configuration
     }
 
     /** @return string[] */
-    public function getFilters(): ?array
+    public function getFilters(): array
     {
-        return $this->filters;
+        return $this->filters ?? [];
     }
 
     /** @param string[] $filters */
-    public function setFilters(?array $filters): self
+    public function setFilters(array $filters): self
     {
         $this->filters = $filters;
 
@@ -230,13 +228,13 @@ final class Configuration
     }
 
     /** @return string[] */
-    public function getNotificationsExcludeReasons(): ?array
+    public function getNotificationsExcludeReasons(): array
     {
-        return $this->notificationsExcludeReasons;
+        return $this->notificationsExcludeReasons ?? [];
     }
 
     /** @param string[] $notificationsExcludeReasons */
-    public function setNotificationsExcludeReasons(?array $notificationsExcludeReasons): self
+    public function setNotificationsExcludeReasons(array $notificationsExcludeReasons): self
     {
         $this->notificationsExcludeReasons = $notificationsExcludeReasons;
 
@@ -244,21 +242,21 @@ final class Configuration
     }
 
     /** @return string[] */
-    public function getNotificationsExcludeReasonsOtherRepos(): ?array
+    public function getNotificationsExcludeReasonsOtherRepos(): array
     {
-        return $this->notificationsExcludeReasonsOtherRepos;
+        return $this->notificationsExcludeReasonsOtherRepos ?? [];
     }
 
-    public function setNotificationsExcludeReasonsOtherRepos(?array $notificationsExcludeReasonsOtherRepos): self
+    public function setNotificationsExcludeReasonsOtherRepos(array $notificationsExcludeReasonsOtherRepos): self
     {
         $this->notificationsExcludeReasonsOtherRepos = $notificationsExcludeReasonsOtherRepos;
 
         return $this;
     }
 
-    public function getEnabledDarkTheme(): ?bool
+    public function getEnabledDarkTheme(): bool
     {
-        return $this->enabledDarkTheme;
+        return $this->enabledDarkTheme ?? false;
     }
 
     public function setEnabledDarkTheme(bool $enabledDarkTheme): self
@@ -268,9 +266,9 @@ final class Configuration
         return $this;
     }
 
-    public function getReloadOnFocus(): ?bool
+    public function getReloadOnFocus(): bool
     {
-        return $this->reloadOnFocus;
+        return $this->reloadOnFocus ?? false;
     }
 
     public function setReloadOnFocus(bool $reloadOnFocus): self
@@ -280,9 +278,9 @@ final class Configuration
         return $this;
     }
 
-    public function getReloadEvery(): ?int
+    public function getReloadEvery(): int
     {
-        return $this->reloadEvery;
+        return $this->reloadEvery ?? 0;
     }
 
     public function setReloadEvery(int $reloadEvery): self

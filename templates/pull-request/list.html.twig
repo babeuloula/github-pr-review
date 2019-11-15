@@ -1,4 +1,4 @@
-{% if useMode == 'label' %}
+{% if app.getUser().getConfiguration().getMode() == 'label' %}
     {% include 'pull-request/labels.html.twig' %}
 {% else %}
     {% include 'pull-request/filters.html.twig' %}

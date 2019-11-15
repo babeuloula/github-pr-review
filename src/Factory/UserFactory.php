@@ -13,9 +13,15 @@ use League\OAuth2\Client\Provider\GithubResourceOwner;
 
 class UserFactory
 {
-    public function createFromGithubUser(GithubResourceOwner $githubUser): User
+    public function createFromGithubUser(GithubResourceOwner $githubUser, ?User $existingUser): User
     {
-        return (new User())
+        $user = new User();
+
+        if ($existingUser instanceof User) {
+            $user = $existingUser;
+        }
+
+        return $user
             ->setEnabled(true)
             ->setName((string) $githubUser->getName())
             ->setNickname((string) $githubUser->getNickname())

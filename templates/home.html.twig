@@ -3,12 +3,20 @@
 {% block body %}
     <h1>Hello World!</h1>
 
-    {% for type, messages in app.getSession().getFlashBag().all() %}
-        {% for message in messages %}
-            <div class="alert alert-{{ type }}">{{ message }}</div>
-        {% endfor %}
-    {% endfor %}
+    {% include 'flashBag.html.twig' %}
 
-    <a href="{{ path('pull_requests_list') }}">Open Github GUI</a>
+    {% if app.getUser() is not null %}
+        <p>
+            <a href="{{ path('pull_requests_list') }}">Open Github GUI</a>
+        </p>
+
+        <p>
+            <a href="{{ path('user_configuration') }}">Open configuration</a>
+        </p>
+    {% else %}
+        <p>
+            <a href="{{ path('oauth_login') }}">Login</a>
+        </p>
+    {% endif %}
 
 {% endblock %}

@@ -8,13 +8,13 @@ declare(strict_types=1);
 
 namespace App\Service\Github;
 
-use App\Enum\UseMode;
+use App\Entity\Configuration;
+use App\Entity\User;
+use App\Service\User\UserService;
 use App\Traits\PullRequestTypedArrayTrait;
 use App\TypedArray\PullRequestArray;
-use Github\Api\{
-    PullRequest as PullRequestApi,
-    Search
-};
+use Github\Api\PullRequest as PullRequestApi;
+use Github\Api\Search;
 use Github\Client;
 
 class PullRequestFilterService implements PullRequestServiceInterface
@@ -27,7 +27,7 @@ class PullRequestFilterService implements PullRequestServiceInterface
     /** @var string[] */
     protected $githubRepos;
 
-    /** @var string[] */
+    /** @var array[] */
     protected $branchsColors;
 
     /** @var string */
@@ -39,31 +39,32 @@ class PullRequestFilterService implements PullRequestServiceInterface
     /** @var int[] */
     protected $openCount = [];
 
-    /**
-     * @param string[] $githubRepos
-     * @param string[] $githubBranchsColors
-     * @param string[] $githubFilters
-     */
-    public function __construct(
-        GithubClientService $client,
-        array $githubRepos,
-        array $githubBranchsColors,
-        string $githubBranchDefaultColor,
-        array $githubFilters,
-        string $useMode
-    ) {
-        $this->client = $client->getClient();
-
-        if (true === (new UseMode($useMode))->equals(UseMode::FILTER()) && 0 === \count($githubFilters)) {
-            throw new \RuntimeException("Option Github Filters cannot be empty.");
+    public function __construct(GithubClientService $client, UserService $userService)
+    {
+        if (false === $userService->getUser() instanceof User
+            || false === $userService->getUser()->getConfiguration() instanceof Configuration
+        ) {
+            return;
         }
 
-        $this->githubRepos = $githubRepos;
+        $this->client = $client->getClient();
+
+        $this->githubRepos = $userService->getUser()->getConfiguration()->getRepositories();
         \natcasesort($this->githubRepos);
 
-        $this->branchsColors = $githubBranchsColors;
-        $this->branchDefaultColor = $githubBranchDefaultColor;
-        $this->githubFilters = $githubFilters;
+        $this->branchsColors = array_map(
+            /**
+             * @param string[] $data
+             *
+             * @return string[]
+             */
+            function (array $data): array {
+                return [$data[0] => $data[1]];
+            },
+            $userService->getUser()->getConfiguration()->getBranchsColors()
+        );
+        $this->branchDefaultColor = $userService->getUser()->getConfiguration()->getBranchDefaultColor();
+        $this->githubFilters = $userService->getUser()->getConfiguration()->getFilters();
     }
 
     /** @return PullRequestArray[] */
@@ -151,7 +152,7 @@ class PullRequestFilterService implements PullRequestServiceInterface
         return $pullRequests;
     }
 
-    /** @return string[] */
+    /** @return array[] */
     protected function getBranchsColors(): array
     {
         return $this->branchsColors;

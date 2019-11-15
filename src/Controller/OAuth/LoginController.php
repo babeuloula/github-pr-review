@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace App\Controller\OAuth;
 
+use App\Security\GithubGuard;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -26,7 +27,10 @@ final class LoginController
         return $this
             ->clientRegistry
             ->getClient('github')
-            ->redirect(['repo'], [])
+            ->redirect(
+                GithubGuard::SCOPES,
+                []
+            )
         ;
     }
 }

@@ -8,41 +8,51 @@ declare(strict_types=1);
 
 namespace App\Controller\Notification;
 
-use App\Enum\UseMode;
+use App\Entity\Configuration;
+use App\Entity\User;
+use App\Exception\GithubGuiException;
+use App\Exception\XhrException;
 use App\Service\Github\NotificationService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment;
 
-class MarkAsReadController
+final class MarkAsReadController
 {
     /** @var NotificationService */
-    protected $notificationService;
-
-    /** @var UseMode */
-    protected $useMode;
+    private $notificationService;
 
     /** @var Environment */
-    protected $twig;
+    private $twig;
 
     public function __construct(
         NotificationService $notificationService,
-        string $useMode,
         Environment $twig
     ) {
         $this->notificationService = $notificationService;
-        $this->useMode = new UseMode($useMode);
         $this->twig = $twig;
     }
 
-    public function __invoke(Request $request, int $threadId): JsonResponse
+    /** @param User $user */
+    public function __invoke(Request $request, UserInterface $user, int $threadId): JsonResponse
     {
-        if (false === $this->useMode->equals(UseMode::FILTER())) {
-            throw new \RuntimeException("You need to use filters to access to this endpoint.");
+        if (false === $user->getConfiguration() instanceof Configuration) {
+            throw new GithubGuiException(
+                GithubGuiException::MESSAGE_CONFIG_IS_EMPTY,
+                GithubGuiException::CODE_CONFIG_IS_EMPTY_XHR
+            );
+        }
+
+        if ('filter' === $user->getConfiguration()->getMode()) {
+            throw new GithubGuiException(
+                GithubGuiException::MESSAGE_FILTERS_NOT_ENABLED,
+                GithubGuiException::CODE_FILTERS_NOT_ENABLED_XHR
+            );
         }
 
         if (false === $request->isXmlHttpRequest()) {
-            throw new \RuntimeException("You must call this endpoint with XHR.");
+            throw new XhrException();
         }
 
         return new JsonResponse(

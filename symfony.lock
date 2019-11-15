@@ -132,6 +132,9 @@
     "league/oauth2-github": {
         "version": "2.0.0"
     },
+    "monolog/monolog": {
+        "version": "1.25.2"
+    },
     "myclabs/php-enum": {
         "version": "1.7.2"
     },
@@ -334,6 +337,23 @@
     },
     "symfony/mime": {
         "version": "v4.3.4"
+    },
+    "symfony/monolog-bridge": {
+        "version": "v4.3.8"
+    },
+    "symfony/monolog-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "6240c6d43e8237a32452f057f81816820fd56ab6"
+        },
+        "files": [
+            "config/packages/dev/monolog.yaml",
+            "config/packages/prod/monolog.yaml",
+            "config/packages/test/monolog.yaml"
+        ]
     },
     "symfony/options-resolver": {
         "version": "v4.3.4"

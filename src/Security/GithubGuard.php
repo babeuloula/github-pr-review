@@ -26,6 +26,8 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class GithubGuard extends SocialAuthenticator
 {
+    public const SCOPES = ['repo', 'read:org'];
+
     /** @var ClientRegistry */
     protected $clientRegistry;
 
@@ -84,14 +86,14 @@ class GithubGuard extends SocialAuthenticator
         $githubUser = $this->clientRegistry->getClient('github')->fetchUserFromToken($credentials);
         $user = $this->userRepository->findByNickname($githubUser->getNickname());
 
-        if ($user instanceof User) {
+        if ($user instanceof User && $credentials->getToken() === $user->getToken()) {
             return $user;
         }
 
         return $this->userRepository->save(
             $this
                 ->userFactory
-                ->createFromGithubUser($githubUser)
+                ->createFromGithubUser($githubUser, $user)
                 ->setToken($credentials->getToken())
         );
     }
@@ -99,7 +101,7 @@ class GithubGuard extends SocialAuthenticator
     // phpcs:ignore
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): RedirectResponse
     {
-        $this->flashBag->set('danger', 'Github OAuth connection failed.');
+        $this->flashBag->add('danger', 'Github OAuth connection failed.');
 
         return new RedirectResponse($this->router->generate('home'));
     }
@@ -107,7 +109,7 @@ class GithubGuard extends SocialAuthenticator
     // phpcs:ignore
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): RedirectResponse
     {
-        $this->flashBag->set('success', 'Github OAuth connection success.');
+        $this->flashBag->add('success', 'Github OAuth connection success.');
 
         return new RedirectResponse($this->router->generate('home'));
     }

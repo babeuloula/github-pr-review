@@ -8,7 +8,7 @@
         {% block stylesheets %}
             <link title="defaut" type="text/css" rel="stylesheet" href="/css/base.css" media="screen">
             <link title="defaut" type="text/css" rel="stylesheet" href="/css/pull-request.css" media="screen">
-            {% if enableDarkTheme %}
+            {% if app.getUser() is not null and app.getUser().getConfiguration() is not null and app.getUser().getConfiguration().getEnabledDarkTheme() %}
                 <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/darkly/bootstrap.min.css"
                         rel="stylesheet" crossorigin="anonymous"
                         integrity="sha384-w+8Gqjk9Cuo6XH9HKHG5t5I1VR4YBNdPt/29vwgfZR485eoEJZ8rJRbm3TR32P6k">
@@ -24,7 +24,7 @@
             {% block body %}{% endblock %}
         </div>
 
-        <img id="reload-img" src="/imgs/reload-{% if enableDarkTheme %}white{% else %}black{% endif %}.svg"
+        <img id="reload-img" src="/imgs/reload-{% if app.getUser() is not null and app.getUser().getConfiguration() is not null and app.getUser().getConfiguration().getEnabledDarkTheme() %}white{% else %}black{% endif %}.svg"
                 width="60" height="60">
 
         {% block javascripts %}

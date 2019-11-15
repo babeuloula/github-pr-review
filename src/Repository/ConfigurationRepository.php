@@ -24,4 +24,15 @@ class ConfigurationRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Configuration::class);
     }
+
+    public function save(Configuration $configuration): Configuration
+    {
+        if (false === $this->getEntityManager()->contains($configuration)) {
+            $this->getEntityManager()->persist($configuration);
+        }
+
+        $this->getEntityManager()->flush();
+
+        return $configuration;
+    }
 }
