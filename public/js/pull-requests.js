@@ -20,7 +20,10 @@ jQuery(function ($) {
                 updateFavicon();
             },
             error: function(response, textStatus, errorThrown) {
-                alert("Unable to load pull requests.");
+                $("body").overhang({
+                    type: "error",
+                    message: response.responseJSON.error.message
+                });
             }
         });
 
@@ -32,7 +35,10 @@ jQuery(function ($) {
                 updateFavicon();
             },
             error: function (response, textStatus, errorThrown) {
-                alert("Unable to load notifications.");
+                $("body").overhang({
+                    type: "error",
+                    message: response.responseJSON.error.message
+                });
             }
         });
 
@@ -229,7 +235,10 @@ jQuery(function ($) {
                 });
             },
             error: function(response, textStatus, errorThrown) {
-                alert("Unable to mark as read notification.");
+                $("body").overhang({
+                    type: "error",
+                    message: response.responseJSON.error.message
+                });
             }
         });
     });

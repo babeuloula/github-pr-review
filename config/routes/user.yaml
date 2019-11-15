@@ -2,3 +2,8 @@ user_configuration:
     path: /user/configuration
     controller: App\Controller\User\ConfigurationController
     methods: [GET, POST]
+
+user_delete_account:
+    path: /user/delete
+    controller: App\Controller\User\DeleteController
+    methods: [GET]

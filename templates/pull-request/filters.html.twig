@@ -4,6 +4,7 @@
     {{ parent() }}
 
     <link title="defaut" type="text/css" rel="stylesheet" href="/css/pull-request.css" media="screen">
+    <link title="defaut" type="text/css" rel="stylesheet" href="/css/libs/overhang/overhang.min.css" media="screen">
     {% if app.getUser() is not null
             and app.getUser().getConfiguration() is not null
             and app.getUser().getConfiguration().getEnabledDarkTheme()
@@ -55,6 +56,8 @@
             integrity="sha256-qg3jI3zMsMmV79xDeYaABwUsh4qC15jOC58KvcQ+OzI=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
             integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <script src="/js/libs/overhang/overhang.min.js"></script>
 
     <script type="text/javascript">
         const LOCALSTORAGE_KEY = 'collapses';

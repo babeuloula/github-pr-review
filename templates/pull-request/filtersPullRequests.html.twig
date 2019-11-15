@@ -13,36 +13,34 @@
             <div class="card-body">
                 <div class="list-group">
                     <div class="list-group-items">
-                        {% if sortedPullRequests.count() > 0 %}
-                            {% for pullRequest in sortedPullRequests %}
-                                <a href="{{ pullRequest.getUrl() }}"
-                                        class="list-group-item list-group-item-action" target="_blank">
-                                    <img src="{{ pullRequest.getUser().getAvatarUrl() }}"
-                                            class="float-left rounded"
-                                            title="Pull request from: {{ pullRequest.getUser().getLogin() }}">
+                        {% for pullRequest in sortedPullRequests %}
+                            <a href="{{ pullRequest.getUrl() }}"
+                                    class="list-group-item list-group-item-action" target="_blank">
+                                <img src="{{ pullRequest.getUser().getAvatarUrl() }}"
+                                        class="float-left rounded"
+                                        title="Pull request from: {{ pullRequest.getUser().getLogin() }}">
 
-                                    <span class="ml-3 text-success">
-                                        #{{ pullRequest.getNumber() }}
-                                    </span>
+                                <span class="ml-3 text-success">
+                                    #{{ pullRequest.getNumber() }}
+                                </span>
 
-                                    <span class="ml-3">
-                                        {{ pullRequest.getTitle() }}
-                                    </span>
+                                <span class="ml-3">
+                                    {{ pullRequest.getTitle() }}
+                                </span>
 
-                                    <div class="absolute-right">
-                                        {% if pullRequest.getBase() is not null %}
-                                            <span class="badge badge-{{ pullRequest.getBranchColor() }}">
-                                                {{ pullRequest.getHead() }}
-                                            </span>
-                                        {% endif %}
-                                    </div>
-                                </a>
-                            {% endfor %}
+                                <div class="absolute-right">
+                                    {% if pullRequest.getBase() is not null %}
+                                        <span class="badge badge-{{ pullRequest.getBranchColor() }}">
+                                            {{ pullRequest.getHead() }}
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </a>
                         {% else %}
                             <div class="list-group-item list-group-item-action disabled" aria-disabled="true">
                                 No pull request for this repository.
                             </div>
-                        {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
             </div>

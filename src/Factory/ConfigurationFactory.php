@@ -53,9 +53,16 @@ class ConfigurationFactory
             ->setLabelsWip($request->request->get('labels_wip', []))
             ->setBranchsColors(
                 array_map(
-                    /** @return string[] : [branch => color] */
+                    /** @return string[] */
                     function (string $data): array {
-                        return explode(':', $data);
+                        // phpcs:ignore
+                        [$branch, $color] = explode(':', $data);
+
+                        if (false === Color::isValid($color)) {
+                            $color = (string) Color::getDefault();
+                        }
+
+                        return [$branch, $color];
                     },
                     $request->request->get('branchs_colors', [])
                 )

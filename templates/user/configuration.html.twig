@@ -9,6 +9,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css"
             integrity="sha256-FdatTf20PQr/rWg+cAKfl6j4/IY3oohFAJ7gVC3M34E=" crossorigin="anonymous" />
+    <link title="defaut" type="text/css" rel="stylesheet" href="/css/libs/overhang/overhang.min.css" media="screen">
 {% endblock %}
 
 {% block body %}
@@ -173,7 +174,7 @@
                     <div class="form-group">
                         <label for="filters">Filters</label>
                         <select class="form-control" name="filters[]" id="filters" multiple="multiple"
-                                data-tags="true" >
+                                data-tags="true" data-required="true">
                             {% for filter in configuration.getFilters() %}
                                 <option value="{{ filter }}" selected="selected">{{ filter }}</option>
                             {% endfor %}
@@ -218,6 +219,9 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Save configuration</button>
+        <button type="button" class="btn btn-danger" id="delete-account" data-href="{{ path('user_delete_account') }}">
+            Delete my account
+        </button>
     </form>
 {% endblock %}
 
@@ -226,6 +230,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"
             integrity="sha256-d/edyIFneUo3SvmaFnf96hRcVBcyaOy96iMkPez1kaU=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <script src="/js/libs/overhang/overhang.min.js"></script>
 
     <script src="/js/user/configuration.js"></script>
 {% endblock %}

@@ -1,5 +1,5 @@
 {% for type, messages in app.getSession().getFlashBag().all() %}
     {% for message in messages %}
-        <div class="alert alert-{{ type }}">{{ message }}</div>
+        <div class="alert alert-{{ type }}">{{ message|raw }}</div>
     {% endfor %}
 {% endfor %}

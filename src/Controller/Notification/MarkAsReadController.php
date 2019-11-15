@@ -41,14 +41,14 @@ final class MarkAsReadController
         if (false === $user->getConfiguration() instanceof Configuration) {
             throw new GithubGuiException(
                 GithubGuiException::MESSAGE_CONFIG_IS_EMPTY,
-                GithubGuiException::CODE_CONFIG_IS_EMPTY_XHR
+                GithubGuiException::CODE_CONFIG_IS_EMPTY
             );
         }
 
-        if (true === UseMode::FILTER()->equals($user->getConfiguration()->getMode())) {
+        if (false === UseMode::FILTER()->equals($user->getConfiguration()->getMode())) {
             throw new GithubGuiException(
                 GithubGuiException::MESSAGE_FILTERS_NOT_ENABLED,
-                GithubGuiException::CODE_FILTERS_NOT_ENABLED_XHR
+                GithubGuiException::CODE_FILTERS_NOT_ENABLED
             );
         }
 

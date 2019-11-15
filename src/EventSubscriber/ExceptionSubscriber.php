@@ -105,18 +105,8 @@ class ExceptionSubscriber implements EventSubscriberInterface
             case GithubGuiException::CODE_FILTERS_NOT_ENABLED:
             case GithubGuiException::CODE_FILTERS_ARE_EMPTY:
             case GithubGuiException::CODE_CONFIG_IS_EMPTY:
-                $this->flashBag->add('danger', $event->getException()->getMessage());
-                $event->setResponse(
-                    new RedirectResponse(
-                        $this->router->generate('user_configuration')
-                    )
-                );
-                break;
-
-            case GithubGuiException::CODE_FILTERS_NOT_ENABLED_XHR:
-            case GithubGuiException::CODE_CONFIG_IS_EMPTY_XHR:
-                $event->setResponse(
-                    new JsonResponse(
+                if (true === $event->getRequest()->isXmlHttpRequest()) {
+                    $response = new JsonResponse(
                         [
                             'error' => [
                                 'code' => $event->getException()->getCode(),
@@ -124,8 +114,15 @@ class ExceptionSubscriber implements EventSubscriberInterface
                             ],
                         ],
                         Response::HTTP_FORBIDDEN
-                    )
-                );
+                    );
+                } else {
+                    $this->flashBag->add('danger', $event->getException()->getMessage());
+                    $response = new RedirectResponse(
+                        $this->router->generate('user_configuration')
+                    );
+                }
+
+                $event->setResponse($response);
                 break;
         }
     }
