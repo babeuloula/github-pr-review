@@ -70,7 +70,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
         switch ($event->getException()->getCode()) {
             case Response::HTTP_UNAUTHORIZED:
-                $this->flashBag->add('danger', 'Bad credentials. You must authorize Github OAuth2.');
+                $this->flashBag->add('error', 'Bad credentials. You must authorize Github OAuth2.');
                 $event->setResponse(
                     new RedirectResponse(
                         $this->router->generate('home')
@@ -81,7 +81,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
             default:
                 switch (\get_class($event->getException())) {
                     case ApiLimitExceedException::class:
-                        $this->flashBag->add('danger', $event->getException()->getMessage());
+                        $this->flashBag->add('error', $event->getException()->getMessage());
                         $event->setResponse(
                             new RedirectResponse(
                                 $this->router->generate('home')
@@ -116,7 +116,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
                         Response::HTTP_FORBIDDEN
                     );
                 } else {
-                    $this->flashBag->add('danger', $event->getException()->getMessage());
+                    $this->flashBag->add('error', $event->getException()->getMessage());
                     $response = new RedirectResponse(
                         $this->router->generate('user_configuration')
                     );
@@ -135,7 +135,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
             return;
         };
 
-        $this->flashBag->add('danger', $event->getException()->getMessage());
+        $this->flashBag->add('error', $event->getException()->getMessage());
         $event->setResponse(
             new RedirectResponse(
                 $this->router->generate('home')

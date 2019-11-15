@@ -101,7 +101,7 @@ class GithubGuard extends SocialAuthenticator
     // phpcs:ignore
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): RedirectResponse
     {
-        $this->flashBag->add('danger', 'Github OAuth connection failed.');
+        $this->flashBag->add('error', 'Github OAuth connection failed.');
 
         return new RedirectResponse($this->router->generate('home'));
     }

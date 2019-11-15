@@ -1,22 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Hello World!</h1>
-
-    {% include 'flashBag.html.twig' %}
-
-    {% if app.getUser() is not null %}
-        <p>
-            <a href="{{ path('pull_requests_list') }}">Open Github GUI</a>
-        </p>
-
-        <p>
-            <a href="{{ path('user_configuration') }}">Open configuration</a>
-        </p>
-    {% else %}
-        <p>
-            <a href="{{ path('oauth_login') }}">Login</a>
-        </p>
-    {% endif %}
-
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">Stop wasting time on <strong>code review</strong></h1>
+            <p class="lead text-muted">
+                Github PR Review is an interface to simplify PR management on GitHub.
+            </p>
+            <p>
+                {% if app.getUser() is null %}
+                    <a href="{{ path('oauth_login') }}" class="btn btn-primary">Login with Github</a>
+                {% else %}
+                    <a href="{{ path('pull_requests_list') }}" class="btn btn-primary">Pull requests</a>
+                {% endif %}
+            </p>
+        </div>
+    </section>
 {% endblock %}

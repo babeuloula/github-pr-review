@@ -6,21 +6,82 @@
 
         <link rel="shortcut icon" type="image/png" href="/imgs/favicon.png">
         {% block stylesheets %}
-            <link title="defaut" type="text/css" rel="stylesheet" href="/css/base.css" media="screen">
-            {% if openPullRequests is not defined %}
-                <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-                        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-                        crossorigin="anonymous">
-            {% endif %}
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+                    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+                    crossorigin="anonymous">
+            <link title="defaut" type="text/css" rel="stylesheet" href="/css/libs/overhang/overhang.min.css" media="screen">
         {% endblock %}
     </head>
     <body>
-        <div class="container-fluid">
-            {% block body %}{% endblock %}
-        </div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbar_github_gui"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-        <img id="reload-img" src="/imgs/reload-{% if app.getUser() is not null and app.getUser().getConfiguration() is not null and app.getUser().getConfiguration().getEnabledDarkTheme() %}white{% else %}black{% endif %}.svg"
-                width="60" height="60">
+                <div class="collapse navbar-collapse" id="navbar_github_gui">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{{ path('home') }}">Home</a>
+                        </li>
+                    </ul>
+
+                    <ul class="navbar-nav">
+                        {% if app.getUser() is null %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('oauth_login') }}">Login with Github</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('pull_requests_list') }}">Pull requests</a>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="my_account" role="button"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    My account
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="my_account">
+                                    <a class="dropdown-item" href="{{ path('user_configuration') }}">Configuration</a>
+                                    <a class="dropdown-item" href="{{ path('oauth_logout') }}">Logout</a>
+                                </div>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        {% block body %}{% endblock %}
+
+        <div class="container">
+            <footer class="pt-4 my-md-5 pt-md-5 border-top">
+                <div class="row">
+                    <div class="col-12 col-md">
+                        <img class="mb-2" src="/imgs/favicon.png" alt="Github PR Review" width="24" height="24">
+                        <small class="d-block mb-3 text-muted">&copy; {{ "now"|date('Y') }} BaBeuloula</small>
+                    </div>
+                    <div class="col-6 col-md"></div>
+                    <div class="col-6 col-md"></div>
+                    <div class="col-6 col-md">
+                        <h5>About</h5>
+                        <ul class="list-unstyled text-small">
+                            <li>
+                                <a class="text-muted" href="https://github.com/babeuloula/github-pr-review"
+                                        target="_blank">
+                                    Fork me on Github
+                                </a>
+                            </li>
+                            <li>
+                                <a class="text-muted" href="https://www.babeuloula.fr" target="_blank">BaBeuloula</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </footer>
+        </div>
 
         {% block javascripts %}
             <script src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -31,6 +92,9 @@
                     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
             <script src="https://kit.fontawesome.com/64411adb1a.js"
                     crossorigin="anonymous"></script>
+            <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+            <script src="/js/libs/overhang/overhang.min.js"></script>
+            {% include 'flashBag.html.twig' %}
         {% endblock %}
     </body>
 </html>
