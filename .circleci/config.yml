@@ -57,6 +57,13 @@ commands:
                 name: "Execute: make stan"
                 command: make stan
 
+    doctrine_schema_validate:
+        description: "Execute doctrine:schema:validate"
+        steps:
+            - run:
+                name: "Execute: bin/console d:s:v"
+                command: bin/console d:s:v --skip-sync
+
 executors:
     php:
         docker:
@@ -83,6 +90,13 @@ jobs:
             - restore-composer-cache
             - phpstan
 
+    doctrine_schema_validate:
+        executor: php
+        steps:
+            - checkout-alpine
+            - restore-composer-cache
+            - doctrine_schema_validate
+
 workflows:
     version: 2.1
     Code quality:
@@ -92,5 +106,8 @@ workflows:
                 requires:
                     - composer
             - phpstan:
+                requires:
+                    - composer
+            - doctrine_schema_validate:
                 requires:
                     - composer

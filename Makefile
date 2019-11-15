@@ -28,6 +28,8 @@ shell:
 check:
 	cd ./docker/ && docker-compose exec -T php make phpcs
 	cd ./docker/ && docker-compose exec -T php make stan
+	cd ./docker/ && docker-compose exec -T php bin/console d:s:v
+	cd ./docker/ && docker-compose exec -T php bin/console d:s:u --dump-sql
 
 hooks:
 	echo "#!/bin/bash" > .git/hooks/pre-commit
