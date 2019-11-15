@@ -10,6 +10,7 @@
         "ext-pdo": "*",
         "cocur/slugify": "^3.2",
         "knplabs/github-api": "^2.11",
+        "knpuniversity/oauth2-client-bundle": "^1.30",
         "league/oauth2-github": "^2.0",
         "myclabs/php-enum": "^1.7",
         "php-http/guzzle6-adapter": "^1.1",

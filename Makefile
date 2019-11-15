@@ -1,6 +1,12 @@
-install-dev: start-dev composer-dev hooks
+install-dev: create-env-dev start-dev composer-dev hooks
 
-install-prod: start-prod composer-prod
+install-prod: create-env-prod start-prod composer-prod
+
+create-env-dev:
+	cp .env.dist .env.local
+
+create-env-prod:
+	cp .env.dist .env
 
 start-dev: hooks
 	bash ./docker/start_dev.sh

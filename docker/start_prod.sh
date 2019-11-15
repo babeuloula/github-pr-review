@@ -2,7 +2,9 @@
 
 set -e
 
-source functions.sh
+readonly DOCKER_PATH=$(dirname $(realpath $0))
+
+. $DOCKER_PATH/functions.sh
 
 cd $(dirname $0)
 

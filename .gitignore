@@ -11,3 +11,4 @@
 /.idea/
 
 /docker/.env
+/docker/docker-compose.override.yml
