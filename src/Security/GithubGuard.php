@@ -15,6 +15,7 @@ use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
 use League\OAuth2\Client\Provider\GithubResourceOwner;
 use League\OAuth2\Client\Token\AccessToken;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
@@ -43,18 +44,23 @@ class GithubGuard extends SocialAuthenticator
     /** @var FlashBagInterface */
     protected $flashBag;
 
+    /** @var LoggerInterface */
+    protected $logger;
+
     public function __construct(
         ClientRegistry $clientRegistry,
         UrlGeneratorInterface $router,
         UserRepository $userRepository,
         UserFactory $userFactory,
-        FlashBagInterface $flashBag
+        FlashBagInterface $flashBag,
+        LoggerInterface $logger
     ) {
         $this->clientRegistry = $clientRegistry;
         $this->router = $router;
         $this->userRepository = $userRepository;
         $this->userFactory = $userFactory;
         $this->flashBag = $flashBag;
+        $this->logger = $logger;
     }
 
     // phpcs:ignore
@@ -102,6 +108,13 @@ class GithubGuard extends SocialAuthenticator
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): RedirectResponse
     {
         $this->flashBag->add('error', 'Github OAuth connection failed.');
+        $this->logger->error(
+            'Github OAuth connection failed',
+            [
+                'exception' => $exception,
+                'request' => $request->query->all(),
+            ]
+        );
 
         return new RedirectResponse($this->router->generate('home'));
     }
