@@ -1,0 +1,4 @@
+oauth_callback_url:
+    path: /oauth/callback-url
+    methods: [GET]
+    schemes: [http]
