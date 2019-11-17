@@ -1,3 +1,15 @@
+.modal {
+    background-color: rgba(0,0,0,0.5) !important;
+}
+
+#reload-img {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 50;
+    display: none;
+}
+
 .tab-content {
     max-height: calc(100vh - 50px);
 }

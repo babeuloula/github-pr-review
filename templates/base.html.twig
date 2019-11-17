@@ -1,87 +1,88 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="fr">
     <head>
-        <meta charset="UTF-8">
         <title>{% block title %}Github PR Review{% endblock %}</title>
 
         <link rel="shortcut icon" type="image/png" href="/imgs/favicon.png">
+
         {% block stylesheets %}
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-                    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-                    crossorigin="anonymous">
+            <link title="defaut" type="text/css" rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+            <link title="defaut" type="text/css" rel="stylesheet" href="/css/libs/bootstrap/bootstrap.min.css"
+                    media="screen">
+            <link title="defaut" type="text/css" rel="stylesheet" href="/css/fonts/feather.css"
+                    media="screen">
             <link title="defaut" type="text/css" rel="stylesheet" href="/css/libs/overhang/overhang.min.css" media="screen">
         {% endblock %}
+
+        <meta charset="utf-8">
+        <meta http-equiv="content-language" content="fr">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <meta name="keywords" content="github, pull, request, pull request, code review, github gui">
+        <meta name="description" content="Stop wasting time on code review">
+        <meta name="revisiter-after" content="7 days">
+        <meta name="robots" content="all">
     </head>
+
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white">
             <div class="container">
-                <button class="navbar-toggler" type="button" data-toggle="collapse"
-                        data-target="#navbarSupportedContent" aria-controls="navbar_github_gui"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" href="{{ path('home') }}">
+                    <img src="/imgs/logo.svg" class="navbar-brand-img" alt="Github PR Review">
+                    <span class="text-primary ml-2">Github PR Review</span>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbar_github_gui">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="{{ path('home') }}">Home</a>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('home') }}#how_to_use">How to use</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('home') }}#self_hosted">Self hosted</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('home') }}#fork_me">Fork me</a>
                         </li>
                     </ul>
 
-                    <ul class="navbar-nav">
-                        {% if app.getUser() is null %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('oauth_login') }}">Login with Github</a>
-                            </li>
-                        {% else %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('pull_requests_list') }}">Pull requests</a>
-                            </li>
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="my_account" role="button"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    My account
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="my_account">
-                                    <a class="dropdown-item" href="{{ path('user_configuration') }}">Configuration</a>
-                                    <a class="dropdown-item" href="{{ path('oauth_logout') }}">Logout</a>
-                                </div>
-                            </li>
-                        {% endif %}
-                    </ul>
+                    {% if app.getUser() is null %}
+                        <a class="navbar-btn btn btn-sm btn-primary lift ml-auto" href="{{ path('oauth_login') }}">
+                            Login with Github
+                        </a>
+                    {% else %}
+                        <a class="navbar-btn btn btn-sm btn-primary lift ml-auto" href="{{ path('pull_requests_list') }}">
+                            View pull requests
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </nav>
 
         {% block body %}{% endblock %}
 
-        <div class="container">
-            <footer class="pt-4 my-md-5 pt-md-5 border-top">
+        <footer class="py-8 py-md-11 bg-gray-200">
+            <div class="container">
                 <div class="row">
-                    <div class="col-12 col-md">
-                        <img class="mb-2" src="/imgs/favicon.png" alt="Github PR Review" width="24" height="24">
-                        <small class="d-block mb-3 text-muted">&copy; {{ "now"|date('Y') }} BaBeuloula</small>
+                    <div class="col-12 col-md-6 col-lg-6">
+                        <img src="/imgs/logo-black.svg" height="20" alt="Github PR Review" class="footer-brand mb-2">
+                        <span class="ml-1">Github PR Review</span>
+
+                        <p class="text-muted mb-2">
+                            Stop wasting time on code review.
+                        </p>
                     </div>
-                    <div class="col-6 col-md"></div>
-                    <div class="col-6 col-md"></div>
-                    <div class="col-6 col-md">
-                        <h5>About</h5>
-                        <ul class="list-unstyled text-small">
-                            <li>
-                                <a class="text-muted" href="https://github.com/babeuloula/github-pr-review"
-                                        target="_blank">
-                                    Fork me on Github
-                                </a>
-                            </li>
-                            <li>
-                                <a class="text-muted" href="https://www.babeuloula.fr" target="_blank">BaBeuloula</a>
-                            </li>
-                        </ul>
+                    <div class="col-12 col-md-6 col-lg-6 pt-2 pt-md-0 pt-lg-0 text-left text-md-right text-lg-right">
+                        <p class="text-muted">
+                            &copy; {{ "now"|date('Y') }} <a href="https://www.babeuloula.fr" target="_blank">BaBeuloula</a>
+                        </p>
                     </div>
                 </div>
-            </footer>
-        </div>
+            </div>
+        </footer>
 
         {% block javascripts %}
             <script src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -90,10 +91,10 @@
                     integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
                     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-            <script src="https://kit.fontawesome.com/64411adb1a.js"
-                    crossorigin="anonymous"></script>
             <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+            <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
             <script src="/js/libs/overhang/overhang.min.js"></script>
+            <script src="/js/base.js"></script>
             {% include 'flashBag.html.twig' %}
         {% endblock %}
     </body>

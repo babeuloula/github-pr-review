@@ -50,9 +50,10 @@ jQuery(function ($) {
 
         $("body").overhang({
             type: "confirm",
-            primary: "#3498DB",
-            accent: "#2980B9",
-            yesColor: "#2ECC71",
+            primary: "#335eea",
+            accent: "#1746e0",
+            yesColor: "#42ba96",
+            noColor: "#df4759",
             message: "Are you really sure, you want to delete your account?",
             overlay: true,
             callback: function (value) {

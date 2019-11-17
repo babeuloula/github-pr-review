@@ -212,10 +212,19 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Save configuration</button>
-            <button type="button" class="btn btn-danger" id="delete-account" data-href="{{ path('user_delete_account') }}">
-                Delete my account
-            </button>
+            <div class="row">
+                <div class="col-sm">
+                    <button type="submit" class="btn btn-primary">Save configuration</button>
+                </div>
+
+                <div class="col-sm text-right">
+                    <a href="{{ path('oauth_logout') }}" class="btn btn-secondary">Logout</a>
+
+                    <button type="button" class="btn btn-danger" id="delete-account" data-href="{{ path('user_delete_account') }}">
+                        Delete my account
+                    </button>
+                </div>
+            </div>
         </form>
     </div>
 {% endblock %}
