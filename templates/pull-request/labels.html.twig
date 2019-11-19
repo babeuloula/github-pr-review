@@ -107,7 +107,7 @@
     <script type="text/javascript">
         jQuery(function($){
             let reloadOnFocus = {{ app.getUser().getConfiguration().getReloadOnFocus() ? 'true' : 'false' }};
-            let reloadEvery = {{ app.getUser().getConfiguration().getReloadEvery() }};
+            let reloadEvery = {{ app.getUser().getConfiguration().getReloadEvery() }} * 1000;
 
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                 let newRepo = $.trim($(e.target).text());

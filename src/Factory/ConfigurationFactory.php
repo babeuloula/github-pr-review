@@ -94,7 +94,7 @@ class ConfigurationFactory
             )
             ->setEnabledDarkTheme('on' === $request->request->get('enabled_dark_theme', 'off'))
             ->setReloadOnFocus('on' === $request->request->get('reload_on_focus', 'off'))
-            ->setReloadEvery($request->request->getInt('reload_every'))
+            ->setReloadEvery($request->request->getInt('reload_every', static::DEFAULT_RELOAD_EVERY))
         ;
     }
 }

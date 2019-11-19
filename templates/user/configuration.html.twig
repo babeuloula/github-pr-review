@@ -24,6 +24,9 @@
                                 <option value="{{ repository }}" selected="selected">{{ repository }}</option>
                             {% endfor %}
                         </select>
+                        <small id="branchs_colors_help" class="form-text text-muted">
+                            Example: <strong>username/repository</strong>.
+                        </small>
                     </div>
                 </div>
 
@@ -61,7 +64,8 @@
                             {% endfor %}
                         </select>
                         <small id="branchs_colors_help" class="form-text text-muted">
-                            Example: branch:color. You can also use regex in branch (ex.: branch-*:color).<br>
+                            Example: <strong>branch:color</strong>. You can also use regex in branch
+                            <strong>branch-*:color</strong>.<br>
                             Allowed colors: {{ colors|join(', ') }}.
                         </small>
                     </div>
@@ -173,6 +177,11 @@
                                     <option value="{{ filter }}" selected="selected">{{ filter }}</option>
                                 {% endfor %}
                             </select>
+                            <small id="filters_help" class="form-text text-muted">
+                                <a target="_blank" href="https://help.github.com/en/github/searching-for-information-on-github/searching-issues-and-pull-requests">
+                                    More informations about filter.
+                                </a>
+                            </small>
                         </div>
                     </div>
                 </div>
@@ -190,6 +199,11 @@
                                     </option>
                                 {% endfor %}
                             </select>
+                            <small id="filters_help" class="form-text text-muted">
+                                <a target="_blank" href="https://help.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications-beta">
+                                    More informations about notifications.
+                                </a>
+                            </small>
                         </div>
                     </div>
 
@@ -213,11 +227,11 @@
             </div>
 
             <div class="row">
-                <div class="col-sm">
+                <div class="col-sm pb-3 text-center text-sm-left">
                     <button type="submit" class="btn btn-primary">Save configuration</button>
                 </div>
 
-                <div class="col-sm text-right">
+                <div class="col-sm pb-3 text-center text-sm-right">
                     <a href="{{ path('oauth_logout') }}" class="btn btn-secondary">Logout</a>
 
                     <button type="button" class="btn btn-danger" id="delete-account" data-href="{{ path('user_delete_account') }}">

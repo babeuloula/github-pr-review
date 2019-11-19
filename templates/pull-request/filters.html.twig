@@ -62,7 +62,7 @@
     <script type="text/javascript">
         const LOCALSTORAGE_KEY = 'collapses';
         const RELOAD_ON_FOCUS = {{ app.getUser().getConfiguration().getReloadOnFocus() ? 'true' : 'false' }};
-        const RELOAD_EVERY = {{ app.getUser().getConfiguration().getReloadEvery() }};
+        const RELOAD_EVERY = {{ app.getUser().getConfiguration().getReloadEvery() }} * 1000;
     </script>
     <script src="/js/pull-requests.js"></script>
 {% endblock %}
