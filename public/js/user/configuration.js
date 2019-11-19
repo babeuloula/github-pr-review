@@ -35,7 +35,8 @@ jQuery(function ($) {
         } catch (e) {}
 
         $('select').select2({
-            allowClear: true
+            allowClear: true,
+            tokenSeparators: [','],
         });
     };
     initSelect2();
