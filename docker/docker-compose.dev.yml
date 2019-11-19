@@ -6,8 +6,6 @@ services:
             - "${HTTP_PORT:-8011}:80"
 
     mysql:
-        env_file:
-            - ../.env.local
         ports:
             - "${MYSQL_PORT:-3310}:3306"
 

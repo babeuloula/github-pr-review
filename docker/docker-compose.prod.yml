@@ -7,9 +7,6 @@ services:
             LETSENCRYPT_HOST: ${DOMAINS}
             LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
 
-    mysql:
-        env_file:
-            - ../.env
 networks:
     default:
         external:
