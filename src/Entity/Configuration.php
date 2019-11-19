@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping\OneToOne;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ConfigurationRepository")
  */
-final class Configuration
+class Configuration
 {
     /**
      * @ORM\Id()

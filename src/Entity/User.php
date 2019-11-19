@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-final class User implements UserInterface, \JsonSerializable
+class User implements UserInterface, \JsonSerializable
 {
     /**
      * @ORM\Id()

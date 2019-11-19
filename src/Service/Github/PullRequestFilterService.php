@@ -128,7 +128,7 @@ class PullRequestFilterService implements PullRequestServiceInterface
         $searchApi = $this->client->api('search');
 
         if (0 === \preg_match("/repo\:[a-zA-Z0-9\/-]+/", $filter)) {
-            $filter .= " repo:$username/$repository";
+            $filter = "repo:$username/$repository $filter";
         }
 
         // Issues and PRs use the same method

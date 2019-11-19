@@ -41,8 +41,6 @@ jQuery(function ($) {
     };
     initSelect2();
 
-    $(document).find('input[name="mode"]').trigger('change');
-
     $(document).on('click', '#delete-account', function (event) {
         event.preventDefault();
         event.stopPropagation();
