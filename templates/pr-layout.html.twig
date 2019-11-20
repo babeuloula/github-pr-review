@@ -6,16 +6,24 @@
 
         <link rel="shortcut icon" type="image/png" href="/imgs/favicon.png">
         {% block stylesheets %}
-            <link title="defaut" type="text/css" rel="stylesheet" href="/css/base.css" media="screen">
+            <link title="defaut" type="text/css" rel="stylesheet" href="/css/pull-request.css" media="screen">
+            <link title="defaut" type="text/css" rel="stylesheet" href="/css/libs/overhang/overhang.min.css" media="screen">
+
+            {% if app.getUser().getConfiguration().getEnabledDarkTheme() %}
+                <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/darkly/bootstrap.min.css"
+                        rel="stylesheet" crossorigin="anonymous"
+                        integrity="sha384-w+8Gqjk9Cuo6XH9HKHG5t5I1VR4YBNdPt/29vwgfZR485eoEJZ8rJRbm3TR32P6k">
+             {% else %}
+                <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+                        rel="stylesheet" crossorigin="anonymous"
+                        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T">
+            {% endif %}
         {% endblock %}
     </head>
     <body>
         <div class="container-fluid">
             {% block body %}{% endblock %}
         </div>
-
-        <img id="reload-img" src="/imgs/reload-{% if app.getUser() is not null and app.getUser().getConfiguration() is not null and app.getUser().getConfiguration().getEnabledDarkTheme() %}white{% else %}black{% endif %}.svg"
-                width="60" height="60">
 
         {% block javascripts %}
             <script src="https://code.jquery.com/jquery-3.4.1.min.js"
@@ -26,6 +34,10 @@
                     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
             <script src="https://kit.fontawesome.com/64411adb1a.js"
                     crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
+                    integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+            <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+            <script src="/js/libs/overhang/overhang.min.js"></script>
         {% endblock %}
     </body>
 </html>

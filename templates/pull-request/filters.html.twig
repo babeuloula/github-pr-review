@@ -1,20 +1,5 @@
 {% extends 'pr-layout.html.twig' %}
 
-{% block stylesheets %}
-    {{ parent() }}
-
-    <link title="defaut" type="text/css" rel="stylesheet" href="/css/pull-request.css" media="screen">
-    <link title="defaut" type="text/css" rel="stylesheet" href="/css/libs/overhang/overhang.min.css" media="screen">
-    {% if app.getUser() is not null
-            and app.getUser().getConfiguration() is not null
-            and app.getUser().getConfiguration().getEnabledDarkTheme()
-    %}
-        <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/darkly/bootstrap.min.css"
-                rel="stylesheet" crossorigin="anonymous"
-                integrity="sha384-w+8Gqjk9Cuo6XH9HKHG5t5I1VR4YBNdPt/29vwgfZR485eoEJZ8rJRbm3TR32P6k">
-    {% endif %}
-{% endblock %}
-
 {% block body %}
     <div class="container-fluid">
         <div class="row">
@@ -36,15 +21,25 @@
         </div>
     </div>
 
-    {% if app.getUser().getConfiguration().getReloadEvery() > 0 and not app.getUser().getConfiguration().getReloadOnFocus() %}
-        <div class="row text-center next-reload-container">
-            <div class="col-sm">
+    <div class="row next-reload-container">
+        <div class="col-sm  text-left">
+            <small>
+                <a href="{{ path('home') }}">Back to home</a>
+            </small>
+        </div>
+        <div class="col-sm text-center">
+            {% if app.getUser().getConfiguration().getReloadEvery() > 0 and not app.getUser().getConfiguration().getReloadOnFocus() %}
                 <small>
                     Next reload in: <span id="next-reload"></span>s
                 </small>
-            </div>
+            {% endif %}
         </div>
-    {% endif %}
+        <div class="col-sm text-right">
+            <small>
+                <a href="{{ path('user_configuration') }}">Configuration</a>
+            </small>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -54,15 +49,12 @@
             integrity="sha256-i265HmNQ6FYdanwd4Tvt6Phby2Ht/9KOGQ3cromZq5Y=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/keypress/2.1.5/keypress.min.js"
             integrity="sha256-qg3jI3zMsMmV79xDeYaABwUsh4qC15jOC58KvcQ+OzI=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
-            integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
-    <script src="/js/libs/overhang/overhang.min.js"></script>
 
     <script type="text/javascript">
         const LOCALSTORAGE_KEY = 'collapses';
         const RELOAD_ON_FOCUS = {{ app.getUser().getConfiguration().getReloadOnFocus() ? 'true' : 'false' }};
         const RELOAD_EVERY = {{ app.getUser().getConfiguration().getReloadEvery() }} * 1000;
     </script>
-    <script src="/js/pull-requests.js"></script>
+    <script src="/js/pull-requests/pull-requests.js"></script>
+    <script src="/js/pull-requests/filters.js"></script>
 {% endblock %}
