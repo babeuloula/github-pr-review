@@ -1,0 +1,12 @@
+<script type="text/javascript">
+    jQuery(function ($) {
+        {% for type, messages in app.getSession().getFlashBag().all() %}
+            {% for message in messages %}
+                $("body").overhang({
+                    type: "{{ type }}",
+                    message: "{{ message|raw }}"
+                });
+            {% endfor %}
+        {% endfor %}
+    });
+</script>

@@ -1,0 +1,253 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Configuration - {{ parent() }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css"
+            integrity="sha256-FdatTf20PQr/rWg+cAKfl6j4/IY3oohFAJ7gVC3M34E=" crossorigin="anonymous" />
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-3">
+        <form method="post">
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label for="repositories">Repositories</label>
+                        <select class="form-control" name="repositories[]" id="repositories" multiple="multiple"
+                                data-tags="true" required="required">
+                            {% for repository in configuration.getRepositories() %}
+                                <option value="{{ repository }}" selected="selected">{{ repository }}</option>
+                            {% endfor %}
+                        </select>
+                        <small id="branchs_colors_help" class="form-text text-muted">
+                            Example: <strong>username/repository</strong>.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label for="repositories">Use mode</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="mode" id="mode_label" value="label"
+                                    required="required" {% if configuration.getMode() == 'label' %}checked="checked"{% endif %}>
+                            <label class="form-check-label" for="mode_label">
+                                Label
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="mode" id="mode_filter" value="filter"
+                                    required="required" {% if configuration.getMode() == 'filter' %}checked="checked"{% endif %}>
+                            <label class="form-check-label" for="mode_filter">
+                                Filter
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label for="branchs_colors">Branchs colors</label>
+                        <select class="form-control" name="branchs_colors[]" id="branchs_colors"
+                                data-tags="true" multiple="multiple">
+                            {% for data in configuration.getBranchsColors() %}
+                                <option value="{{ data[0] }}:{{ data[1] }}" selected="selected">
+                                    {{ data[0] }}:{{ data[1] }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <small id="branchs_colors_help" class="form-text text-muted">
+                            Example: <strong>branch:color</strong>. You can also use regex in branch
+                            <strong>branch-*:color</strong>.<br>
+                            Allowed colors: {{ colors|join(', ') }}.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label for="branch_default_color">Branch default color</label>
+                        <select class="form-control" name="branch_default_color" id="branch_default_color" required="required">
+                            {% for color in colors %}
+                                <option value="{{ color }}"
+                                        {% if configuration.getBranchDefaultColor() == color %}selected="selected"{% endif %}>
+                                    {{ color }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm">
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" name="enabled_dark_theme" id="enabled_dark_theme"
+                                {% if configuration.getEnabledDarkTheme() %}checked="checked"{% endif %}>
+                        <label class="form-check-label" for="enabled_dark_theme">Enable dark theme</label>
+                    </div>
+                </div>
+
+                <div class="col-sm">
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" name="reload_on_focus" id="reload_on_focus"
+                                {% if configuration.getReloadOnFocus() %}checked="checked"{% endif %}>
+                        <label class="form-check-label" for="reload_on_focus">Reload on focus</label>
+                    </div>
+                </div>
+
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label for="reload_every">Refresh interval (in seconds)*</label>
+                        <input type="number" min="0" step="1" class="form-control" name="reload_every" id="reload_every"
+                                required="required" value="{{ configuration.getReloadEvery() }}">
+                    </div>
+                </div>
+            </div>
+
+            <div id="label" style="display: {% if configuration.getMode() == 'label' %}block{% else %}none{% endif %};">
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label for="labels_review_needed">Labels review needed</label>
+                            <select class="form-control" name="labels_review_needed[]" id="labels_review_needed"
+                                    multiple="multiple" data-tags="true">
+                                {% for label in configuration.getLabelsReviewNeeded() %}
+                                    <option value="{{ label }}" selected="selected">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label for="labels_accepted">Labels accepted</label>
+                            <select class="form-control" name="labels_accepted[]" id="labels_accepted" multiple="multiple"
+                                    data-tags="true">
+                                {% for label in configuration.getLabelsAccepted() %}
+                                    <option value="{{ label }}" selected="selected">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label for="labels_changes_requested">Labels changes requested</label>
+                            <select class="form-control" name="labels_changes_requested[]" id="labels_changes_requested"
+                                    multiple="multiple" data-tags="true">
+                                {% for label in configuration.getLabelsChangesRequested() %}
+                                    <option value="{{ label }}" selected="selected">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label for="labels_wip">Labels WIP</label>
+                            <select class="form-control" name="labels_wip[]" id="labels_wip" multiple="multiple"
+                                    data-tags="true">
+                                {% for label in configuration.getLabelsWip() %}
+                                    <option value="{{ label }}" selected="selected">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="filter" style="display: {% if configuration.getMode() == 'filter' %}block{% else %}none{% endif %};">
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label for="filters">Filters</label>
+                            <select class="form-control" name="filters[]" id="filters" multiple="multiple"
+                                    data-tags="true" data-required="true">
+                                {% for filter in configuration.getFilters() %}
+                                    <option value="{{ filter }}" selected="selected">{{ filter }}</option>
+                                {% endfor %}
+                            </select>
+                            <small id="filters_help" class="form-text text-muted">
+                                <a target="_blank" href="https://help.github.com/en/github/searching-for-information-on-github/searching-issues-and-pull-requests">
+                                    More informations about filter.
+                                </a>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label for="notifications_exclude_reasons">Notifications exclude reasons</label>
+                            <select class="form-control" name="notifications_exclude_reasons[]" id="notifications_exclude_reasons"
+                                    multiple="multiple">
+                                {% for reason in notificationReasons %}
+                                    <option value="{{ reason }}"
+                                            {% if reason in configuration.getNotificationsExcludeReasons() %}selected="selected"{% endif %}>
+                                        {{ reason }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <small id="filters_help" class="form-text text-muted">
+                                <a target="_blank" href="https://help.github.com/en/github/managing-subscriptions-and-notifications-on-github/about-notifications-beta">
+                                    More informations about notifications.
+                                </a>
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label for="notifications_exclude_reasons_other_repos">
+                                Notifications exclude reasons (other repos)
+                            </label>
+                            <select class="form-control" name="notifications_exclude_reasons_other_repos[]"
+                                    id="notifications_exclude_reasons_other_repos" multiple="multiple">
+                                {% for reason in notificationReasons %}
+                                    <option value="{{ reason }}"
+                                            {% if reason in configuration.getNotificationsExcludeReasonsOtherRepos() %}selected="selected"{% endif %}>
+                                        {{ reason }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm pb-3 text-center text-sm-left">
+                    <button type="submit" class="btn btn-primary">Save configuration</button>
+                </div>
+
+                <div class="col-sm pb-3 text-center text-sm-right">
+                    <a href="{{ path('oauth_logout') }}" class="btn btn-secondary">Logout</a>
+
+                    <button type="button" class="btn btn-danger" id="delete-account" data-href="{{ path('user_delete_account') }}">
+                        Delete my account
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"
+            integrity="sha256-d/edyIFneUo3SvmaFnf96hRcVBcyaOy96iMkPez1kaU=" crossorigin="anonymous"></script>
+
+    <script src="/js/user/configuration.js"></script>
+{% endblock %}

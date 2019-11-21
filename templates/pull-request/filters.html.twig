@@ -1,0 +1,40 @@
+{% extends 'pr-layout.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm">
+                <h4 class="mt-2 ml-2">Pull requests</h4>
+
+                <div class="accordion" id="accordion-pull-requests" data-url="{{ url('pull_requests_reload') }}">
+                    {% include 'pull-request/filtersPullRequests.html.twig' %}
+                </div>
+            </div>
+
+            <div class="col-sm">
+                <h4 class="mt-2 ml-2">Notifications</h4>
+
+                <div class="accordion" id="accordion-notifs" data-url="{{ url('notification_reload') }}">
+                    {% include 'pull-request/filtersNotifications.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/favico.js/0.3.10/favico.min.js"
+            integrity="sha256-i265HmNQ6FYdanwd4Tvt6Phby2Ht/9KOGQ3cromZq5Y=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/keypress/2.1.5/keypress.min.js"
+            integrity="sha256-qg3jI3zMsMmV79xDeYaABwUsh4qC15jOC58KvcQ+OzI=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        const LOCALSTORAGE_KEY = 'collapses';
+        const RELOAD_ON_FOCUS = {{ app.getUser().getConfiguration().getReloadOnFocus() ? 'true' : 'false' }};
+        const RELOAD_EVERY = {{ app.getUser().getConfiguration().getReloadEvery() }} * 1000;
+    </script>
+    <script src="{{ asset('js/pull-requests/pull-requests.js', 'v') }}"></script>
+    <script src="{{ asset('js/pull-requests/filters.js', 'v') }}"></script>
+{% endblock %}

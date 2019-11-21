@@ -8,7 +8,10 @@ declare(strict_types=1);
 
 namespace App\Service\Github;
 
+use App\Entity\Configuration;
+use App\Entity\User;
 use App\Enum\Label;
+use App\Service\User\UserService;
 use App\Traits\PullRequestTypedArrayTrait;
 use App\TypedArray\PullRequestArray;
 use Github\Api\PullRequest as PullRequestApi;
@@ -36,7 +39,7 @@ class PullRequestLabelService implements PullRequestServiceInterface
     /** @var string[] */
     protected $labelsWip;
 
-    /** @var string[] */
+    /** @var array[] */
     protected $branchsColors;
 
     /** @var string */
@@ -45,35 +48,34 @@ class PullRequestLabelService implements PullRequestServiceInterface
     /** @var array[] */
     protected $openCount = [];
 
-    /**
-     * @param string[] $githubRepos
-     * @param string[] $githubLabelsReviewNeeded
-     * @param string[] $githubLabelsChangedRequested
-     * @param string[] $githubLabelsAccepted
-     * @param string[] $githubLabelsWip
-     * @param string[] $githubBranchsColors
-     */
-    public function __construct(
-        GithubClientService $client,
-        array $githubRepos,
-        array $githubLabelsReviewNeeded,
-        array $githubLabelsChangedRequested,
-        array $githubLabelsAccepted,
-        array $githubLabelsWip,
-        array $githubBranchsColors,
-        string $githubBranchDefaultColor
-    ) {
-        $this->client = $client->getClient();
+    public function __construct(GithubClientService $client, UserService $userService)
+    {
+        if (false === $userService->getUser() instanceof User
+            || false === $userService->getUser()->getConfiguration() instanceof Configuration
+        ) {
+            return;
+        }
 
-        $this->githubRepos = $githubRepos;
+        $this->client = $client->getClient();
+        $this->githubRepos = $userService->getUser()->getConfiguration()->getRepositories();
         \natcasesort($this->githubRepos);
 
-        $this->labelsReviewNeeded = $githubLabelsReviewNeeded;
-        $this->labelsChangesRequested = $githubLabelsChangedRequested;
-        $this->labelsAccepted = $githubLabelsAccepted;
-        $this->labelsWip = $githubLabelsWip;
-        $this->branchsColors = $githubBranchsColors;
-        $this->branchDefaultColor = $githubBranchDefaultColor;
+        $this->labelsReviewNeeded = $userService->getUser()->getConfiguration()->getLabelsReviewNeeded();
+        $this->labelsChangesRequested = $userService->getUser()->getConfiguration()->getLabelsChangesRequested();
+        $this->labelsAccepted = $userService->getUser()->getConfiguration()->getLabelsAccepted();
+        $this->labelsWip = $userService->getUser()->getConfiguration()->getLabelsWip();
+        $this->branchsColors = array_map(
+            /**
+             * @param string[] $data
+             *
+             * @return string[]
+             */
+            function (array $data): array {
+                return [$data[0] => $data[1]];
+            },
+            $userService->getUser()->getConfiguration()->getBranchsColors()
+        );
+        $this->branchDefaultColor = (string) $userService->getUser()->getConfiguration()->getBranchDefaultColor();
 
         $this->openCount = [
             Label::REVIEW_NEEDED()->getValue() => [],
@@ -197,7 +199,7 @@ class PullRequestLabelService implements PullRequestServiceInterface
         return $pullRequestsSorted;
     }
 
-    /** @return string[] */
+    /** @return array[] */
     protected function getBranchsColors(): array
     {
         return $this->branchsColors;

@@ -1,14 +1,14 @@
-install: start composer hooks
+start-dev: hooks
+	bash ./docker/start_dev.sh
 
-start: hooks
-	bash ./docker/start.sh
+start-prod:
+	bash ./docker/start_prod.sh
 
-stop:
-	cd ./docker/ && docker-compose stop
+stop-dev:
+	cd ./docker/ && docker-compose -f docker-compose.yml -f docker-compose.dev.yml stop
 
-composer:
-	cd ./docker/ && docker-compose exec php composer global require hirak/prestissimo
-	cd ./docker/ && docker-compose exec php composer install --no-interaction --no-progress
+stop-prod:
+	cd ./docker/ && docker-compose -f docker-compose.yml -f docker-compose.prod.yml stop
 
 shell:
 	cd ./docker/ && docker-compose exec php bash
@@ -16,6 +16,7 @@ shell:
 check:
 	cd ./docker/ && docker-compose exec -T php make phpcs
 	cd ./docker/ && docker-compose exec -T php make stan
+	cd ./docker/ && docker-compose exec -T php make check-doctrine
 
 hooks:
 	echo "#!/bin/bash" > .git/hooks/pre-commit
@@ -28,3 +29,7 @@ phpcs:
 stan:
 	bin/console cache:warmup --env=dev
 	vendor/bin/phpstan analyse src --level max -c extension.neon
+
+check-doctrine:
+	bin/console d:s:v
+	bin/console d:s:u --dump-sql

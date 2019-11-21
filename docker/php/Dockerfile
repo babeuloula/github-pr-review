@@ -16,7 +16,8 @@ RUN apt-get update \
     && apt-get install -y \
         zlib1g-dev \
         libzip-dev \
-    && docker-php-ext-install zip
+    && docker-php-ext-configure opcache --enable-opcache \
+    && docker-php-ext-install zip pdo_mysql opcache
 
 ARG UID
 RUN \
@@ -25,6 +26,8 @@ RUN \
     && chown -R githubgui /var/www/html
 
 RUN echo "date.timezone = Europe/Paris" > /usr/local/etc/php/conf.d/timezone.ini
+
+COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 WORKDIR /var/www/html
 

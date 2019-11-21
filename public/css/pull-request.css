@@ -1,5 +1,17 @@
+.modal {
+    background-color: rgba(0,0,0,0.5) !important;
+}
+
+#reload-img {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 50;
+    display: none;
+}
+
 .tab-content {
-    max-height: calc(100vh - 50px);
+    max-height: calc(100vh - 100px);
 }
 
 .tab-content .label {
@@ -50,4 +62,39 @@
     right: 0;
     bottom: 5px;
     width: 100%;
+    padding-left: 30px;
+    padding-right: 0;
+}
+
+.accordion>.card:last-child .card-header {
+    margin-bottom: 0;
+}
+
+@media (max-width:576px) {
+    .tab-content, .list-group-item {
+        max-height: inherit;
+    }
+
+    .next-reload-container {
+        padding-top: 15px;
+        position: relative;
+    }
+
+    .list-group-item .absolute-right {
+        top: auto;
+        bottom: 10px;
+    }
+
+    .list-group-item.list-group-item-action {
+        padding-bottom: 30px;
+    }
+
+    .tab-pane .list-group-item.list-group-item-action {
+        padding: .75rem 1.25rem;
+    }
+
+    .tab-content .label {
+        height: auto;
+        padding: 10px 0;
+    }
 }

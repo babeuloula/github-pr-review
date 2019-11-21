@@ -21,4 +21,9 @@ class UseMode extends Enum
 
     /** @var string */
     protected const LABEL = 'label';
+
+    public static function getDefault(): self
+    {
+        return static::LABEL();
+    }
 }

@@ -8,14 +8,13 @@ declare(strict_types=1);
 
 namespace App\Service\Github;
 
-use App\Enum\{
-    NotificationReason,
-    NotificationType
-};
-use App\TypedArray\{
-    NotificationArray,
-    Type\Notification
-};
+use App\Entity\Configuration;
+use App\Entity\User;
+use App\Enum\NotificationReason;
+use App\Enum\NotificationType;
+use App\Service\User\UserService;
+use App\TypedArray\NotificationArray;
+use App\TypedArray\Type\Notification;
 use Github\Api\Notification as NotificationApi;
 use Github\Client;
 
@@ -38,23 +37,36 @@ class NotificationService
     /** @var int[] */
     protected $notificationsCount = [];
 
-    /**
-     * @param string[] $githubRepos
-     * @param string[] $githubNotificationsExcludeReasons
-     * @param string[] $githubNotificationsExcludeReasonsOtherRepos
-     */
-    public function __construct(
-        GithubClientService $client,
-        array $githubRepos,
-        array $githubNotificationsExcludeReasons,
-        array $githubNotificationsExcludeReasonsOtherRepos
-    ) {
+    public function __construct(GithubClientService $client, UserService $userService)
+    {
+        if (false === $userService->getUser() instanceof User
+            || false === $userService->getUser()->getConfiguration() instanceof Configuration
+        ) {
+            return;
+        }
+
         $this->client = $client->getClient();
-        $this->githubRepos = $githubRepos;
+        $this->githubRepos = $userService->getUser()->getConfiguration()->getRepositories();
         \natcasesort($this->githubRepos);
 
-        $this->githubNotificationsExcludeReasons = $githubNotificationsExcludeReasons;
-        $this->githubNotificationsExcludeReasonsOtherRepos = $githubNotificationsExcludeReasonsOtherRepos;
+        $this->githubNotificationsExcludeReasons = array_map(
+            function (NotificationReason $reason): string {
+                return (string) $reason;
+            },
+            $userService
+                ->getUser()
+                ->getConfiguration()
+                ->getNotificationsExcludeReasons()
+        );
+        $this->githubNotificationsExcludeReasonsOtherRepos = array_map(
+            function (NotificationReason $reason): string {
+                return (string) $reason;
+            },
+            $userService
+                ->getUser()
+                ->getConfiguration()
+                ->getNotificationsExcludeReasonsOtherRepos()
+        );
 
         foreach ($this->githubRepos as $repo) {
             $this->notificationsCount[$repo] = 0;

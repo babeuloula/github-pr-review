@@ -7,7 +7,9 @@
     <arg name="extensions" value="php" />
     <arg name="ignore" value="src/Kernel.php" />
 
-    <rule ref="vendor/babeuloula/phpcs/BaBeuloula/ruleset.xml"/>
+    <rule ref="vendor/babeuloula/phpcs/BaBeuloula/ruleset.xml">
+        <exclude name="BaBeuloula.Uses.GroupUses" />
+    </rule>
 
     <file>src/</file>
 

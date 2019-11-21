@@ -1,0 +1,13 @@
+version: '3.5'
+
+services:
+    nginx:
+        environment:
+            VIRTUAL_HOST: ${DOMAINS}
+            LETSENCRYPT_HOST: ${DOMAINS}
+            LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+
+networks:
+    default:
+        external:
+            name: ${NETWORK}

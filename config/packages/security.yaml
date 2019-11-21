@@ -1,0 +1,23 @@
+security:
+    providers:
+        user:
+            entity:
+                class: 'App\Entity\User'
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: true
+            logout:
+                path: oauth_logout
+            guard:
+                authenticators:
+                    - App\Security\GithubGuard
+
+    access_control:
+        - { path: ^/oauth/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/pull-requests, roles: ROLE_USER }
+        - { path: ^/notifications, roles: ROLE_USER }
+        - { path: ^/user, roles: ROLE_USER }

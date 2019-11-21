@@ -1,86 +1,101 @@
 # Github PR Review
 
-Interface to simplify PR management on GitHub. 
+Stop wasting time on **code review**.    
+Github PR Review is an interface to simplify pull requests management on GitHub.
+
+- **Built for developers**     
+Track all pull requests from your teams, or your own pull requests, and do a code review more easier.
+
+- **Sort your pull requests**    
+You can use both modes, _label_ or _filter_ and sort your pull requests.
+
+- **Increase your productivity**    
+In one single page you have all your watched repositories with the related pull requests and your notifications sorted
+by repositories. 
 
 ## How to use
 
-1. Create a Github's token ([here](https://github.com/settings/tokens)) and select `repo` scope
-1. Create `.env.local` from `.env`
-1. Fill `GITHUB_TOKEN` with your own token
-1. Depending on if you want to search PRs with labels or filters, you can set `USE_MODE` with two different value: filter | label
-1. If you choose `USE_MODE=label`, fill `GITHUB_LABELS_*` with you own labels for the differents categories 
-1. If you choose `USE_MODE=filter`, fill `GITHUB_FILTERS` and `GITHUB_NOTIFICATIONS_*` with you own filters
+### Sort by filters
 
-### Demo find by labels
+You can search for issues and pull requests globally across all of GitHub, or search for issues and pull requests within
+a particular organization.
 
-![PR list labels](github-pr-review-labels.png)
+![Sort by filters](github-pr-review-filters.png)
 
-### Demo find by filters
+[More information about filters](https://help.github.com/en/github/searching-for-information-on-github/searching-issues-and-pull-requests)
 
-![PR list filters](github-pr-review-filters.png)
+### Sort by labels
 
-## Configuration example
+You can sort you pull requests on four blocks Review needed, Accepted, Changes requested and WIP.    
+_Notification view is not possible with this mode_
 
-```
-GITHUB_AUTH_METHOD=http_token
-GITHUB_TOKEN=
-GITHUB_REPOS='["username/repo_1", "username/repo_2", "username_2/repo_1"]'
-GITHUB_LABELS_CHANGES_REQUESTED='["Changes requested"]'
-GITHUB_LABELS_ACCEPTED='["Accepted"]'
-GITHUB_LABELS_WIP='["WIP", "Pending answer"]'
-GITHUB_BRANCHS_COLORS='[{"master": "warning"}, {"develop": "success"}, {"feature-*": "primary"}, {"release*": "info"}, {"hotfix-*": "danger"}]'
-GITHUB_BRANCH_DEFAULT_COLOR=danger
-GITHUB_FILTERS='["is:pr is:open -label:WIP", "is:pr is:draft repo:username/repository"]'
-GITHUB_NOTIFICATIONS_EXCLUDE_REASONS='["assign", "comment", "invitation"]'
-GITHUB_NOTIFICATIONS_EXCLUDE_REASONS_OTHER_REPOS='["review_requested", "state_change"]'
+![Sort by labels](github-pr-review-labels.png)
 
-ENABLE_DARK_THEME=1
-RELOAD_ON_FOCUS=0
-# Reload time is ms
-RELOAD_EVERY=60000
-# Mode to use : filter | label
-USE_MODE=label
-```
-
-If you don't want to reload on focus and reload every x ms, you just need to set `RELOAD_ON_FOCUS=0` and `RELOAD_EVERY=0`.
-
-If you want to search PRs by filters, you can fill `GITHUB_FILTERS`. You can find a list of available filters [here](https://help.github.com/en/articles/searching-issues-and-pull-requests).    
-You can filter on a specific repository with `repo:username/repository`.
-
-To fill `GITHUB_NOTIFICATIONS_EXCLUDE_REASONS` and `GITHUB_NOTIFICATIONS_EXCLUDE_REASONS_OTHER_REPOS` you can find the list [here](https://developer.github.com/v3/activity/notifications/#notification-reasons).
+[More information about labels](https://help.github.com/en/github/managing-your-work-on-github/about-labels)
 
 ## Installation
 
-Install composer and assets:
-```sh
-make install
+### Requirements
+
+- [Docker](https://docs.docker.com/install/linux/docker-ce/ubuntu) >= 18.04.0
+- [Docker compose](https://docs.docker.com/compose/install) >= 1.24.0
+
+### For development
+
+```bash
+$ make start-dev
+$ make stop-dev
 ```
 
-## Docker commands
+### For self hosted
 
-Start containers:
-```sh
-make start
+```bash
+$ make start-prod
+$ make stop-prod
 ```
 
-Stop containers:
-```sh
-make stop
+### Database connection
+
+Setting up your database information:
+
+```
+# .env
+[...]
+MYSQL_DATABASE=
+MYSQL_USER=
+MYSQL_PASSWORD=
+[...]
 ```
 
-Connect to PHP's container:
-```sh
-make shell
+Only in dev, you can use **[adminer](http://localhost:8012)** to see you database:
+- Server: _mysql_
+- Username: _env:MYSQL_USER_
+- Password: _env:MYSQL_PASSWORD_
+- Database: _env:MYSQL_DATABASE_
+
+### Connect to PHP's shell
+
+```bash
+$ make shell
 ```
 
 ## Check code quality
 
-```sh
-make check
+You can run all check with:
+```bash
+$ make check
+```
+
+Or you can just run all check individually:
+```bash
+$ make phpcs
+$ make stan
+$ make check-doctrine
 ```
 
 ## Contributors
 
 - [ArthurHoaro](https://github.com/ArthurHoaro)
+- [cyprille](https://github.com/cyprille)
 - [GijsGoudzwaard](https://github.com/GijsGoudzwaard)
 - [tleon](https://github.com/tleon)

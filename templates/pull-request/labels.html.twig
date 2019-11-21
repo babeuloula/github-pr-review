@@ -1,0 +1,106 @@
+{% extends 'pr-layout.html.twig' %}
+
+{% block title %}
+    {{ openPullRequests|keys|first }} - {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {% if app.getUser().getConfiguration().getEnabledDarkTheme() %}
+        {% set color = 'white' %}
+    {% else %}
+        {% set color = 'black' %}
+    {% endif %}
+
+    <img src="{{ asset('imgs/reload-'~color~'.svg') }}"
+            id="reload-img" width="60" height="60">
+
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            {% for repo, sortedPullRequests in openPullRequests %}
+                <a class="nav-item nav-link {% if loop.first %}active{% endif %}" id="nav-{{ repo|slugify }}-tab"
+                        data-toggle="tab" href="#nav-{{ repo|slugify }}" role="tab" aria-controls="nav-{{ repo|slugify }}"
+                        aria-selected="{% if loop.first %}true{% else %}false{% endif %}"
+                        data-repo="{{ repo }}">
+                    {{ repo }}
+                </a>
+            {% endfor %}
+        </div>
+    </nav>
+
+    <div class="tab-content" id="nav-tab-content">
+        {% for repo, sortedPullRequests in openPullRequests %}
+            <div class="tab-pane fade {% if loop.first %}show active{% endif %}"
+                    id="nav-{{ repo|slugify }}" role="tabpanel" aria-labelledby="nav-{{ repo|slugify }}-tab">
+
+                <div class="container-fluid">
+                    {% for label, pullRequests in sortedPullRequests %}
+                        {% if loop.index == 1 or loop.index == 3 %}
+                            <div class="row">
+                        {% endif %}
+
+                                <div class="col-sm">
+                                    <div class="list-group label label-group-{{ label|slugify }}">
+                                        {% set type = 'primary' %}
+                                        {% if loop.index == 2 %}
+                                            {% set type = 'success' %}
+                                        {% elseif loop.index == 3 %}
+                                            {% set type = 'warning' %}
+                                        {% elseif loop.index == 4 %}
+                                            {% set type = 'danger' %}
+                                        {% endif %}
+
+                                        <div class="list-group-item list-group-header list-group-item-{{ type }}">
+                                            {{ label }} <strong>({{ pullRequests.count() }})</strong>
+                                        </div>
+
+                                        <div class="list-group-items">
+                                            {% for pullRequest in pullRequests %}
+                                                <a href="{{ pullRequest.getUrl() }}"
+                                                        class="list-group-item list-group-item-action" target="_blank">
+                                                    <img src="{{ pullRequest.getUser().getAvatarUrl() }}"
+                                                            class="float-left rounded"
+                                                            title="Pull request from: {{ pullRequest.getUser().getLogin() }}">
+
+                                                    <span class="ml-3 text-success">
+                                                        #{{ pullRequest.getNumber() }}
+                                                    </span>
+
+                                                    <span class="ml-3">
+                                                        {{ pullRequest.getTitle() }}
+                                                    </span>
+
+                                                    <div class="absolute-right">
+                                                        <span class="badge badge-{{ pullRequest.getBranchColor() }}">
+                                                            {{ pullRequest.getBase() }}
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                            {% else %}
+                                                <div class="list-group-item list-group-item-action disabled" aria-disabled="true">
+                                                    No pull request in <strong>{{ label|lower }}</strong>.
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                        {% if loop.index == 2 or loop.index == 4 %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        const RELOAD_ON_FOCUS = {{ app.getUser().getConfiguration().getReloadOnFocus() ? 'true' : 'false' }};
+        const RELOAD_EVERY = {{ app.getUser().getConfiguration().getReloadEvery() }} * 1000;
+    </script>
+    <script src="{{ asset('js/pull-requests/pull-requests.js', 'v') }}"></script>
+    <script src="{{ asset('js/pull-requests/labels.js', 'v') }}"></script>
+{% endblock %}
