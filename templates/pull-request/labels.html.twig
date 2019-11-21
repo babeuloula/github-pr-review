@@ -4,22 +4,14 @@
     {{ openPullRequests|keys|first }} - {{ parent() }}
 {% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-
-    <link title="defaut" type="text/css" rel="stylesheet" href="/css/pull-request.css" media="screen">
-    {% if app.getUser() is not null
-        and app.getUser().getConfiguration() is not null
-        and app.getUser().getConfiguration().getEnabledDarkTheme()
-    %}
-        <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/darkly/bootstrap.min.css"
-                rel="stylesheet" crossorigin="anonymous"
-                integrity="sha384-w+8Gqjk9Cuo6XH9HKHG5t5I1VR4YBNdPt/29vwgfZR485eoEJZ8rJRbm3TR32P6k">
-    {% endif %}
-{% endblock %}
-
 {% block body %}
-    <img src="/imgs/reload-{% if app.getUser().getConfiguration().getEnabledDarkTheme() %}white{% else %}black{% endif %}.svg"
+    {% if app.getUser().getConfiguration().getEnabledDarkTheme() %}
+        {% set color = 'white' %}
+    {% else %}
+        {% set color = 'black' %}
+    {% endif %}
+
+    <img src="{{ asset('imgs/reload-'~color~'.svg') }}"
             id="reload-img" width="60" height="60">
 
     <nav>
@@ -100,26 +92,6 @@
             </div>
         {% endfor %}
     </div>
-
-    <div class="row next-reload-container">
-        <div class="col-sm  text-left">
-            <small>
-                <a href="{{ path('home') }}">Back to home</a>
-            </small>
-        </div>
-        <div class="col-sm text-center">
-            {% if app.getUser().getConfiguration().getReloadEvery() > 0 and not app.getUser().getConfiguration().getReloadOnFocus() %}
-                <small>
-                    Next reload in: <span id="next-reload"></span>s
-                </small>
-            {% endif %}
-        </div>
-        <div class="col-sm text-right">
-            <small>
-                <a href="{{ path('user_configuration') }}">Configuration</a>
-            </small>
-        </div>
-    </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -129,6 +101,6 @@
         const RELOAD_ON_FOCUS = {{ app.getUser().getConfiguration().getReloadOnFocus() ? 'true' : 'false' }};
         const RELOAD_EVERY = {{ app.getUser().getConfiguration().getReloadEvery() }} * 1000;
     </script>
-    <script src="/js/pull-requests/pull-requests.js"></script>
-    <script src="/js/pull-requests/labels.js"></script>
+    <script src="{{ asset('js/pull-requests/pull-requests.js', 'v') }}"></script>
+    <script src="{{ asset('js/pull-requests/labels.js', 'v') }}"></script>
 {% endblock %}

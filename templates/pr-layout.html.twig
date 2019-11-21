@@ -1,19 +1,22 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
     <head>
-        <meta charset="UTF-8">
         <title>{% block title %}Github PR Review{% endblock %}</title>
 
-        <link rel="shortcut icon" type="image/png" href="/imgs/favicon.png">
+        <meta charset="utf-8">
+        <meta http-equiv="content-language" content="en">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+        <link rel="shortcut icon" type="image/png" href="{{ asset('imgs/favicon.png') }}">
         {% block stylesheets %}
-            <link title="defaut" type="text/css" rel="stylesheet" href="/css/pull-request.css" media="screen">
-            <link title="defaut" type="text/css" rel="stylesheet" href="/css/libs/overhang/overhang.min.css" media="screen">
+            <link title="defaut" type="text/css" rel="stylesheet" href="{{ asset('css/pull-request.css', 'v') }}" media="screen">
+            <link title="defaut" type="text/css" rel="stylesheet" href="{{ asset('css/libs/overhang/overhang.min.css') }}" media="screen">
 
             {% if app.getUser().getConfiguration().getEnabledDarkTheme() %}
                 <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/darkly/bootstrap.min.css"
                         rel="stylesheet" crossorigin="anonymous"
                         integrity="sha384-w+8Gqjk9Cuo6XH9HKHG5t5I1VR4YBNdPt/29vwgfZR485eoEJZ8rJRbm3TR32P6k">
-             {% else %}
+            {% else %}
                 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
                         rel="stylesheet" crossorigin="anonymous"
                         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T">
@@ -23,6 +26,26 @@
     <body>
         <div class="container-fluid">
             {% block body %}{% endblock %}
+        </div>
+
+        <div class="row next-reload-container">
+            <div class="col-4 text-left">
+                <small>
+                    <a href="{{ path('home') }}">Back to home</a>
+                </small>
+            </div>
+            <div class="col-4 text-center">
+                {% if app.getUser().getConfiguration().getReloadEvery() > 0 and not app.getUser().getConfiguration().getReloadOnFocus() %}
+                    <small>
+                        Next reload in: <span id="next-reload"></span>s
+                    </small>
+                {% endif %}
+            </div>
+            <div class="col-4 text-right">
+                <small>
+                    <a href="{{ path('user_configuration') }}">Configuration</a>
+                </small>
+            </div>
         </div>
 
         {% block javascripts %}
@@ -37,7 +60,7 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
                     integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
             <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
-            <script src="/js/libs/overhang/overhang.min.js"></script>
+            <script src="{{ asset('js/libs/overhang/overhang.min.js') }}"></script>
         {% endblock %}
     </body>
 </html>

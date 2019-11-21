@@ -228,6 +228,9 @@
     "steevanb/php-typed-array": {
         "version": "2.0.0"
     },
+    "symfony/asset": {
+        "version": "v4.3.8"
+    },
     "symfony/cache": {
         "version": "v4.3.4"
     },

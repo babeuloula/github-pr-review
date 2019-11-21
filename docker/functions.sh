@@ -131,3 +131,9 @@ function databaseAndMigrations() {
     docker-compose exec php bin/console doctrine:database:create --if-not-exists
     docker-compose exec php bin/console doctrine:migration:migrate --allow-no-migration --no-interaction
 }
+
+function getCurrentVersion() {
+    gitVersion=$(git for-each-ref refs/tags --sort=-taggerdate --format='%(refname)' --count=1)
+
+    echo "$gitVersion" | sed -r 's/refs\/tags\/v//g'
+}

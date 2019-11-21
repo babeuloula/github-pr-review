@@ -1,3 +1,6 @@
+parameters:
+    default_version: 0
+
 framework:
     secret: '%env(APP_SECRET)%'
     csrf_protection: true
@@ -16,3 +19,8 @@ framework:
     #fragments: true
     php_errors:
         log: true
+
+    assets:
+        packages:
+            v:
+                version: 'v%env(default:default_version:VERSION)%'

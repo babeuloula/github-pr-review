@@ -65,3 +65,36 @@
     padding-left: 30px;
     padding-right: 0;
 }
+
+.accordion>.card:last-child .card-header {
+    margin-bottom: 0;
+}
+
+@media (max-width:576px) {
+    .tab-content, .list-group-item {
+        max-height: inherit;
+    }
+
+    .next-reload-container {
+        padding-top: 15px;
+        position: relative;
+    }
+
+    .list-group-item .absolute-right {
+        top: auto;
+        bottom: 10px;
+    }
+
+    .list-group-item.list-group-item-action {
+        padding-bottom: 30px;
+    }
+
+    .tab-pane .list-group-item.list-group-item-action {
+        padding: .75rem 1.25rem;
+    }
+
+    .tab-content .label {
+        height: auto;
+        padding: 10px 0;
+    }
+}

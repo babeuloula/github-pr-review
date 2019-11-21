@@ -20,26 +20,6 @@
             </div>
         </div>
     </div>
-
-    <div class="row next-reload-container">
-        <div class="col-sm  text-left">
-            <small>
-                <a href="{{ path('home') }}">Back to home</a>
-            </small>
-        </div>
-        <div class="col-sm text-center">
-            {% if app.getUser().getConfiguration().getReloadEvery() > 0 and not app.getUser().getConfiguration().getReloadOnFocus() %}
-                <small>
-                    Next reload in: <span id="next-reload"></span>s
-                </small>
-            {% endif %}
-        </div>
-        <div class="col-sm text-right">
-            <small>
-                <a href="{{ path('user_configuration') }}">Configuration</a>
-            </small>
-        </div>
-    </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -55,6 +35,6 @@
         const RELOAD_ON_FOCUS = {{ app.getUser().getConfiguration().getReloadOnFocus() ? 'true' : 'false' }};
         const RELOAD_EVERY = {{ app.getUser().getConfiguration().getReloadEvery() }} * 1000;
     </script>
-    <script src="/js/pull-requests/pull-requests.js"></script>
-    <script src="/js/pull-requests/filters.js"></script>
+    <script src="{{ asset('js/pull-requests/pull-requests.js', 'v') }}"></script>
+    <script src="{{ asset('js/pull-requests/filters.js', 'v') }}"></script>
 {% endblock %}

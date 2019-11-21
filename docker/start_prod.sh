@@ -17,6 +17,8 @@ do
     configureEnv ${key} $(getEnvValue ${key} ${defaultValue})
 done
 
+configureEnv 'VERSION' $(getCurrentVersion)
+
 . $DOCKER_PATH/../.env
 
 cd $DOCKER_PATH

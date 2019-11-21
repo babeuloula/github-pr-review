@@ -1,21 +1,21 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
     <head>
         <title>{% block title %}Github PR Review{% endblock %}</title>
 
-        <link rel="shortcut icon" type="image/png" href="/imgs/favicon.png">
+        <link rel="shortcut icon" type="image/png" href="{{ asset('imgs/favicon.png') }}">
 
         {% block stylesheets %}
             <link title="defaut" type="text/css" rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
-            <link title="defaut" type="text/css" rel="stylesheet" href="/css/libs/bootstrap/bootstrap.min.css"
+            <link title="defaut" type="text/css" rel="stylesheet" href="{{ asset('css/libs/bootstrap/bootstrap.min.css', 'v') }}"
                     media="screen">
-            <link title="defaut" type="text/css" rel="stylesheet" href="/css/fonts/feather.css"
+            <link title="defaut" type="text/css" rel="stylesheet" href="{{ asset('css/fonts/feather.css') }}"
                     media="screen">
-            <link title="defaut" type="text/css" rel="stylesheet" href="/css/libs/overhang/overhang.min.css" media="screen">
+            <link title="defaut" type="text/css" rel="stylesheet" href="{{ asset('css/libs/overhang/overhang.min.css') }}" media="screen">
         {% endblock %}
 
         <meta charset="utf-8">
-        <meta http-equiv="content-language" content="fr">
+        <meta http-equiv="content-language" content="en">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
         <meta name="keywords" content="github, pull, request, pull request, code review, github gui">
         <meta name="description" content="Stop wasting time on code review">
@@ -31,7 +31,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-white">
             <div class="container">
                 <a class="navbar-brand" href="{{ path('home') }}">
-                    <img src="/imgs/logo.svg" class="navbar-brand-img" alt="Github PR Review">
+                    <img src="{{ asset('imgs/logo.svg') }}" class="navbar-brand-img" alt="Github PR Review">
                     <span class="text-primary ml-2">Github PR Review</span>
                 </a>
 
@@ -72,7 +72,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12 col-md-6 col-lg-6">
-                        <img src="/imgs/logo-black.svg" height="20" alt="Github PR Review" class="footer-brand mb-2">
+                        <img src="{{ asset('imgs/logo-black.svg') }}" height="20" alt="Github PR Review" class="footer-brand mb-2">
                         <span class="ml-1">Github PR Review</span>
 
                         <p class="text-muted mb-2">
@@ -97,8 +97,8 @@
                     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
             <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
             <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-            <script src="/js/libs/overhang/overhang.min.js"></script>
-            <script src="/js/base.js"></script>
+            <script src="{{ asset('js/libs/overhang/overhang.min.js') }}"></script>
+            <script src="{{ asset('js/base.js', 'v') }}"></script>
             {% include 'flashBag.html.twig' %}
         {% endblock %}
     </body>
