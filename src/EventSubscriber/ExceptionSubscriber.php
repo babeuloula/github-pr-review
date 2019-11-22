@@ -70,6 +70,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
         switch ($event->getException()->getCode()) {
             case Response::HTTP_UNAUTHORIZED:
+                $this->log('error', 'GitHub OAuth: Bad credentials', $event);
                 $this->flashBag->add('error', 'Bad credentials. You must authorize Github OAuth2.');
                 $event->setResponse(
                     new RedirectResponse(
@@ -81,6 +82,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
             default:
                 switch (\get_class($event->getException())) {
                     case ApiLimitExceedException::class:
+                        $this->log('error', 'GitHub API: Limit exceeded', $event);
                         $this->flashBag->add('error', $event->getException()->getMessage());
                         $event->setResponse(
                             new RedirectResponse(
@@ -141,5 +143,21 @@ class ExceptionSubscriber implements EventSubscriberInterface
                 $this->router->generate('home')
             )
         );
+    }
+
+    protected function log(string $level, string $message, ExceptionEvent $event): self
+    {
+        $this->logger->$level(
+            $message,
+            [
+                'exception' => $event->getException(),
+                'request' => [
+                    'get' => $event->getRequest()->query->all(),
+                    'post' => $event->getRequest()->request->all(),
+                ],
+            ]
+        );
+
+        return $this;
     }
 }
