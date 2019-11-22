@@ -24,7 +24,7 @@ a particular organization.
 
 [More information about filters](https://help.github.com/en/github/searching-for-information-on-github/searching-issues-and-pull-requests)
 
-### Sort by labels
+### Sort by labels
 
 You can sort you pull requests on four blocks Review needed, Accepted, Changes requested and WIP.    
 _Notification view is not possible with this mode_
