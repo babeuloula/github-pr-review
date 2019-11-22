@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>{% block title %}Github PR Review{% endblock %}</title>
+        <title>{% block title %}GitHub PR Review{% endblock %}</title>
 
         <link rel="shortcut icon" type="image/png" href="{{ asset('imgs/favicon.png') }}">
         <link rel="apple-touch-icon" href="{{ asset('touch-icon-iphone.png') }}">
@@ -22,15 +22,15 @@
         <meta http-equiv="content-language" content="en">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
         <meta name="keywords" content="github, pull, request, pull request, code review, github gui">
-        <meta name="description" content="Github PR Review, Stop wasting time on code review!">
+        <meta name="description" content="GitHub PR Review, Stop wasting time on code review!">
         <meta name="revisiter-after" content="7 days">
         <meta name="robots" content="all">
 
-        <meta property="og:title" content="Github PR Review, Stop wasting time on code review!">
-        <meta property="og:description" content="Github PR Review, Stop wasting time on code review! Github PR Review is an interface to simplify pull requests management on GitHub.">
+        <meta property="og:title" content="GitHub PR Review, Stop wasting time on code review!">
+        <meta property="og:description" content="GitHub PR Review, Stop wasting time on code review! GitHub PR Review is an interface to simplify pull requests management on GitHub.">
         <meta property="og:type" content="website">
         <meta property="og:locale" content="en_EN">
-        <meta property="og:site_name" content="Github PR Review">
+        <meta property="og:site_name" content="GitHub PR Review">
         <meta property="og:image" content="{{ website_url ~ asset('imgs/home.png') }}">
         <meta property="og:url" content="{{ website_url }}">
     </head>
@@ -43,8 +43,8 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-white">
             <div class="container">
                 <a class="navbar-brand" href="{{ path('home') }}">
-                    <img src="{{ asset('imgs/logo.svg') }}" class="navbar-brand-img" alt="Github PR Review">
-                    <span class="text-primary ml-2">Github PR Review</span>
+                    <img src="{{ asset('imgs/logo.svg') }}" class="navbar-brand-img" alt="GitHub PR Review">
+                    <span class="text-primary ml-2">GitHub PR Review</span>
                 </a>
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
@@ -67,7 +67,7 @@
 
                     {% if app.getUser() is null %}
                         <a class="navbar-btn btn btn-sm btn-primary lift ml-auto" href="{{ path('oauth_login') }}">
-                            Login with Github
+                            Login with GitHub
                         </a>
                     {% else %}
                         <a class="navbar-btn btn btn-sm btn-primary lift ml-auto" href="{{ path('pull_requests_list') }}">
@@ -84,8 +84,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12 col-md-6 col-lg-6">
-                        <img src="{{ asset('imgs/logo-black.svg') }}" height="20" alt="Github PR Review" class="footer-brand mb-2">
-                        <span class="ml-1">Github PR Review</span>
+                        <img src="{{ asset('imgs/logo-black.svg') }}" height="20" alt="GitHub PR Review" class="footer-brand mb-2">
+                        <span class="ml-1">GitHub PR Review</span>
 
                         <p class="text-muted mb-2">
                             Stop wasting time on code review.
