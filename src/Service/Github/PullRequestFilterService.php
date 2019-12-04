@@ -21,23 +21,21 @@ class PullRequestFilterService implements PullRequestServiceInterface
 {
     use PullRequestTypedArrayTrait;
 
-    /** @var Client */
-    protected $client;
+    protected Client $client;
 
     /** @var string[] */
-    protected $githubRepos;
+    protected array $githubRepos;
 
     /** @var array[] */
-    protected $branchsColors;
+    protected array $branchsColors;
 
-    /** @var string */
-    protected $branchDefaultColor;
+    protected string $branchDefaultColor;
 
     /** @var string[] */
-    protected $githubFilters;
+    protected array $githubFilters;
 
     /** @var int[] */
-    protected $openCount = [];
+    protected array $openCount = [];
 
     public function __construct(GithubClientService $client, UserService $userService)
     {

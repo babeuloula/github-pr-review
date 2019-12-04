@@ -22,11 +22,9 @@ use Twig\Environment;
 
 final class ReloadController
 {
-    /** @var PullRequestFilterService */
-    private $pullRequestFilterService;
+    private PullRequestFilterService $pullRequestFilterService;
 
-    /** @var Environment */
-    private $twig;
+    private Environment $twig;
 
     public function __construct(
         PullRequestFilterService $pullRequestFilterService,

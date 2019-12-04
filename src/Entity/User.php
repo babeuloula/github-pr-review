@@ -45,7 +45,8 @@ class User implements UserInterface, \JsonSerializable
     private $enabled;
 
     /**
-     * @var Configuration|null
+     * @var null|Configuration
+     *
      * @OneToOne(targetEntity="Configuration", mappedBy="user", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private $configuration;

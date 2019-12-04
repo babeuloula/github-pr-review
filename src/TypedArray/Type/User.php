@@ -10,11 +10,9 @@ namespace App\TypedArray\Type;
 
 class User
 {
-    /** @var string */
-    protected $login;
+    protected string $login;
 
-    /** @var string */
-    protected $avatarUrl;
+    protected string $avatarUrl;
 
     public function __construct(array $data)
     {

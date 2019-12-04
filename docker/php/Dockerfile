@@ -1,4 +1,4 @@
-FROM php:7.3.8-fpm
+FROM php:7.4.0-fpm
 
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 

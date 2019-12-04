@@ -21,11 +21,9 @@ use Twig\Environment;
 
 class ReloadController
 {
-    /** @var NotificationService */
-    protected $notificationService;
+    protected NotificationService $notificationService;
 
-    /** @var Environment */
-    protected $twig;
+    protected Environment $twig;
 
     public function __construct(
         NotificationService $notificationService,

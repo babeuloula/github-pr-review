@@ -22,20 +22,19 @@ class NotificationService
 {
     protected const OTHER_REPOS = 'Other repos';
 
-    /** @var Client */
-    protected $client;
+    protected Client $client;
 
     /** @var string[] */
-    protected $githubRepos;
+    protected array $githubRepos;
 
     /** @var string[] */
-    protected $githubNotificationsExcludeReasons;
+    protected array $githubNotificationsExcludeReasons;
 
     /** @var string[] */
-    protected $githubNotificationsExcludeReasonsOtherRepos;
+    protected array $githubNotificationsExcludeReasonsOtherRepos;
 
     /** @var int[] */
-    protected $notificationsCount = [];
+    protected array $notificationsCount = [];
 
     public function __construct(GithubClientService $client, UserService $userService)
     {

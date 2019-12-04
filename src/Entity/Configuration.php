@@ -98,7 +98,8 @@ class Configuration
     private $reloadEvery;
 
     /**
-     * @var User|null
+     * @var null|User
+     *
      * @OneToOne(targetEntity="User", inversedBy="configuration")
      * @JoinColumn(name="user_id", referencedColumnName="id")
      */

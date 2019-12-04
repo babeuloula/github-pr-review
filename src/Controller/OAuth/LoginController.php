@@ -14,8 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 final class LoginController
 {
-    /** @var ClientRegistry */
-    private $clientRegistry;
+    private ClientRegistry $clientRegistry;
 
     public function __construct(ClientRegistry $clientRegistry)
     {

@@ -21,32 +21,30 @@ class PullRequestLabelService implements PullRequestServiceInterface
 {
     use PullRequestTypedArrayTrait;
 
-    /** @var Client */
-    protected $client;
+    protected Client $client;
 
     /** @var string[] */
-    protected $githubRepos;
+    protected array $githubRepos;
 
     /** @var string[] */
-    protected $labelsReviewNeeded;
+    protected array $labelsReviewNeeded;
 
     /** @var string[] */
-    protected $labelsChangesRequested;
+    protected array $labelsChangesRequested;
 
     /** @var string[] */
-    protected $labelsAccepted;
+    protected array $labelsAccepted;
 
     /** @var string[] */
-    protected $labelsWip;
+    protected array $labelsWip;
 
     /** @var array[] */
-    protected $branchsColors;
+    protected array $branchsColors;
 
-    /** @var string */
-    protected $branchDefaultColor;
+    protected string $branchDefaultColor;
 
     /** @var array[] */
-    protected $openCount = [];
+    protected array $openCount = [];
 
     public function __construct(GithubClientService $client, UserService $userService)
     {

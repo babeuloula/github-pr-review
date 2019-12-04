@@ -29,23 +29,17 @@ class GithubGuard extends SocialAuthenticator
 {
     public const SCOPES = ['repo', 'read:org'];
 
-    /** @var ClientRegistry */
-    protected $clientRegistry;
+    protected ClientRegistry $clientRegistry;
 
-    /** @var UrlGeneratorInterface */
-    protected $router;
+    protected UrlGeneratorInterface $router;
 
-    /** @var UserRepository */
-    protected $userRepository;
+    protected UserRepository $userRepository;
 
-    /** @var UserFactory */
-    protected $userFactory;
+    protected UserFactory $userFactory;
 
-    /** @var FlashBagInterface */
-    protected $flashBag;
+    protected FlashBagInterface $flashBag;
 
-    /** @var LoggerInterface */
-    protected $logger;
+    protected LoggerInterface $logger;
 
     public function __construct(
         ClientRegistry $clientRegistry,

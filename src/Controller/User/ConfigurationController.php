@@ -23,20 +23,15 @@ use Twig\Environment;
 
 final class ConfigurationController
 {
-    /** @var Environment */
-    private $twig;
+    private Environment $twig;
 
-    /** @var ConfigurationFactory */
-    private $configurationFactory;
+    private ConfigurationFactory $configurationFactory;
 
-    /** @var ConfigurationRepository */
-    private $configurationRepository;
+    private ConfigurationRepository $configurationRepository;
 
-    /** @var FlashBagInterface */
-    private $flashBag;
+    private FlashBagInterface $flashBag;
 
-    /** @var UrlGeneratorInterface */
-    private $router;
+    private UrlGeneratorInterface $router;
 
     public function __construct(
         Environment $twig,

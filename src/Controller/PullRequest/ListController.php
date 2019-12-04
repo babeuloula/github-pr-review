@@ -25,23 +25,17 @@ use Twig\Environment;
 
 final class ListController
 {
-    /** @var PullRequestLabelService */
-    private $pullRequestLabelService;
+    private PullRequestLabelService $pullRequestLabelService;
 
-    /** @var PullRequestFilterService */
-    private $pullRequestFilterService;
+    private PullRequestFilterService $pullRequestFilterService;
 
-    /** @var NotificationService */
-    private $notificationService;
+    private NotificationService $notificationService;
 
-    /** @var Environment */
-    private $twig;
+    private Environment $twig;
 
-    /** @var UrlGeneratorInterface */
-    private $router;
+    private UrlGeneratorInterface $router;
 
-    /** @var FlashBagInterface */
-    private $flashBag;
+    private FlashBagInterface $flashBag;
 
     public function __construct(
         PullRequestLabelService $pullRequestLabelService,

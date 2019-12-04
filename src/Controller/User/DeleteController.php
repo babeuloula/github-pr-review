@@ -18,17 +18,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class DeleteController
 {
-    /** @var FlashBagInterface */
-    private $flashBag;
+    private FlashBagInterface $flashBag;
 
-    /** @var UserRepository */
-    private $userRepository;
+    private UserRepository $userRepository;
 
-    /** @var UrlGeneratorInterface */
-    private $router;
+    private UrlGeneratorInterface $router;
 
-    /** @var TokenStorageInterface */
-    protected $tokenStorage;
+    private TokenStorageInterface $tokenStorage;
 
     public function __construct(
         FlashBagInterface $flashBag,

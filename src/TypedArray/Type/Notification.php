@@ -13,32 +13,23 @@ use App\Enum\NotificationType;
 
 class Notification
 {
-    /** @var int */
-    protected $id;
+    protected int $id;
 
-    /** @var bool */
-    protected $unread;
+    protected bool $unread;
 
-    /** @var NotificationReason */
-    protected $reason;
+    protected NotificationReason $reason;
 
-    /** @var \DateTimeImmutable */
-    protected $updatedAt;
+    protected \DateTimeImmutable $updatedAt;
 
-    /** @var ?\DateTimeImmutable */
-    protected $lastReadAt;
+    protected ?\DateTimeImmutable $lastReadAt;
 
-    /** @var string */
-    protected $subject;
+    protected string $subject;
 
-    /** @var NotificationType */
-    protected $type;
+    protected NotificationType $type;
 
-    /** @var string */
-    protected $repository;
+    protected string $repository;
 
-    /** @var string */
-    protected $url;
+    protected string $url;
 
     public function __construct(array $data)
     {

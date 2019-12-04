@@ -14,14 +14,15 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class UserService
 {
-    /** @var null|User */
-    protected $user;
+    protected ?User $user;
 
     public function __construct(TokenStorageInterface $tokenStorage)
     {
         $user = null;
 
-        if ($tokenStorage->getToken() instanceof TokenInterface) {
+        if ($tokenStorage->getToken() instanceof TokenInterface
+            && false === \is_string($tokenStorage->getToken()->getUser())
+        ) {
             /** @var User $user */
             $user = $tokenStorage->getToken()->getUser();
         }

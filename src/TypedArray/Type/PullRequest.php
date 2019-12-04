@@ -10,32 +10,23 @@ namespace App\TypedArray\Type;
 
 class PullRequest
 {
-    /** @var string */
-    protected $url;
+    protected string $url;
 
-    /** @var int */
-    protected $number;
+    protected int $number;
 
-    /** @var string */
-    protected $title;
+    protected string $title;
 
-    /** @var User */
-    protected $user;
+    protected User $user;
 
-    /** @var \DateTimeImmutable */
-    protected $createdAt;
+    protected \DateTimeImmutable $createdAt;
 
-    /** @var \DateTimeImmutable */
-    protected $updatedAt;
+    protected \DateTimeImmutable $updatedAt;
 
-    /** @var ?string */
-    protected $head;
+    protected ?string $head;
 
-    /** @var ?string */
-    protected $base;
+    protected ?string $base;
 
-    /** @var string */
-    protected $branchColor;
+    protected string $branchColor;
 
     public function __construct(array $data)
     {

@@ -25,17 +25,13 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
-    /** @var FlashBagInterface */
-    protected $flashBag;
+    protected FlashBagInterface $flashBag;
 
-    /** @var UrlGeneratorInterface */
-    protected $router;
+    protected UrlGeneratorInterface $router;
 
-    /** @var LoggerInterface */
-    protected $logger;
+    protected LoggerInterface $logger;
 
-    /** @var UserService */
-    protected $userService;
+    protected UserService $userService;
 
     public function __construct(
         FlashBagInterface $flashBag,
@@ -49,7 +45,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         $this->userService = $userService;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::EXCEPTION => [

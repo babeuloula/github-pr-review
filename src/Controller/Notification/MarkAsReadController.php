@@ -21,11 +21,9 @@ use Twig\Environment;
 
 final class MarkAsReadController
 {
-    /** @var NotificationService */
-    private $notificationService;
+    private NotificationService $notificationService;
 
-    /** @var Environment */
-    private $twig;
+    private Environment $twig;
 
     public function __construct(
         NotificationService $notificationService,

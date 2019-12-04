@@ -108,7 +108,7 @@ function installComposer() {
     if [ "${env}" == "dev" ]; then
         docker-compose exec php composer install --no-interaction --no-progress
     else
-        docker-compose exec php composer install --no-dev --optimize-autoloader --no-interaction --no-progress
+        docker-compose exec php composer install --no-dev --optimize-autoloader --no-interaction --no-progress --classmap-authoritative
     fi
 }
 

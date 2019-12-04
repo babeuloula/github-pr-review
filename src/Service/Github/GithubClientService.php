@@ -14,8 +14,7 @@ use Github\Client;
 
 class GithubClientService
 {
-    /** @var Client */
-    protected $client;
+    protected Client $client;
 
     public function __construct(UserService $userService)
     {

@@ -36,6 +36,7 @@ class Kernel extends BaseKernel
     {
         $container->addResource(new FileResource($this->getProjectDir().'/config/bundles.php'));
         $container->setParameter('container.dumper.inline_class_loader', true);
+        $container->setParameter('container.dumper.inline_factories', true);
         $confDir = $this->getProjectDir().'/config';
 
         $loader->load($confDir.'/{packages}/'.$this->environment.'/**/*'.self::CONFIG_EXTS, 'glob');
