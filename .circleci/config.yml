@@ -67,7 +67,7 @@ commands:
 executors:
     php:
         docker:
-            - image: php:7.3.8-cli-alpine3.10
+            - image: php:7.4.0-cli-alpine3.10
         working_directory: ~/repository
 
 jobs:
