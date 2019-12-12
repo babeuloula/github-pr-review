@@ -99,3 +99,4 @@ $ make check-doctrine
 - [cyprille](https://github.com/cyprille)
 - [GijsGoudzwaard](https://github.com/GijsGoudzwaard)
 - [tleon](https://github.com/tleon)
+- [ecourtial](https://github.com/ecourtial)
