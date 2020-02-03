@@ -96,6 +96,7 @@ function getEnvValue() {
 function dockerStart() {
     local env=$1
 
+    docker-compose -f "docker-compose.yml" -f "docker-compose.${env}.yml" stop
     docker-compose -f "docker-compose.yml" -f "docker-compose.${env}.yml" build --parallel
     if [ "${env}" == "dev" ]; then
         docker-compose -f "docker-compose.yml" -f "docker-compose.${env}.yml" up -d --remove-orphans --scale php=2
