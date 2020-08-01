@@ -19,8 +19,10 @@ services:
 
     mysql:
         networks:
-            - default
-            - github_gui
+            default:
+            github_gui:
+                aliases:
+                    - "github_gui_mysql"
 
 networks:
     github_gui:

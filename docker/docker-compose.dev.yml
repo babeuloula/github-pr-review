@@ -15,7 +15,9 @@ services:
 
     mysql:
         networks:
-            - github_gui
+            github_gui:
+                aliases:
+                    - "github_gui_mysql"
         ports:
             - "${MYSQL_PORT:-3310}:3306"
 
