@@ -4,8 +4,18 @@ services:
     nginx:
         ports:
             - "${HTTP_PORT:-8011}:80"
+        networks:
+            - github_gui
+
+    php:
+        networks:
+            github_gui:
+                aliases:
+                    - "github_gui_php"
 
     mysql:
+        networks:
+            - github_gui
         ports:
             - "${MYSQL_PORT:-3310}:3306"
 
@@ -14,3 +24,8 @@ services:
         restart: unless-stopped
         ports:
             - "${ADMINER_PORT:-8012}:8080"
+        networks:
+            - github_gui
+
+networks:
+    github_gui:
