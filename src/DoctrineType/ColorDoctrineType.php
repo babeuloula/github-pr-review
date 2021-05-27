@@ -33,10 +33,6 @@ class ColorDoctrineType extends Type
             return null;
         }
 
-        if (false === $value instanceof Color) {
-            throw new \InvalidArgumentException('Can only map Color Enum');
-        }
-
         return (string) $value;
     }
 

@@ -33,10 +33,6 @@ class UseModeDoctrineType extends Type
             return null;
         }
 
-        if (false === $value instanceof UseMode) {
-            throw new \InvalidArgumentException('Can only map UseMode Enum');
-        }
-
         return (string) $value;
     }
 
