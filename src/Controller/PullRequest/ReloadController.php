@@ -5,6 +5,7 @@
  * @license     Proprietary
  * @copyright   Copyright (c) Wizacha
  */
+
 declare(strict_types=1);
 
 namespace App\Controller\PullRequest;
