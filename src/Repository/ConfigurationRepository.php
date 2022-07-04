@@ -1,18 +1,15 @@
 <?php
 
-/**
- * @author BaBeuloula <info@babeuloula.fr>
- */
-
 declare(strict_types=1);
 
 namespace App\Repository;
 
 use App\Entity\Configuration;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
+ * @extends ServiceEntityRepository<Configuration>
  * @method Configuration|null find($id, $lockMode = null, $lockVersion = null)
  * @method Configuration|null findOneBy(array $criteria, array $orderBy = null)
  * @method Configuration[]    findAll()
@@ -25,14 +22,21 @@ class ConfigurationRepository extends ServiceEntityRepository
         parent::__construct($registry, Configuration::class);
     }
 
-    public function save(Configuration $configuration): Configuration
+    public function add(Configuration $entity, bool $flush = false): void
     {
-        if (false === $this->getEntityManager()->contains($configuration)) {
-            $this->getEntityManager()->persist($configuration);
+        $this->getEntityManager()->persist($entity);
+
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
         }
+    }
 
-        $this->getEntityManager()->flush();
+    public function remove(Configuration $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
 
-        return $configuration;
+        if (true === $flush) {
+            $this->getEntityManager()->flush();
+        }
     }
 }

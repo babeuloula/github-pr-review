@@ -1,49 +1,33 @@
 <?php
 
-/**
- * @author BaBeuloula <info@babeuloula.fr>
- */
-
 declare(strict_types=1);
 
 namespace App\Service\Github;
 
-use App\Entity\Configuration;
+use App\Contract\Service\PullRequestServiceInterface;
 use App\Entity\User;
+use App\Model\AbstractPullRequestService;
 use App\Service\User\UserService;
-use App\Traits\PullRequestTypedArrayTrait;
-use App\TypedArray\PullRequestArray;
 use Github\Api\PullRequest as PullRequestApi;
 use Github\Api\Search;
 use Github\Client;
 
-class PullRequestFilterService implements PullRequestServiceInterface
+final class PullRequestFilterService extends AbstractPullRequestService implements PullRequestServiceInterface
 {
-    use PullRequestTypedArrayTrait;
-
-    /** @var Client */
-    protected $client;
+    protected Client $client;
 
     /** @var string[] */
-    protected $githubRepos;
-
-    /** @var array[] */
-    protected $branchsColors;
-
-    /** @var string */
-    protected $branchDefaultColor;
+    protected array $githubRepos;
 
     /** @var string[] */
-    protected $githubFilters;
+    protected array $githubFilters;
 
     /** @var int[] */
-    protected $openCount = [];
+    protected array $openCount = [];
 
     public function __construct(GithubClientService $client, UserService $userService)
     {
-        if (false === $userService->getUser() instanceof User
-            || false === $userService->getUser()->getConfiguration() instanceof Configuration
-        ) {
+        if (false === $userService->getUser() instanceof User) {
             return;
         }
 
@@ -52,28 +36,24 @@ class PullRequestFilterService implements PullRequestServiceInterface
         $this->githubRepos = $userService->getUser()->getConfiguration()->getRepositories();
         \natcasesort($this->githubRepos);
 
-        $this->branchsColors = array_map(
-            /**
-             * @param string[] $data
-             *
-             * @return string[]
-             */
-            function (array $data): array {
+        $this->branchesColors = array_map(
+            // phpcs:ignore
+            static function (array $data): array { // @phpstan-ignore-line
                 return [$data[0] => $data[1]];
             },
-            $userService->getUser()->getConfiguration()->getBranchsColors()
+            $userService->getUser()->getConfiguration()->getBranchesColors()
         );
-        $this->branchDefaultColor = (string) $userService->getUser()->getConfiguration()->getBranchDefaultColor();
+        $this->branchDefaultColor = $userService->getUser()->getConfiguration()->getBranchDefaultColor()->value;
         $this->githubFilters = $userService->getUser()->getConfiguration()->getFilters();
     }
 
-    /** @return PullRequestArray[] */
+    /** @return array[] */
     public function getOpen(): array
     {
         return $this->search();
     }
 
-    /** return int[] */
+    /** @return int[] */
     public function getOpenCount(): array
     {
         return $this->openCount;
@@ -82,7 +62,7 @@ class PullRequestFilterService implements PullRequestServiceInterface
     /**
      * @param mixed[] $params
      *
-     * @return PullRequestArray[]
+     * @return array[]
      */
     protected function search(array $params = []): array
     {
@@ -92,7 +72,7 @@ class PullRequestFilterService implements PullRequestServiceInterface
 
         foreach ($this->githubRepos as $githubRepo) {
             [$username, $repository] = \explode("/", $githubRepo);
-            $pullRequestsArray = new PullRequestArray();
+            $pullRequestsArray = [];
 
             // Filters example:
             //   - "is:pr is:open -label:WIP"
@@ -114,7 +94,7 @@ class PullRequestFilterService implements PullRequestServiceInterface
                 }
             }
 
-            $this->openCount[$githubRepo] = $pullRequestsArray->count();
+            $this->openCount[$githubRepo] = \count($pullRequestsArray);
             $pullRequests[$githubRepo] = $pullRequestsArray;
         }
 
@@ -137,7 +117,7 @@ class PullRequestFilterService implements PullRequestServiceInterface
         // Github does not offer a system indicating the total number of PRs.
         // We are therefore obliged to detect the number of returns.
         // If we have 30, it's because there's a next page. If we have less, we are on the last page.
-        if (\count($pullRequests) === 30) {
+        if (30 === \count($pullRequests)) {
             $pullRequests = \array_merge(
                 $this->getAll(
                     $username,
@@ -153,8 +133,8 @@ class PullRequestFilterService implements PullRequestServiceInterface
     }
 
     /** @return array[] */
-    protected function getBranchsColors(): array
+    protected function getBranchesColors(): array
     {
-        return $this->branchsColors;
+        return $this->branchesColors;
     }
 }

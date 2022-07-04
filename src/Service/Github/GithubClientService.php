@@ -1,33 +1,27 @@
 <?php
 
-/**
- * @author BaBeuloula <info@babeuloula.fr>
- */
-
 declare(strict_types=1);
 
 namespace App\Service\Github;
 
 use App\Entity\User;
 use App\Service\User\UserService;
+use Github\AuthMethod;
 use Github\Client;
 
-class GithubClientService
+final class GithubClientService
 {
-    /** @var Client */
-    protected $client;
+    private Client $client;
 
     public function __construct(UserService $userService)
     {
         $this->client = new Client();
 
-        if (false === $userService->getUser() instanceof User
-            || false === \is_string($userService->getUser()->getToken())
-        ) {
+        if (false === $userService->getUser() instanceof User) {
             return;
         }
 
-        $this->client->authenticate($userService->getUser()->getToken(), null, Client::AUTH_HTTP_TOKEN);
+        $this->client->authenticate($userService->getUser()->getToken(), null, AuthMethod::ACCESS_TOKEN);
     }
 
     public function getClient(): Client

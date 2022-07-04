@@ -3,4 +3,8 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     globals:
-        website_url: '%env(WEBSITE_URL)%'
+        website_url: 'https://%env(HTTP_HOST)%'
+
+when@test:
+    twig:
+        strict_variables: true

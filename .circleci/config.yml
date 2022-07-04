@@ -5,28 +5,28 @@ commands:
         description: Install alpine requirements for checkout
         steps:
             - run:
-                name: "Install alpine requirements for checkout"
-                command: apk add git openssh-client curl make
+                  name: "Install alpine requirements for checkout"
+                  command: apk add git openssh-client curl make
             - checkout
 
     composer-install:
         description: "Install dependencies"
         steps:
             - run:
-                name: "Execute: composer install"
-                command: |
-                    if [ ! -f vendor/autoload.php ];then
-                        curl https://getcomposer.org/composer-1.phar --location --silent  --output /usr/bin/composer;
-                        chmod +x /usr/bin/composer;
-                        composer global require hirak/prestissimo;
-                        composer install --no-interaction --no-progress;
-                    fi
+                  name: "Execute: composer install"
+                  command: |
+                      if [ ! -f vendor/autoload.php ];then
+                          curl https://getcomposer.org/composer-2.phar --location --silent  --output /usr/bin/composer;
+                          chmod +x /usr/bin/composer;
+                          cp .env.ci .env.local;
+                          composer install --no-interaction --no-progress;
+                      fi
 
     restore-composer-cache:
         description: "Restore vendor folder from CircleCI cache"
         steps:
             - restore_cache:
-                key: composer-{{ checksum "composer.json" }}-{{ checksum "composer.lock" }}
+                  key: composer-{{ checksum "composer.json" }}-{{ checksum "composer.lock" }}
 
     store-composer-cache:
         description: "Store vendor folder in CircleCI cache"
@@ -35,39 +35,63 @@ commands:
             - restore-composer-cache
             - composer-install
             - save_cache:
-                key: composer-{{ checksum "composer.json" }}-{{ checksum "composer.lock" }}
-                paths:
-                  - ./vendor
+                  key: composer-{{ checksum "composer.json" }}-{{ checksum "composer.lock" }}
+                  paths:
+                      - ./vendor
             - persist_to_workspace:
-                root: .
-                paths:
-                  - vendor
+                  root: .
+                  paths:
+                      - vendor
 
     phpcs:
         description: "Execute PHPCS"
         steps:
             - run:
-                name: "Execute: make phpcs"
-                command: make phpcs
+                  name: "Execute: make lint"
+                  command: |
+                      cp .env.ci .env.local
+                      make lint
 
     phpstan:
         description: "Execute PHPStan"
         steps:
             - run:
-                name: "Execute: make stan"
-                command: make stan
+                  name: "Execute: make analyse"
+                  command: |
+                      cp .env.ci .env.local
+                      make analyse
+
+    copy-paste:
+        description: "Execute Copy/Paste"
+        steps:
+            - run:
+                  name: "Execute: make copy-paste"
+                  command: |
+                      cp .env.ci .env.local
+                      make copy-paste
+
+    security:
+        description: "Execute security checker"
+        steps:
+            - run:
+                  name: "Execute: make security"
+                  command: |
+                      cp .env.ci .env.local
+                      make security
 
     doctrine_schema_validate:
         description: "Execute doctrine:schema:validate"
         steps:
             - run:
-                name: "Execute: bin/console d:s:v"
-                command: bin/console d:s:v --skip-sync
+                  name: "Execute: bin/console d:s:v"
+                  command: |
+                      cp .env.ci .env.local
+                      bin/console d:s:v --skip-sync
 
 executors:
     php:
         docker:
-            - image: php:7.3.8-cli-alpine3.10
+            - image: php:8.1-cli-alpine
         working_directory: ~/repository
 
 jobs:
@@ -90,6 +114,20 @@ jobs:
             - restore-composer-cache
             - phpstan
 
+    copy-paste:
+        executor: php
+        steps:
+            - checkout-alpine
+            - restore-composer-cache
+            - copy-paste
+
+    security:
+        executor: php
+        steps:
+            - checkout-alpine
+            - restore-composer-cache
+            - security
+
     doctrine_schema_validate:
         executor: php
         steps:
@@ -103,11 +141,17 @@ workflows:
         jobs:
             - composer
             - phpcs:
-                requires:
-                    - composer
+                  requires:
+                      - composer
             - phpstan:
-                requires:
-                    - composer
+                  requires:
+                      - composer
+            - copy-paste:
+                  requires:
+                      - composer
+            - security:
+                  requires:
+                      - composer
             - doctrine_schema_validate:
-                requires:
-                    - composer
+                  requires:
+                      - composer

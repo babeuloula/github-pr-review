@@ -1,85 +1,49 @@
 <?php
 
-/**
- * @author BaBeuloula <info@babeuloula.fr>
- */
-
 declare(strict_types=1);
 
 namespace App\Controller\PullRequest;
 
-use App\Entity\Configuration;
+use App\Contract\Service\PullRequestServiceInterface;
 use App\Entity\User;
 use App\Enum\Label;
-use App\Enum\UseMode;
-use App\Exception\GithubGuiException;
+use App\Exception\EmptyFilterException;
+use App\Exception\MissingConfigurationException;
 use App\Service\Github\NotificationService;
 use App\Service\Github\PullRequestFilterService;
 use App\Service\Github\PullRequestLabelService;
-use App\Service\Github\PullRequestServiceInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment;
 
 final class ListController
 {
-    /** @var PullRequestLabelService */
-    private $pullRequestLabelService;
-
-    /** @var PullRequestFilterService */
-    private $pullRequestFilterService;
-
-    /** @var NotificationService */
-    private $notificationService;
-
-    /** @var Environment */
-    private $twig;
-
-    /** @var UrlGeneratorInterface */
-    private $router;
-
-    /** @var FlashBagInterface */
-    private $flashBag;
-
     public function __construct(
-        PullRequestLabelService $pullRequestLabelService,
-        PullRequestFilterService $pullRequestFilterService,
-        NotificationService $notificationService,
-        Environment $twig,
-        UrlGeneratorInterface $router,
-        FlashBagInterface $flashBag
+        readonly private PullRequestLabelService $pullRequestLabelService,
+        readonly private PullRequestFilterService $pullRequestFilterService,
+        readonly private NotificationService $notificationService,
+        readonly private Environment $twig,
     ) {
-        $this->pullRequestLabelService = $pullRequestLabelService;
-        $this->pullRequestFilterService = $pullRequestFilterService;
-        $this->notificationService = $notificationService;
-        $this->twig = $twig;
-        $this->router = $router;
-        $this->flashBag = $flashBag;
     }
 
     /** @param User $user */
+    #[Route('/pull-requests', name: 'pull_requests_list', methods: Request::METHOD_GET)]
     public function __invoke(UserInterface $user): Response
     {
-        if (false === $user->getConfiguration() instanceof Configuration) {
-            throw new GithubGuiException(
-                GithubGuiException::MESSAGE_CONFIG_IS_EMPTY,
-                GithubGuiException::CODE_CONFIG_IS_EMPTY
-            );
+        if (0 === \count($user->getConfiguration()->getRepositories())) {
+            throw new MissingConfigurationException();
         }
 
-        if (true === UseMode::FILTER()->equals($user->getConfiguration()->getMode())
+        if (true === $user->getConfiguration()->getMode()->isFilter()
             && 0 === \count($user->getConfiguration()->getFilters())
         ) {
-            throw new GithubGuiException(
-                GithubGuiException::MESSAGE_FILTERS_ARE_EMPTY,
-                GithubGuiException::CODE_FILTERS_ARE_EMPTY
-            );
+            throw new EmptyFilterException();
         }
 
         /** @var PullRequestServiceInterface $service */
-        $service = (true === UseMode::LABEL()->equals($user->getConfiguration()->getMode()))
+        $service = (true === $user->getConfiguration()->getMode()->isLabel())
             ? $this->pullRequestLabelService
             : $this->pullRequestFilterService;
 
@@ -90,7 +54,7 @@ final class ListController
                     'openPullRequests' => $service->getOpen(),
                     'unreadNotifications' => $this->notificationService->getNotifications(),
                     'unreadNotificationsCount' => $this->notificationService->getNotificationsCount(),
-                    'labels' => Label::toArray(),
+                    'labels' => Label::cases(),
                 ]
             )
         );

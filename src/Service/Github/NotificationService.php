@@ -1,47 +1,37 @@
 <?php
 
-/**
- * @author BaBeuloula <info@babeuloula.fr>
- */
-
 declare(strict_types=1);
 
 namespace App\Service\Github;
 
-use App\Entity\Configuration;
+use App\Dto\Notification;
 use App\Entity\User;
 use App\Enum\NotificationReason;
-use App\Enum\NotificationType;
 use App\Service\User\UserService;
-use App\TypedArray\NotificationArray;
-use App\TypedArray\Type\Notification;
 use Github\Api\Notification as NotificationApi;
 use Github\Client;
 
-class NotificationService
+final class NotificationService
 {
-    protected const OTHER_REPOS = 'Other repos';
+    private const OTHER_REPOS = 'Other repos';
 
-    /** @var Client */
-    protected $client;
-
-    /** @var string[] */
-    protected $githubRepos;
+    private Client $client;
 
     /** @var string[] */
-    protected $githubNotificationsExcludeReasons;
+    private array $githubRepos;
 
     /** @var string[] */
-    protected $githubNotificationsExcludeReasonsOtherRepos;
+    private array $githubNotificationsExcludeReasons;
+
+    /** @var string[] */
+    private array $githubNotificationsExcludeReasonsOtherRepos;
 
     /** @var int[] */
-    protected $notificationsCount = [];
+    private array $notificationsCount = [];
 
     public function __construct(GithubClientService $client, UserService $userService)
     {
-        if (false === $userService->getUser() instanceof User
-            || false === $userService->getUser()->getConfiguration() instanceof Configuration
-        ) {
+        if (false === $userService->getUser() instanceof User) {
             return;
         }
 
@@ -49,30 +39,22 @@ class NotificationService
         $this->githubRepos = $userService->getUser()->getConfiguration()->getRepositories();
         \natcasesort($this->githubRepos);
 
-        $this->githubNotificationsExcludeReasons = array_map(
-            function (NotificationReason $reason): string {
-                return (string) $reason;
-            },
-            $userService
-                ->getUser()
-                ->getConfiguration()
-                ->getNotificationsExcludeReasons()
-        );
-        $this->githubNotificationsExcludeReasonsOtherRepos = array_map(
-            function (NotificationReason $reason): string {
-                return (string) $reason;
-            },
-            $userService
-                ->getUser()
-                ->getConfiguration()
-                ->getNotificationsExcludeReasonsOtherRepos()
-        );
+        $this->githubNotificationsExcludeReasons = $userService
+            ->getUser()
+            ->getConfiguration()
+            ->getNotificationsExcludeReasons()
+        ;
+        $this->githubNotificationsExcludeReasonsOtherRepos = $userService
+            ->getUser()
+            ->getConfiguration()
+            ->getNotificationsExcludeReasonsOtherRepos()
+        ;
 
         foreach ($this->githubRepos as $repo) {
             $this->notificationsCount[$repo] = 0;
         }
 
-        $this->notificationsCount[static::OTHER_REPOS] = 0;
+        $this->notificationsCount[self::OTHER_REPOS] = 0;
     }
 
     /** @return array[] */
@@ -80,44 +62,42 @@ class NotificationService
     {
         /** @var NotificationApi $notificationsApi */
         $notificationsApi = $this->client->api('notifications');
+        /** @var NotificationReason[] $reasons */
         $reasons = \array_filter(
-            \array_values(NotificationReason::toArray()),
-            function (string $reason): bool {
-                return false === \in_array($reason, $this->githubNotificationsExcludeReasons);
+            \array_values(NotificationReason::cases()),
+            function (NotificationReason $reason): bool {
+                return false === \in_array($reason->value, $this->githubNotificationsExcludeReasons, true);
             }
         );
+        /** @var NotificationReason[] $reasonsOtherRepos */
         $reasonsOtherRepos = \array_filter(
-            \array_values(NotificationReason::toArray()),
-            function (string $reason): bool {
-                return false === \in_array($reason, $this->githubNotificationsExcludeReasonsOtherRepos);
+            \array_values(NotificationReason::cases()),
+            function (NotificationReason $reason): bool {
+                return false === \in_array($reason->value, $this->githubNotificationsExcludeReasonsOtherRepos, true);
             }
         );
         $notificationsOrdered = [];
 
         foreach ($this->githubRepos as $repo) {
             foreach ($reasons as $reason) {
-                $notificationsOrdered[$repo][$reason] = new NotificationArray();
+                $notificationsOrdered[$repo][$reason->value] = [];
             }
         }
 
-        $notificationsOrdered[static::OTHER_REPOS] = [];
+        $notificationsOrdered[self::OTHER_REPOS] = [];
 
         foreach ($reasonsOtherRepos as $reason) {
-            $notificationsOrdered[static::OTHER_REPOS][$reason] = new NotificationArray();
+            $notificationsOrdered[self::OTHER_REPOS][$reason->value] = [];
         }
 
         foreach ($notificationsApi->all() as $notification) {
             $repo = (true === \array_key_exists($notification['repository']['full_name'], $notificationsOrdered))
                 ? $notification['repository']['full_name']
-                : static::OTHER_REPOS;
+                : self::OTHER_REPOS;
             $reason = $notification['reason'];
 
             if (true === \array_key_exists($reason, $notificationsOrdered[$repo])) {
                 $notification = new Notification($notification);
-
-                $notification->setUrl(
-                    $this->formatUrl($notification->getType(), $notification->getUrl())
-                );
 
                 $notificationsOrdered[$repo][$reason][] = $notification;
                 ++$this->notificationsCount[$repo];
@@ -145,28 +125,5 @@ class NotificationService
         }
 
         return true;
-    }
-
-    protected function formatUrl(NotificationType $type, string $url): string
-    {
-        switch ($type) {
-            case NotificationType::ISSUE():
-                $url = \str_replace(
-                    ['https://api.github.com/repos/'],
-                    ['https://github.com/'],
-                    $url
-                );
-                break;
-
-            case NotificationType::PULL_REQUEST():
-                $url = \str_replace(
-                    ['https://api.github.com/repos/', '/pulls/'],
-                    ['https://github.com/', '/pull/'],
-                    $url
-                );
-                break;
-        }
-
-        return $url;
     }
 }

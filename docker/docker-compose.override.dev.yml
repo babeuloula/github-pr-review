@@ -1,0 +1,34 @@
+version: '3.5'
+
+services:
+    # Reverse proxy for SSL certificates
+    nginx_proxy:
+        image: jwilder/nginx-proxy
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - /var/run/docker.sock:/tmp/docker.sock:ro
+            - ./proxy/config/proxy.conf:/etc/nginx/conf.d/proxy.conf:ro
+            - ./certificates/${HTTP_HOST}.pem:/etc/nginx/certs/${HTTP_HOST}.crt:ro
+            - ./certificates/${HTTP_HOST}.key:/etc/nginx/certs/${HTTP_HOST}.key:ro
+        networks:
+            - github_gui
+        restart: "no"
+
+    php:
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+
+    database:
+        ports:
+            # Expose port if you want to connect to databse with a DB software like MySQL Workbench
+            - "${MYSQL_PORT:-3307}:3306"
+
+    adminer:
+        image: adminer
+        ports:
+            - "${ADMINER_PORT:-8080}:8080"
+        networks:
+            - github_gui
+        restart: "no"

@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @author BaBeuloula <info@babeuloula.fr>
- */
-
 declare(strict_types=1);
 
 namespace App\Service\User;
@@ -12,10 +8,9 @@ use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-class UserService
+final class UserService
 {
-    /** @var null|User */
-    protected $user;
+    protected ?User $user = null;
 
     public function __construct(TokenStorageInterface $tokenStorage)
     {
