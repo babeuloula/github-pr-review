@@ -3,30 +3,55 @@ version: '3.5'
 services:
     nginx:
         build:
-            context: ..
-            dockerfile: docker/nginx/Dockerfile
+            context: .
+            dockerfile: ./nginx/Dockerfile
+        environment:
+            - VIRTUAL_HOST=${HTTP_HOST}
         volumes:
             - ../public:/var/www/html/public
-        restart: unless-stopped
+            - ./nginx/config/vhost.nginx:/etc/nginx/conf.d/default.conf:ro
+        networks:
+            - github_gui
+        restart: "no"
 
     php:
         build:
-            context: ..
-            dockerfile: docker/php/Dockerfile
+            context: .
+            dockerfile: ./php/Dockerfile
             args:
+                # It's UID in order to have the same rights on your computer and your docker container
                 UID: "${DOCKER_UID}"
-        volumes:
-            - ..:/var/www/html
-        restart: unless-stopped
-
-    mysql:
+                TZ: "${TZ}"
         env_file:
             - .env
-            - ../.env
-        image: mysql:5.7
-        restart: unless-stopped
         volumes:
-            - mysql:/var/lib/mysql
+            - ./php/${DOCKER_ENV}/config/apcu.ini:/usr/local/etc/php/conf.d/apcu.ini:ro
+            - ./php/${DOCKER_ENV}/config/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini:ro
+            - ./php/${DOCKER_ENV}/config/upload.ini:/usr/local/etc/php/conf.d/upload.ini:ro
+            - ..:/var/www/html
+        networks:
+            github_gui:
+                aliases:
+                    - "github_gui_php"
+        restart: "no"
+
+    database:
+        image: mysql:8.0.29
+        env_file:
+            - .env
+        volumes:
+            - database:/var/lib/mysql
+        ports:
+            # Expose port if you want to connect to databse with a DB software like MySQL Workbench
+            - "${MYSQL_PORT:-3307}:3306"
+        networks:
+            github_gui:
+                aliases:
+                    - "github_gui_mysql"
+        restart: "no"
 
 volumes:
-    mysql:
+    database:
+
+networks:
+    github_gui:

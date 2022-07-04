@@ -12,7 +12,7 @@
             <link title="defaut" type="text/css" rel="stylesheet" href="{{ asset('css/pull-request.css', 'v') }}" media="screen">
             <link title="defaut" type="text/css" rel="stylesheet" href="{{ asset('css/libs/overhang/overhang.min.css') }}" media="screen">
 
-            {% if app.getUser().getConfiguration().getEnabledDarkTheme() %}
+            {% if app.getUser().getConfiguration().isEnabledDarkTheme() %}
                 <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/darkly/bootstrap.min.css"
                         rel="stylesheet" crossorigin="anonymous"
                         integrity="sha384-w+8Gqjk9Cuo6XH9HKHG5t5I1VR4YBNdPt/29vwgfZR485eoEJZ8rJRbm3TR32P6k">
@@ -35,7 +35,7 @@
                 </small>
             </div>
             <div class="col-4 text-center">
-                {% if app.getUser().getConfiguration().getReloadEvery() > 0 and not app.getUser().getConfiguration().getReloadOnFocus() %}
+                {% if app.getUser().getConfiguration().getReloadEvery() > 0 and not app.getUser().getConfiguration().isReloadOnFocus() %}
                     <small>
                         Next reload in: <span id="next-reload"></span>s
                     </small>

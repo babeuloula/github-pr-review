@@ -1,29 +1,26 @@
 <?php
 
-/**
- * @author BaBeuloula <info@babeuloula.fr>
- */
-
 declare(strict_types=1);
 
 namespace App\Enum;
 
-use MyCLabs\Enum\Enum;
-
-/**
- * @method static UseMode FILTER()
- * @method static UseMode LABEL()
- */
-class UseMode extends Enum
+enum UseMode: string
 {
-    /** @var string */
-    protected const FILTER = 'filter';
+    case FILTER = 'filter';
+    case LABEL = 'label';
 
-    /** @var string */
-    protected const LABEL = 'label';
-
-    public static function getDefault(): self
+    public static function default(): self
     {
-        return static::LABEL();
+        return self::LABEL;
+    }
+
+    public function isFilter(): bool
+    {
+        return $this->value === self::FILTER->value;
+    }
+
+    public function isLabel(): bool
+    {
+        return $this->value === self::LABEL->value;
     }
 }

@@ -1,15 +1,15 @@
 {% for repository, sortedPullRequests in openPullRequests %}
     <div class="card">
-        <div class="card-header p-0" id="heading-pr-{{ repository|slugify }}">
-            <button class="btn btn-link" type="button" data-target="#collapse-pr-{{ repository|slugify }}"
-                    aria-expanded="true" aria-controls="collapse-pr-{{ repository|slugify }}">
-                {{ repository }} <strong>({{ sortedPullRequests.count() }})</strong>
+        <div class="card-header p-0" id="heading-pr-{{ repository|slug }}">
+            <button class="btn btn-link" type="button" data-target="#collapse-pr-{{ repository|slug }}"
+                    aria-expanded="true" aria-controls="collapse-pr-{{ repository|slug }}">
+                {{ repository }} <strong>({{ sortedPullRequests|length }})</strong>
             </button>
         </div>
 
-        <div id="collapse-pr-{{ repository|slugify }}" data-count="{{ sortedPullRequests.count() }}"
-                class="collapse {{ sortedPullRequests.count() > 0 ? 'show' : '' }}"
-                aria-labelledby="heading-pr-{{ repository|slugify }}" data-parent="#accordion-pull-requests">
+        <div id="collapse-pr-{{ repository|slug }}" data-count="{{ sortedPullRequests|length }}"
+                class="collapse {{ sortedPullRequests|length > 0 ? 'show' : '' }}"
+                aria-labelledby="heading-pr-{{ repository|slug }}" data-parent="#accordion-pull-requests">
             <div class="card-body">
                 <div class="list-group">
                     <div class="list-group-items">

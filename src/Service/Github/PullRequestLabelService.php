@@ -1,58 +1,42 @@
 <?php
 
-/**
- * @author BaBeuloula <info@babeuloula.fr>
- */
-
 declare(strict_types=1);
 
 namespace App\Service\Github;
 
-use App\Entity\Configuration;
+use App\Contract\Service\PullRequestServiceInterface;
 use App\Entity\User;
 use App\Enum\Label;
+use App\Model\AbstractPullRequestService;
 use App\Service\User\UserService;
-use App\Traits\PullRequestTypedArrayTrait;
-use App\TypedArray\PullRequestArray;
 use Github\Api\PullRequest as PullRequestApi;
 use Github\Client;
 
-class PullRequestLabelService implements PullRequestServiceInterface
+final class PullRequestLabelService extends AbstractPullRequestService implements PullRequestServiceInterface
 {
-    use PullRequestTypedArrayTrait;
-
-    /** @var Client */
-    protected $client;
+    protected Client $client;
 
     /** @var string[] */
-    protected $githubRepos;
+    protected array $githubRepos;
 
     /** @var string[] */
-    protected $labelsReviewNeeded;
+    protected array $labelsReviewNeeded;
 
     /** @var string[] */
-    protected $labelsChangesRequested;
+    protected array $labelsChangesRequested;
 
     /** @var string[] */
-    protected $labelsAccepted;
+    protected array $labelsAccepted;
 
     /** @var string[] */
-    protected $labelsWip;
+    protected array $labelsWip;
 
     /** @var array[] */
-    protected $branchsColors;
-
-    /** @var string */
-    protected $branchDefaultColor;
-
-    /** @var array[] */
-    protected $openCount = [];
+    protected array $openCount = [];
 
     public function __construct(GithubClientService $client, UserService $userService)
     {
-        if (false === $userService->getUser() instanceof User
-            || false === $userService->getUser()->getConfiguration() instanceof Configuration
-        ) {
+        if (false === $userService->getUser() instanceof User) {
             return;
         }
 
@@ -64,24 +48,20 @@ class PullRequestLabelService implements PullRequestServiceInterface
         $this->labelsChangesRequested = $userService->getUser()->getConfiguration()->getLabelsChangesRequested();
         $this->labelsAccepted = $userService->getUser()->getConfiguration()->getLabelsAccepted();
         $this->labelsWip = $userService->getUser()->getConfiguration()->getLabelsWip();
-        $this->branchsColors = array_map(
-            /**
-             * @param string[] $data
-             *
-             * @return string[]
-             */
-            function (array $data): array {
+        $this->branchesColors = array_map(
+            // phpcs:ignore
+            static function (array $data): array { // @phpstan-ignore-line
                 return [$data[0] => $data[1]];
             },
-            $userService->getUser()->getConfiguration()->getBranchsColors()
+            $userService->getUser()->getConfiguration()->getBranchesColors(),
         );
-        $this->branchDefaultColor = (string) $userService->getUser()->getConfiguration()->getBranchDefaultColor();
+        $this->branchDefaultColor = $userService->getUser()->getConfiguration()->getBranchDefaultColor()->value;
 
         $this->openCount = [
-            Label::REVIEW_NEEDED()->getValue() => [],
-            Label::ACCEPTED()->getValue() => [],
-            Label::CHANGES_REQUESTED()->getValue() => [],
-            Label::WIP()->getValue() => [],
+            Label::REVIEW_NEEDED->value => [],
+            Label::ACCEPTED->value => [],
+            Label::CHANGES_REQUESTED->value => [],
+            Label::WIP->value => [],
         ];
     }
 
@@ -119,7 +99,7 @@ class PullRequestLabelService implements PullRequestServiceInterface
             );
 
             foreach ($pullRequestsSorted as $label => $pullRequestArray) {
-                $this->openCount[$label][$githubRepo] = $pullRequestArray->count();
+                $this->openCount[$label][$githubRepo] = \count($pullRequestArray);
             }
 
             $pullRequests[$githubRepo] = $pullRequestsSorted;
@@ -142,7 +122,7 @@ class PullRequestLabelService implements PullRequestServiceInterface
         // Github does not offer a system indicating the total number of PRs.
         // We are therefore obliged to detect the number of returns.
         // If we have 30, it's because there's a next page. If we have less, we are on the last page.
-        if (\count($pullRequest) === 30) {
+        if (30 === \count($pullRequest)) {
             $pullRequest = \array_merge(
                 $this->getAll(
                     $username,
@@ -159,49 +139,49 @@ class PullRequestLabelService implements PullRequestServiceInterface
     /**
      * @param array[] $pullRequests
      *
-     * @return PullRequestArray[]
+     * @return array[]
      */
     protected function sortByLabel(array $pullRequests): array
     {
         $pullRequestsSorted = [
-            Label::REVIEW_NEEDED()->getValue() => new PullRequestArray(),
-            Label::ACCEPTED()->getValue() => new PullRequestArray(),
-            Label::CHANGES_REQUESTED()->getValue() => new PullRequestArray(),
-            Label::WIP()->getValue() => new PullRequestArray(),
+            Label::REVIEW_NEEDED->value => [],
+            Label::ACCEPTED->value => [],
+            Label::CHANGES_REQUESTED->value => [],
+            Label::WIP->value => [],
         ];
 
-        foreach ($pullRequests as $key => $pullRequest) {
-            $labelEnum = Label::REVIEW_NEEDED();
+        foreach ($pullRequests as $pullRequest) {
+            $labelEnum = Label::REVIEW_NEEDED;
 
             foreach ($pullRequest['labels'] as $label) {
                 if (true === \in_array($label['name'], $this->labelsWip, true)) {
-                    $labelEnum = Label::WIP();
+                    $labelEnum = Label::WIP;
 
                     break;
                 } elseif (true === \in_array($label['name'], $this->labelsAccepted, true)) {
-                    $labelEnum = Label::ACCEPTED();
+                    $labelEnum = Label::ACCEPTED;
 
                     break;
                 } elseif (true === \in_array($label['name'], $this->labelsReviewNeeded, true)) {
-                    $labelEnum = Label::REVIEW_NEEDED();
+                    $labelEnum = Label::REVIEW_NEEDED;
 
                     break;
                 } elseif (true === \in_array($label['name'], $this->labelsChangesRequested, true)) {
-                    $labelEnum = Label::CHANGES_REQUESTED();
+                    $labelEnum = Label::CHANGES_REQUESTED;
 
                     break;
                 }
             }
 
-            $pullRequestsSorted[$labelEnum->getValue()][] = $this->convertToTypedArray($pullRequest);
+            $pullRequestsSorted[$labelEnum->value][] = $this->convertToTypedArray($pullRequest);
         }
 
         return $pullRequestsSorted;
     }
 
     /** @return array[] */
-    protected function getBranchsColors(): array
+    protected function getBranchesColors(): array
     {
-        return $this->branchsColors;
+        return $this->branchesColors;
     }
 }

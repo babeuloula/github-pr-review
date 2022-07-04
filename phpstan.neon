@@ -1,0 +1,25 @@
+includes:
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-symfony/rules.neon
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+
+parameters:
+    level: max
+    paths:
+        - src
+    symfony:
+        container_xml_path: var/cache/dev/App_KernelDevDebugContainer.xml
+    ignoreErrors:
+        -
+            message: '#^Method [a-zA-Z0-9\\]+::[a-zA-Z0-9_-]+\(\) has parameter \$[a-zA-Z0-9\\]+ with no value type specified in iterable type array.$#'
+            path: src/
+        -
+            message: '#^Method [a-zA-Z0-9\\]+::[a-zA-Z0-9_-]+\(\) return type has no value type specified in iterable type array.$#'
+            path: src/
+        -
+            message: '#^Property [a-zA-Z0-9\\]+::\$[a-zA-Z0-9_-]+ type has no value type specified in iterable type array.$#'
+            path: src/
+        -
+            message: '#^PHPDoc tag @var for variable \$[a-zA-Z0-9_-]+ has no value type specified in iterable type array.$#'
+            path: src/

@@ -1,61 +1,103 @@
 <?php
 
-/**
- * @author BaBeuloula <info@babeuloula.fr>
- */
-
 declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Enum\UseMode;
+use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\OneToOne;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- */
-class User implements UserInterface, \JsonSerializable
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+class User implements UserInterface
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    protected const DEFAULT_ROLE = 'ROLE_USER';
+    protected const ROLE_LABEL = 'ROLE_LABEL';
+    protected const ROLE_FILER = 'ROLE_FILER';
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $token;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer', options: ['unsigned' => true])]
+    protected int $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    protected string $username;
 
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     */
-    private $nickname;
+    /** @var string[] */
+    #[ORM\Column(type: 'json')]
+    protected array $roles = [];
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $enabled;
+    #[ORM\Column(type: 'string', length: 255)]
+    protected string $token;
 
-    /**
-     * @var Configuration|null
-     * @OneToOne(targetEntity="Configuration", mappedBy="user", orphanRemoval=true, cascade={"persist", "remove"})
-     */
-    private $configuration;
+    #[ORM\Column(type: 'string', length: 255)]
+    protected string $name;
 
-    public function getId(): ?int
+    #[ORM\Column(type: 'boolean', options: ['default' => true])]
+    protected bool $enabled;
+
+    #[ORM\OneToOne(targetEntity: Configuration::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    protected Configuration $configuration;
+
+    public function __construct()
+    {
+        $this->setEnabled(true);
+        $this->setRoles([self::DEFAULT_ROLE]);
+        $this->setConfiguration(new Configuration());
+    }
+
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getToken(): ?string
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->username;
+    }
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = self::DEFAULT_ROLE;
+        $roles[] = match ($this->getConfiguration()->getMode()) {
+            UseMode::FILTER => self::ROLE_FILER,
+            UseMode::LABEL => self::ROLE_LABEL,
+        };
+
+        return array_unique($roles);
+    }
+
+    /** @param string[] $roles */
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getToken(): string
     {
         return $this->token;
     }
@@ -67,7 +109,7 @@ class User implements UserInterface, \JsonSerializable
         return $this;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -79,19 +121,7 @@ class User implements UserInterface, \JsonSerializable
         return $this;
     }
 
-    public function getNickname(): ?string
-    {
-        return $this->nickname;
-    }
-
-    public function setNickname(string $nickname): self
-    {
-        $this->nickname = $nickname;
-
-        return $this;
-    }
-
-    public function getEnabled(): ?bool
+    public function isEnabled(): bool
     {
         return $this->enabled;
     }
@@ -103,51 +133,15 @@ class User implements UserInterface, \JsonSerializable
         return $this;
     }
 
-    public function getConfiguration(): ?Configuration
+    public function getConfiguration(): Configuration
     {
         return $this->configuration;
     }
 
-    public function setConfiguration(?Configuration $configuration): self
+    public function setConfiguration(Configuration $configuration): self
     {
         $this->configuration = $configuration;
 
         return $this;
-    }
-
-    /** @return string[] */
-    public function getRoles(): array
-    {
-        return ['ROLE_USER'];
-    }
-
-    public function getPassword(): string
-    {
-        return '';
-    }
-
-    public function getSalt(): ?string
-    {
-        return null;
-    }
-
-    public function getUsername(): ?string
-    {
-        return $this->getNickname();
-    }
-
-    public function eraseCredentials(): void
-    {
-    }
-
-    /** @return mixed[] */
-    public function jsonSerialize(): array
-    {
-        return [
-            'id' => $this->getId(),
-            'name' => $this->getName(),
-            'nickname' => $this->getNickname(),
-            'roles' => $this->getRoles(),
-        ];
     }
 }

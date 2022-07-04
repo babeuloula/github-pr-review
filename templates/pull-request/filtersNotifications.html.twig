@@ -5,22 +5,22 @@
     {% endif %}
 
     <div class="card">
-        <div class="card-header p-0" id="heading-notifs-{{ repository|slugify }}">
-            <button class="btn btn-link" type="button" data-target="#collapse-notifs-{{ repository|slugify }}"
-                    aria-expanded="true" aria-controls="collapse-notifs-{{ repository|slugify }}">
+        <div class="card-header p-0" id="heading-notifs-{{ repository|slug }}">
+            <button class="btn btn-link" type="button" data-target="#collapse-notifs-{{ repository|slug }}"
+                    aria-expanded="true" aria-controls="collapse-notifs-{{ repository|slug }}">
                 {{ repository }} <strong>({{ unreadNotificationsCount[repository] }})</strong>
             </button>
         </div>
 
-        <div id="collapse-notifs-{{ repository|slugify }}" data-count="{{ unreadNotificationsCount[repository] }}"
+        <div id="collapse-notifs-{{ repository|slug }}" data-count="{{ unreadNotificationsCount[repository] }}"
                 class="collapse {{ unreadNotificationsCount[repository] > 0 ? 'show' : '' }}"
-                aria-labelledby="heading-notifs-{{ repository|slugify }}" data-parent="#accordion-notifs">
+                aria-labelledby="heading-notifs-{{ repository|slug }}" data-parent="#accordion-notifs">
             <div class="card-body">
                 <div class="list-group">
                     <div class="list-group-items">
                         {% if unreadNotificationsCount[repository] > 0 %}
                             {% for notifications in sortedNotifications %}
-                                {% if notifications.count() > 0 %}
+                                {% if notifications|length > 0 %}
                                     <div class="list-group-item list-group-header text-success">
                                         <strong>{{ notifications[0].getReason().getName() }}</strong>
                                     </div>
@@ -40,7 +40,7 @@
                                                 <span class="notification-mark-as-read"
                                                         id="notification-mark-as-read-{{ notification.getId() }}"
                                                         title="Mark as read"
-                                                        data-url="{{ url('notifification_mark_as_read', { 'threadId': notification.getId() }) }}">
+                                                        data-url="{{ url('notification_mark_as_read', { 'threadId': notification.getId() }) }}">
                                                     <i class="text-muted fas fa-check"></i>
                                                 </span>
                                             </div>

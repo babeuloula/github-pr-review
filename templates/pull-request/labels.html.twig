@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-    {% if app.getUser().getConfiguration().getEnabledDarkTheme() %}
+    {% if app.getUser().getConfiguration().isEnabledDarkTheme() %}
         {% set color = 'white' %}
     {% else %}
         {% set color = 'black' %}
@@ -17,8 +17,8 @@
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             {% for repo, sortedPullRequests in openPullRequests %}
-                <a class="nav-item nav-link {% if loop.first %}active{% endif %}" id="nav-{{ repo|slugify }}-tab"
-                        data-toggle="tab" href="#nav-{{ repo|slugify }}" role="tab" aria-controls="nav-{{ repo|slugify }}"
+                <a class="nav-item nav-link {% if loop.first %}active{% endif %}" id="nav-{{ repo|slug }}-tab"
+                        data-toggle="tab" href="#nav-{{ repo|slug }}" role="tab" aria-controls="nav-{{ repo|slug }}"
                         aria-selected="{% if loop.first %}true{% else %}false{% endif %}"
                         data-repo="{{ repo }}">
                     {{ repo }}
@@ -30,7 +30,7 @@
     <div class="tab-content" id="nav-tab-content">
         {% for repo, sortedPullRequests in openPullRequests %}
             <div class="tab-pane fade {% if loop.first %}show active{% endif %}"
-                    id="nav-{{ repo|slugify }}" role="tabpanel" aria-labelledby="nav-{{ repo|slugify }}-tab">
+                    id="nav-{{ repo|slug }}" role="tabpanel" aria-labelledby="nav-{{ repo|slug }}-tab">
 
                 <div class="container-fluid">
                     {% for label, pullRequests in sortedPullRequests %}
@@ -39,7 +39,7 @@
                         {% endif %}
 
                                 <div class="col-sm">
-                                    <div class="list-group label label-group-{{ label|slugify }}">
+                                    <div class="list-group label label-group-{{ label|slug }}">
                                         {% set type = 'primary' %}
                                         {% if loop.index == 2 %}
                                             {% set type = 'success' %}
@@ -50,7 +50,7 @@
                                         {% endif %}
 
                                         <div class="list-group-item list-group-header list-group-item-{{ type }}">
-                                            {{ label }} <strong>({{ pullRequests.count() }})</strong>
+                                            {{ label }} <strong>({{ pullRequests|length }})</strong>
                                         </div>
 
                                         <div class="list-group-items">
@@ -98,7 +98,7 @@
     {{ parent() }}
 
     <script type="text/javascript">
-        const RELOAD_ON_FOCUS = {{ app.getUser().getConfiguration().getReloadOnFocus() ? 'true' : 'false' }};
+        const RELOAD_ON_FOCUS = {{ app.getUser().getConfiguration().isReloadOnFocus() ? 'true' : 'false' }};
         const RELOAD_EVERY = {{ app.getUser().getConfiguration().getReloadEvery() }} * 1000;
     </script>
     <script src="{{ asset('js/pull-requests/pull-requests.js', 'v') }}"></script>

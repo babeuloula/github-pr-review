@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @author BaBeuloula <info@babeuloula.fr>
- */
-
 declare(strict_types=1);
 
 namespace App\Factory;
@@ -16,85 +12,65 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ConfigurationFactory
 {
-    public const DEFAULT_RELOAD_EVERY = 60;
-
-    public function createDefault(): Configuration
+    public static function createFromRequest(Request $request, Configuration $configuration): Configuration
     {
-        return (new Configuration())
-            ->setMode(UseMode::getDefault())
-            ->setBranchDefaultColor(Color::getDefault())
-            ->setEnabledDarkTheme(false)
-            ->setReloadOnFocus(false)
-            ->setReloadEvery(static::DEFAULT_RELOAD_EVERY)
-        ;
-    }
-
-    public function createFromRequest(Request $request, ?Configuration $previousConfiguration): Configuration
-    {
-        $configuration = new Configuration();
-
-        if ($previousConfiguration instanceof Configuration) {
-            $configuration = $previousConfiguration;
-        }
+        /** @var array[] $data */
+        $data = $request->request->all();
 
         return $configuration
-            ->setRepositories($request->request->get('repositories', []))
+            ->setRepositories($data['repositories'] ?? [])
             ->setMode(
-                new UseMode(
-                    $request->request->get(
-                        'mode',
-                        (string) UseMode::getDefault()
-                    )
+                UseMode::from(
+                    $request->request->get('mode', UseMode::default()->value) // @phpstan-ignore-line
                 )
             )
-            ->setLabelsReviewNeeded($request->request->get('labels_review_needed', []))
-            ->setLabelsChangesRequested($request->request->get('labels_changes_requested', []))
-            ->setLabelsAccepted($request->request->get('labels_accepted', []))
-            ->setLabelsWip($request->request->get('labels_wip', []))
-            ->setBranchsColors(
+            ->setLabelsReviewNeeded($data['labels_review_needed'] ?? [])
+            ->setLabelsChangesRequested($data['labels_changes_requested'] ?? [])
+            ->setLabelsAccepted($data['labels_accepted'] ?? [])
+            ->setLabelsWip($data['labels_wip'] ?? [])
+            ->setBranchesColors(
                 array_map(
-                    /** @return string[] */
-                    function (string $data): array {
+                    /** @return array<string, string> */
+                    static function (string $data): array {
                         // phpcs:ignore
                         [$branch, $color] = explode(':', $data);
 
-                        if (false === Color::isValid($color)) {
-                            $color = (string) Color::getDefault();
+                        try {
+                            $color = Color::from($color);
+                        } catch (\Throwable) {
+                            $color = Color::default();
                         }
 
-                        return [$branch, $color];
+                        return [$branch, $color->value];
                     },
-                    $request->request->get('branchs_colors', [])
+                    $data['branchs_colors'] ?? []
                 )
             )
             ->setBranchDefaultColor(
-                new Color(
-                    $request->request->get(
-                        'branch_default_color',
-                        (string) Color::getDefault()
-                    )
+                Color::from(
+                    $request->request->get('branch_default_color', Color::default()->value) // @phpstan-ignore-line
                 )
             )
-            ->setFilters($request->request->get('filters', []))
+            ->setFilters($data['filters'] ?? [])
             ->setNotificationsExcludeReasons(
                 array_map(
-                    function (string $reason): NotificationReason {
-                        return new NotificationReason($reason);
+                    static function (string $reason): string {
+                        return NotificationReason::from($reason)->value;
                     },
-                    $request->request->get('notifications_exclude_reasons', [])
+                    $data['notifications_exclude_reasons'] ?? []
                 )
             )
             ->setNotificationsExcludeReasonsOtherRepos(
                 array_map(
-                    function (string $reason): NotificationReason {
-                        return new NotificationReason($reason);
+                    static function (string $reason): string {
+                        return NotificationReason::from($reason)->value;
                     },
-                    $request->request->get('notifications_exclude_reasons_other_repos', [])
+                    $data['notifications_exclude_reasons_other_repos'] ?? []
                 )
             )
             ->setEnabledDarkTheme('on' === $request->request->get('enabled_dark_theme', 'off'))
             ->setReloadOnFocus('on' === $request->request->get('reload_on_focus', 'off'))
-            ->setReloadEvery($request->request->getInt('reload_every', static::DEFAULT_RELOAD_EVERY))
+            ->setReloadEvery($request->request->getInt('reload_every', (new Configuration())->getReloadEvery()))
         ;
     }
 }

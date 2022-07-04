@@ -1,110 +1,91 @@
 <?php
 
-/**
- * @author BaBeuloula <info@babeuloula.fr>
- */
-
 declare(strict_types=1);
 
 namespace App\Entity;
 
 use App\Enum\Color;
-use App\Enum\NotificationReason;
 use App\Enum\UseMode;
+use App\Repository\ConfigurationRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\OneToOne;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\ConfigurationRepository")
- */
+#[ORM\Entity(repositoryClass: ConfigurationRepository::class)]
 class Configuration
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer', options: ['unsigned' => true])]
+    protected int $id;
 
-    /**
-     * @ORM\Column(type="array")
-     */
-    private $repositories = [];
+    /** @var string[] */
+    #[ORM\Column(type: 'json')]
+    protected array $repositories;
 
-    /**
-     * @ORM\Column(type="use_mode", length=25)
-     */
-    private $mode;
+    #[ORM\Column(type: 'enum_use_mode', length: 25)]
+    protected UseMode $mode;
 
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $labelsReviewNeeded = [];
+    /** @var string[] */
+    #[ORM\Column(type: 'json')]
+    protected array $labelsReviewNeeded;
 
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $labelsChangesRequested = [];
+    /** @var string[] */
+    #[ORM\Column(type: 'json')]
+    protected array $labelsChangesRequested;
 
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $labelsAccepted = [];
+    /** @var string[] */
+    #[ORM\Column(type: 'json')]
+    protected array $labelsAccepted;
 
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $labelsWip = [];
+    /** @var string[] */
+    #[ORM\Column(type: 'json')]
+    protected array $labelsWip;
 
-    /**
-     * @ORM\Column(type="array")
-     */
-    private $branchsColors = [];
+    #[ORM\Column(type: 'json')]
+    protected array $branchesColors;
 
-    /**
-     * @ORM\Column(type="color", length=25)
-     */
-    private $branchDefaultColor;
+    #[ORM\Column(type: 'enum_color', length: 25)]
+    protected Color $branchDefaultColor;
 
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $filters = [];
+    /** @var string[] */
+    #[ORM\Column(type: 'json')]
+    protected array $filters;
 
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $notificationsExcludeReasons = [];
+    /** @var string[] */
+    #[ORM\Column(type: 'json')]
+    protected array $notificationsExcludeReasons;
 
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $notificationsExcludeReasonsOtherRepos = [];
+    /** @var string[] */
+    #[ORM\Column(type: 'json')]
+    protected array $notificationsExcludeReasonsOtherRepos;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $enabledDarkTheme;
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    protected bool $enabledDarkTheme;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $reloadOnFocus;
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    protected bool $reloadOnFocus;
 
-    /**
-     * @ORM\Column(type="integer", options={"unsigned":true})
-     */
-    private $reloadEvery;
+    #[ORM\Column(type: 'integer', options: ['unsigned' => true, 'default' => 60])]
+    protected int $reloadEvery;
 
-    /**
-     * @var User|null
-     * @OneToOne(targetEntity="User", inversedBy="configuration")
-     * @JoinColumn(name="user_id", referencedColumnName="id")
-     */
-    private $user;
+    public function __construct()
+    {
+        $this->repositories = [];
+        $this->mode = UseMode::default();
+        $this->labelsReviewNeeded = [];
+        $this->labelsChangesRequested = [];
+        $this->labelsAccepted = [];
+        $this->labelsWip = [];
+        $this->branchesColors = [];
+        $this->branchDefaultColor = Color::default();
+        $this->filters = [];
+        $this->notificationsExcludeReasons = [];
+        $this->notificationsExcludeReasonsOtherRepos = [];
+        $this->enabledDarkTheme = false;
+        $this->reloadOnFocus = false;
+        $this->reloadEvery = 60;
+    }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -112,9 +93,10 @@ class Configuration
     /** @return string[] */
     public function getRepositories(): array
     {
-        return $this->repositories ?? [];
+        return $this->repositories;
     }
 
+    /** @param string[] $repositories */
     public function setRepositories(array $repositories): self
     {
         $this->repositories = $repositories;
@@ -124,7 +106,7 @@ class Configuration
 
     public function getMode(): UseMode
     {
-        return $this->mode ?? new UseMode('label');
+        return $this->mode;
     }
 
     public function setMode(UseMode $mode): self
@@ -137,7 +119,7 @@ class Configuration
     /** @return string[] */
     public function getLabelsReviewNeeded(): array
     {
-        return $this->labelsReviewNeeded ?? [];
+        return $this->labelsReviewNeeded;
     }
 
     /** @param string[] $labelsReviewNeeded */
@@ -151,7 +133,7 @@ class Configuration
     /** @return string[] */
     public function getLabelsChangesRequested(): array
     {
-        return $this->labelsChangesRequested ?? [];
+        return $this->labelsChangesRequested;
     }
 
     /** @param string[] $labelsChangesRequested */
@@ -165,7 +147,7 @@ class Configuration
     /** @return string[] */
     public function getLabelsAccepted(): array
     {
-        return $this->labelsAccepted ?? [];
+        return $this->labelsAccepted;
     }
 
     /** @param string[] $labelsAccepted */
@@ -179,7 +161,7 @@ class Configuration
     /** @return string[] */
     public function getLabelsWip(): array
     {
-        return $this->labelsWip ?? [];
+        return $this->labelsWip;
     }
 
     /** @param string[] $labelsWip */
@@ -190,23 +172,22 @@ class Configuration
         return $this;
     }
 
-    /** @return string[] */
-    public function getBranchsColors(): array
+    /** @return array<string, string> */
+    public function getBranchesColors(): array
     {
-        return $this->branchsColors ?? [];
+        return $this->branchesColors;
     }
 
-    /** @param array[] $branchsColors */
-    public function setBranchsColors(array $branchsColors): self
+    public function setBranchesColors(array $branchesColors): self
     {
-        $this->branchsColors = $branchsColors;
+        $this->branchesColors = $branchesColors;
 
         return $this;
     }
 
     public function getBranchDefaultColor(): Color
     {
-        return $this->branchDefaultColor ?? new Color('primary');
+        return $this->branchDefaultColor;
     }
 
     public function setBranchDefaultColor(Color $branchDefaultColor): self
@@ -219,7 +200,7 @@ class Configuration
     /** @return string[] */
     public function getFilters(): array
     {
-        return $this->filters ?? [];
+        return $this->filters;
     }
 
     /** @param string[] $filters */
@@ -230,57 +211,37 @@ class Configuration
         return $this;
     }
 
-    /** @return NotificationReason[] */
+    /** @return string[] */
     public function getNotificationsExcludeReasons(): array
     {
-        return array_map(
-            function (string $reason): NotificationReason {
-                return new NotificationReason($reason);
-            },
-            $this->notificationsExcludeReasons ?? []
-        );
+        return $this->notificationsExcludeReasons;
     }
 
-    /** @param NotificationReason[] $notificationsExcludeReasons */
+    /** @param string[] $notificationsExcludeReasons */
     public function setNotificationsExcludeReasons(array $notificationsExcludeReasons): self
     {
-        $this->notificationsExcludeReasons = array_map(
-            function (NotificationReason $reason): string {
-                return $reason->getValue();
-            },
-            $notificationsExcludeReasons
-        );
+        $this->notificationsExcludeReasons = $notificationsExcludeReasons;
 
         return $this;
     }
 
-    /** @return NotificationReason[] */
+    /** @return string[] */
     public function getNotificationsExcludeReasonsOtherRepos(): array
     {
-        return array_map(
-            function (string $reason): NotificationReason {
-                return new NotificationReason($reason);
-            },
-            $this->notificationsExcludeReasonsOtherRepos ?? []
-        );
+        return $this->notificationsExcludeReasonsOtherRepos;
     }
 
-    /** @param NotificationReason[] $notificationsExcludeReasonsOtherRepos */
+    /** @param string[] $notificationsExcludeReasonsOtherRepos */
     public function setNotificationsExcludeReasonsOtherRepos(array $notificationsExcludeReasonsOtherRepos): self
     {
-        $this->notificationsExcludeReasonsOtherRepos = array_map(
-            function (NotificationReason $reason): string {
-                return $reason->getValue();
-            },
-            $notificationsExcludeReasonsOtherRepos
-        );
+        $this->notificationsExcludeReasonsOtherRepos = $notificationsExcludeReasonsOtherRepos;
 
         return $this;
     }
 
-    public function getEnabledDarkTheme(): bool
+    public function isEnabledDarkTheme(): bool
     {
-        return $this->enabledDarkTheme ?? false;
+        return $this->enabledDarkTheme;
     }
 
     public function setEnabledDarkTheme(bool $enabledDarkTheme): self
@@ -290,9 +251,9 @@ class Configuration
         return $this;
     }
 
-    public function getReloadOnFocus(): bool
+    public function isReloadOnFocus(): bool
     {
-        return $this->reloadOnFocus ?? false;
+        return $this->reloadOnFocus;
     }
 
     public function setReloadOnFocus(bool $reloadOnFocus): self
@@ -304,24 +265,12 @@ class Configuration
 
     public function getReloadEvery(): int
     {
-        return $this->reloadEvery ?? 0;
+        return $this->reloadEvery;
     }
 
     public function setReloadEvery(int $reloadEvery): self
     {
         $this->reloadEvery = $reloadEvery;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
 
         return $this;
     }
