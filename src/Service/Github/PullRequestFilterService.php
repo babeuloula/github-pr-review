@@ -9,21 +9,21 @@ use App\Entity\User;
 use App\Model\AbstractPullRequestService;
 use App\Service\User\UserService;
 use Github\Api\PullRequest as PullRequestApi;
-use Github\Api\Search;
 use Github\Client;
+use Github\ResultPager;
 
 final class PullRequestFilterService extends AbstractPullRequestService implements PullRequestServiceInterface
 {
-    protected Client $client;
+    private Client $client;
 
     /** @var string[] */
-    protected array $githubRepos;
+    private array $githubRepos;
 
     /** @var string[] */
-    protected array $githubFilters;
+    private array $githubFilters;
 
     /** @var int[] */
-    protected array $openCount = [];
+    private array $openCount = [];
 
     public function __construct(GithubClientService $client, UserService $userService)
     {
@@ -59,12 +59,8 @@ final class PullRequestFilterService extends AbstractPullRequestService implemen
         return $this->openCount;
     }
 
-    /**
-     * @param mixed[] $params
-     *
-     * @return array[]
-     */
-    protected function search(array $params = []): array
+    /** @return array[] */
+    private function search(): array
     {
         /** @var PullRequestApi $pullRequestApi */
         $pullRequestApi = $this->client->api('pullRequest');
@@ -84,7 +80,7 @@ final class PullRequestFilterService extends AbstractPullRequestService implemen
                     continue;
                 }
 
-                foreach ($this->getAll($username, $repository, $filter, $params) as $pullRequest) {
+                foreach ($this->getAll($username, $repository, $filter) as $pullRequest) {
                     $pullRequest = $pullRequestApi->show($username, $repository, $pullRequest['number']);
 
                     if (true === \is_array($pullRequest)) {
@@ -102,34 +98,19 @@ final class PullRequestFilterService extends AbstractPullRequestService implemen
     }
 
     /** @return array[] */
-    protected function getAll(string $username, string $repository, string $filter, array $params): array
+    private function getAll(string $username, string $repository, string $filter): array
     {
-        /** @var Search $searchApi */
-        $searchApi = $this->client->api('search');
-
         if (0 === \preg_match("/repo\:[a-zA-Z0-9\/-]+/", $filter)) {
             $filter = "repo:$username/$repository $filter";
         }
 
-        // Issues and PRs use the same method
-        $pullRequests = $searchApi->issues($filter)['items'];
-
-        // Github does not offer a system indicating the total number of PRs.
-        // We are therefore obliged to detect the number of returns.
-        // If we have 30, it's because there's a next page. If we have less, we are on the last page.
-        if (30 === \count($pullRequests)) {
-            $pullRequests = \array_merge(
-                $this->getAll(
-                    $username,
-                    $repository,
-                    $filter,
-                    \array_merge($params, ['page' => ($params['page'] ?? 1) + 1])
-                ),
-                $pullRequests
-            );
-        }
-
-        return $pullRequests;
+        return (new ResultPager($this->client))
+            ->fetchAll(
+                $this->client->api('search'),
+                'issues',
+                [$filter]
+            )
+        ;
     }
 
     /** @return array[] */

@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Service\User\UserService;
 use Github\AuthMethod;
 use Github\Client;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 final class GithubClientService
 {
@@ -15,7 +16,8 @@ final class GithubClientService
 
     public function __construct(UserService $userService)
     {
-        $this->client = new Client();
+        $this->client = new Client(apiVersion: 'v4');
+        $this->client->addCache(new FilesystemAdapter());
 
         if (false === $userService->getUser() instanceof User) {
             return;

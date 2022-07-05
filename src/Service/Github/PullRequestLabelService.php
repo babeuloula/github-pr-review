@@ -9,30 +9,30 @@ use App\Entity\User;
 use App\Enum\Label;
 use App\Model\AbstractPullRequestService;
 use App\Service\User\UserService;
-use Github\Api\PullRequest as PullRequestApi;
 use Github\Client;
+use Github\ResultPager;
 
 final class PullRequestLabelService extends AbstractPullRequestService implements PullRequestServiceInterface
 {
-    protected Client $client;
+    private Client $client;
 
     /** @var string[] */
-    protected array $githubRepos;
+    private array $githubRepos;
 
     /** @var string[] */
-    protected array $labelsReviewNeeded;
+    private array $labelsReviewNeeded;
 
     /** @var string[] */
-    protected array $labelsChangesRequested;
+    private array $labelsChangesRequested;
 
     /** @var string[] */
-    protected array $labelsAccepted;
+    private array $labelsAccepted;
 
     /** @var string[] */
-    protected array $labelsWip;
+    private array $labelsWip;
 
     /** @var array[] */
-    protected array $openCount = [];
+    private array $openCount = [];
 
     public function __construct(GithubClientService $client, UserService $userService)
     {
@@ -115,25 +115,13 @@ final class PullRequestLabelService extends AbstractPullRequestService implement
      */
     protected function getAll(string $username, string $repository, array $params): array
     {
-        /** @var PullRequestApi $pullRequestApi */
-        $pullRequestApi = $this->client->api('pullRequest');
-        $pullRequest = $pullRequestApi->all($username, $repository, $params);
-
-        // Github does not offer a system indicating the total number of PRs.
-        // We are therefore obliged to detect the number of returns.
-        // If we have 30, it's because there's a next page. If we have less, we are on the last page.
-        if (30 === \count($pullRequest)) {
-            $pullRequest = \array_merge(
-                $this->getAll(
-                    $username,
-                    $repository,
-                    \array_merge($params, ['page' => ($params['page'] ?? 1) + 1])
-                ),
-                $pullRequest
-            );
-        }
-
-        return $pullRequest;
+        return (new ResultPager($this->client))
+            ->fetchAll(
+                $this->client->api('pullRequest'),
+                'all',
+                [$username, $repository, $params]
+            )
+        ;
     }
 
     /**
@@ -141,7 +129,7 @@ final class PullRequestLabelService extends AbstractPullRequestService implement
      *
      * @return array[]
      */
-    protected function sortByLabel(array $pullRequests): array
+    private function sortByLabel(array $pullRequests): array
     {
         $pullRequestsSorted = [
             Label::REVIEW_NEEDED->value => [],
