@@ -31,7 +31,7 @@ block_info "Install dependencies"
 install_composer "${DOCKER_ENV}"
 echo -e "${GREEN}Dependencies installed with success!${RESET}" > /dev/tty
 
-wait_mysql
+wait_database
 database_and_migrations
 
 end=$(date +%s)
