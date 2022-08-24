@@ -77,7 +77,7 @@
                         <select class="form-control" name="branch_default_color" id="branch_default_color" required="required">
                             {% for color in colors %}
                                 <option value="{{ color.value }}"
-                                        {% if configuration.getBranchDefaultColor() == color.value %}selected="selected"{% endif %}>
+                                        {% if configuration.getBranchDefaultColor().value == color.value %}selected="selected"{% endif %}>
                                     {{ color.value }}
                                 </option>
                             {% endfor %}
