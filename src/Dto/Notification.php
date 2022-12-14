@@ -100,9 +100,7 @@ final class Notification
                 ['https://github.com/', '/pull/'],
                 $url
             ),
-            default => throw new \InvalidArgumentException(
-                'Unexpected match value for Notification Type:' . $type->value
-            ),
+            default => $url,
         };
     }
 }
