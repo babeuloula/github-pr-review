@@ -32,7 +32,7 @@ final class Notification
         $this->subject = $data['subject']['title'];
         $this->type = NotificationType::from($data['subject']['type']);
         $this->repository = $data['repository']['full_name'];
-        $this->setUrl($data['subject']['url']);
+        $this->setUrl((string) $data['subject']['url']);
     }
 
     public function getId(): int
