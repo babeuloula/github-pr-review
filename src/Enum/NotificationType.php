@@ -11,4 +11,5 @@ enum NotificationType: string
     case PULL_REQUEST = 'PullRequest';
     case RELEASE = 'Release';
     case REPOSITORY_VULNERABILITY_ALERT = 'RepositoryVulnerabilityAlert';
+    case REPOSITORY_DEPENDABOT_ALERTS_THREAD = 'RepositoryDependabotAlertsThread';
 }
