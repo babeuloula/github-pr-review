@@ -13,13 +13,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class ExceptionSubscriber implements EventSubscriberInterface
 {
-    public function __construct(readonly protected UrlGeneratorInterface $router)
+    public function __construct(protected readonly UrlGeneratorInterface $router)
     {
     }
 
@@ -51,7 +52,9 @@ final class ExceptionSubscriber implements EventSubscriberInterface
                     Response::HTTP_FORBIDDEN
                 );
             } else {
-                $event->getRequest()->getSession()->getFlashBag()->add(
+                /** @var Session $session */
+                $session = $event->getRequest()->getSession();
+                $session->getFlashBag()->add(
                     'error',
                     $event->getThrowable()->getMessage()
                 );
@@ -70,7 +73,9 @@ final class ExceptionSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $event->getRequest()->getSession()->getFlashBag()->add('error', $event->getThrowable()->getMessage());
+        /** @var Session $session */
+        $session = $event->getRequest()->getSession();
+        $session->getFlashBag()->add('error', $event->getThrowable()->getMessage());
         $event->setResponse(
             new RedirectResponse(
                 $this->router->generate('home')

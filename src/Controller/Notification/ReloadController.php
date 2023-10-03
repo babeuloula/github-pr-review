@@ -18,8 +18,8 @@ use Twig\Environment;
 final class ReloadController
 {
     public function __construct(
-        readonly private NotificationService $notificationService,
-        readonly private Environment $twig
+        private readonly NotificationService $notificationService,
+        private readonly Environment $twig
     ) {
     }
 

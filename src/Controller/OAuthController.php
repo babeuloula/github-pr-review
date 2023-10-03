@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class OAuthController extends AbstractController
 {
-    public function __construct(readonly private ClientRegistry $clientRegistry)
+    public function __construct(private readonly ClientRegistry $clientRegistry)
     {
     }
 

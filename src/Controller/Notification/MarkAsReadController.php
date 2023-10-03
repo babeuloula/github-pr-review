@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 final class MarkAsReadController
 {
     public function __construct(
-        readonly private NotificationService $notificationService,
+        private readonly NotificationService $notificationService,
     ) {
     }
 

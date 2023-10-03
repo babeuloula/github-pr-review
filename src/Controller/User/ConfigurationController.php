@@ -12,6 +12,7 @@ use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -20,9 +21,9 @@ use Twig\Environment;
 final class ConfigurationController
 {
     public function __construct(
-        readonly private Environment $twig,
-        readonly private UserRepository $repository,
-        readonly private UrlGeneratorInterface $router
+        private readonly Environment $twig,
+        private readonly UserRepository $repository,
+        private readonly UrlGeneratorInterface $router
     ) {
     }
 
@@ -38,7 +39,9 @@ final class ConfigurationController
                 true,
             );
 
-            $request->getSession()->getFlashBag()->add('success', 'Configuration saved with success.');
+            /** @var Session $session */
+            $session = $request->getSession();
+            $session->getFlashBag()->add('success', 'Configuration saved with success.');
 
             return new RedirectResponse(
                 $this->router->generate('user_configuration')

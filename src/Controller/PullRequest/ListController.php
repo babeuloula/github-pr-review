@@ -21,10 +21,10 @@ use Twig\Environment;
 final class ListController
 {
     public function __construct(
-        readonly private PullRequestLabelService $pullRequestLabelService,
-        readonly private PullRequestFilterService $pullRequestFilterService,
-        readonly private NotificationService $notificationService,
-        readonly private Environment $twig,
+        private readonly PullRequestLabelService $pullRequestLabelService,
+        private readonly PullRequestFilterService $pullRequestFilterService,
+        private readonly NotificationService $notificationService,
+        private readonly Environment $twig,
     ) {
     }
 
