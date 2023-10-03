@@ -13,6 +13,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -24,10 +25,10 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
 final class GithubAuthenticator extends OAuth2Authenticator implements AuthenticationEntryPointInterface
 {
     public function __construct(
-        readonly private ClientRegistry $clientRegistry,
-        readonly private RouterInterface $router,
-        readonly private UserRepository $userRepository,
-        readonly private LoggerInterface $logger,
+        private readonly ClientRegistry $clientRegistry,
+        private readonly RouterInterface $router,
+        private readonly UserRepository $userRepository,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -83,7 +84,9 @@ final class GithubAuthenticator extends OAuth2Authenticator implements Authentic
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        $request->getSession()->getFlashBag()->add('success', 'Github OAuth connection success.');
+        /** @var Session $session */
+        $session = $request->getSession();
+        $session->getFlashBag()->add('success', 'Github OAuth connection success.');
 
         return new RedirectResponse($this->router->generate('home'));
     }
@@ -93,7 +96,10 @@ final class GithubAuthenticator extends OAuth2Authenticator implements Authentic
     {
         $error = strtr($exception->getMessageKey(), $exception->getMessageData());
 
-        $request->getSession()->getFlashBag()->add('error', $error);
+        /** @var Session $session */
+        $session = $request->getSession();
+        $session->getFlashBag()->add('error', $error);
+
         $this->logger->error(
             'Github OAuth connection failed',
             [

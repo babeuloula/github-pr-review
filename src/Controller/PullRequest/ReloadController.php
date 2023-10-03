@@ -18,8 +18,8 @@ use Twig\Environment;
 final class ReloadController
 {
     public function __construct(
-        readonly private PullRequestFilterService $pullRequestFilterService,
-        readonly private Environment $twig
+        private readonly PullRequestFilterService $pullRequestFilterService,
+        private readonly Environment $twig
     ) {
     }
 

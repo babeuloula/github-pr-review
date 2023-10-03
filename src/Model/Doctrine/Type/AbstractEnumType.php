@@ -15,9 +15,7 @@ abstract class AbstractEnumType extends Type
     // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        if (false === \array_key_exists('type', $column)
-            || false === $column['type'] instanceof AbstractEnumType
-        ) {
+        if (false === \array_key_exists('type', $column)) {
             throw new \InvalidArgumentException('Wrong enum column type.');
         }
 

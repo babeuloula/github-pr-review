@@ -11,7 +11,7 @@ use Twig\Environment;
 
 final class HomeController
 {
-    public function __construct(readonly private Environment $twig)
+    public function __construct(private readonly Environment $twig)
     {
     }
 
