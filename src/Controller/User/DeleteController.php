@@ -27,7 +27,7 @@ final class DeleteController
     public function __invoke(Request $request, UserInterface $user): RedirectResponse
     {
         $this->userRepository->remove($user, true);
-        $this->tokenStorage->setToken();
+        $this->tokenStorage->setToken(null);
 
         $request->getSession()->getFlashBag()->add('success', 'Your account was deleted with success.');
 
