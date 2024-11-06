@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "57cd26e153f39c776a12dbcb7624b871",
+    "content-hash": "dc2f48bd6285425f6cd9524a394e0ccb",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -5824,16 +5824,16 @@
         },
         {
             "name": "symfony/runtime",
-            "version": "v6.1.11",
+            "version": "v6.4.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/runtime.git",
-                "reference": "717cb91d66893a27a4607f227e28eb74ff007fde"
+                "reference": "4facd4174f45cd37c65860403412b67c7381136a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/runtime/zipball/717cb91d66893a27a4607f227e28eb74ff007fde",
-                "reference": "717cb91d66893a27a4607f227e28eb74ff007fde",
+                "url": "https://api.github.com/repos/symfony/runtime/zipball/4facd4174f45cd37c65860403412b67c7381136a",
+                "reference": "4facd4174f45cd37c65860403412b67c7381136a",
                 "shasum": ""
             },
             "require": {
@@ -5845,10 +5845,10 @@
             },
             "require-dev": {
                 "composer/composer": "^1.0.2|^2.0",
-                "symfony/console": "^5.4|^6.0",
-                "symfony/dotenv": "^5.4|^6.0",
-                "symfony/http-foundation": "^5.4|^6.0",
-                "symfony/http-kernel": "^5.4|^6.0"
+                "symfony/console": "^5.4.9|^6.0.9|^7.0",
+                "symfony/dotenv": "^5.4|^6.0|^7.0",
+                "symfony/http-foundation": "^5.4|^6.0|^7.0",
+                "symfony/http-kernel": "^5.4|^6.0|^7.0"
             },
             "type": "composer-plugin",
             "extra": {
@@ -5879,8 +5879,11 @@
             ],
             "description": "Enables decoupling PHP applications from global state",
             "homepage": "https://symfony.com",
+            "keywords": [
+                "runtime"
+            ],
             "support": {
-                "source": "https://github.com/symfony/runtime/tree/v6.1.11"
+                "source": "https://github.com/symfony/runtime/tree/v6.4.14"
             },
             "funding": [
                 {
@@ -5896,7 +5899,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-01-20T17:44:30+00:00"
+            "time": "2024-11-05T16:39:55+00:00"
         },
         {
             "name": "symfony/security-bundle",
