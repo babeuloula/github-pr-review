@@ -25,7 +25,7 @@
         "symfony/http-client": "6.1.*",
         "symfony/monolog-bundle": "^3.8",
         "symfony/proxy-manager-bridge": "6.1.*",
-        "symfony/runtime": "6.1.*",
+        "symfony/runtime": "6.4.*",
         "symfony/security-bundle": "6.1.*",
         "symfony/yaml": "6.1.*",
         "twig/extra-bundle": "^3.4",
